@@ -14,13 +14,13 @@
           <form class="space-y-4 md:space-y-6" @submit.prevent="handleSubmit">
             <div>
               <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-              <input type="email" name="email" id="email"
+              <input type="text" name="email" id="email" v-model="formData.email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-emerald-600 focus:border-emerald-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <span className="text-sm text-red-400">{{ formError.email.message }}</span>
             </div>
             <div>
               <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-              <input type="password" name="password" id="password"
+              <input type="password" name="password" id="password" v-model="formData.password"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-emerald-600 focus:border-emerald-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <span className="text-sm text-red-400">{{ formError.password.message }}</span>
             </div>
@@ -35,9 +35,13 @@
                 </div>
               </div>
             </div>
-            <button type="submit"
-              class="w-full text-white bg-emerald-600 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800">Sign
-              in</button>
+            <div class="flex flex-col gap-2">
+              <button type="submit" :disabled="!backendEnabled"
+                :class="{ 'bg-emerald-600 hover:bg-emerald-700': backendEnabled, 'bg-gray-700': !backendEnabled }"
+                class="w-full text-white focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-emerald-800">Sign
+                in</button>
+              <BackendSelect />
+            </div>
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
               Don’t have an account yet? <router-link to="/register"
                 class="font-medium text-emerald-600 hover:underline dark:text-emerald-500">Sign up</router-link>
@@ -51,6 +55,7 @@
 
 <script setup lang="ts">
 import * as Vue from 'vue';
+import BackendSelect from '@/components/formulary/backend-select/BackendSelect.vue';
 import { FormData, FormDataError } from '@/types/types';
 import { FormValidation } from '../../utils/FormValidation';
 import { useAuth } from '@/stores/AuthStore';
@@ -60,18 +65,25 @@ type Fields = {
   password: string
 }
 
-const initialForm = { email: "", password: "" }
-const initialFormError = { email: { error: false, message: "" }, password: { error: false, message: "" } }
+const initialForm = JSON.stringify({ email: "", password: "" })
+const initialFormError = JSON.stringify({ email: { error: false, message: "" }, password: { error: false, message: "" } })
 
 const { login } = useAuth();
-const formData = Vue.reactive<FormData<Fields>>(initialForm);
-const formError = Vue.reactive<FormDataError<Fields>>(initialFormError);
+const formData = Vue.reactive<FormData<Fields>>(JSON.parse(initialForm));
+const formError = Vue.reactive<FormDataError<Fields>>(JSON.parse(initialFormError));
 const alert = Vue.reactive({ show: false, message: "" });
 const rememberMe = Vue.ref(false);
+const backendEnabled = Vue.ref<boolean>(false);
+
+Vue.onMounted(() => {
+  if (localStorage.getItem("app-backend")) {
+    backendEnabled.value = true;
+  }
+});
 
 function handleSubmit() {
 
-  const obj = new FormValidation(formData, formError);
+  const obj = new FormValidation(formData, JSON.parse(initialFormError));
   const { validation, is_valid } = obj.exec();
   const validationCopy = JSON.parse(JSON.stringify(validation));
   Object.assign(formError, validationCopy);
@@ -87,7 +99,7 @@ function handleSubmit() {
 
 async function request() {
   try {
-    login({ ...formData, rememberMe: rememberMe.value });
+    await login({ ...formData, rememberMe: rememberMe.value });
   } catch (e) {
     console.error(e);
   }

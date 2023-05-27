@@ -46,7 +46,7 @@
                             class="w-full text-white bg-emerald-600 hover:bg-emerald-700 focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-emerald-600 dark:hover:bg-emerald-700 dark:focus:ring-emerald-800">Create
                             an account</button>
                         <p class="text-sm font-light text-gray-500 dark:text-gray-400">
-                            Already have an account? <router-link to="/"
+                            Already have an account? <router-link to="/login"
                                 class="font-medium text-emerald-600 hover:underline dark:text-emerald-500">Login
                                 here</router-link>
                         </p>
@@ -69,16 +69,16 @@ type Fields = {
     password_confirmation: string
 }
 
-const initialForm = { name: "", email: "", password: "", password_confirmation: "" }
-const initialFormError = { name: { error: false, message: "" }, email: { error: false, message: "" }, password: { error: false, message: "" }, password_confirmation: { error: false, message: "" } }
+const initialForm = JSON.stringify({ name: "", email: "", password: "", password_confirmation: "" })
+const initialFormError = JSON.stringify({ name: { error: false, message: "" }, email: { error: false, message: "" }, password: { error: false, message: "" }, password_confirmation: { error: false, message: "" } })
 
-const formData = Vue.reactive<FormData<Fields>>(initialForm);
-const formError = Vue.reactive<FormDataError<Fields>>(initialFormError);
+const formData = Vue.reactive<FormData<Fields>>(JSON.parse(initialForm));
+const formError = Vue.reactive<FormDataError<Fields>>(JSON.parse(initialFormError));
 const alert = Vue.reactive({ show: false, message: "" });
 
 async function handleSubmit() {
 
-    const obj = new FormValidation(formData, formError);
+    const obj = new FormValidation(formData, JSON.parse(initialForm));
     const { validation, is_valid } = obj.exec();
     const validationCopy = JSON.parse(JSON.stringify(validation));
     Object.assign(formError, validationCopy);
@@ -88,6 +88,16 @@ async function handleSubmit() {
         return;
     }
 
+    request();
+
+}
+
+async function request() {
+    try {
+        console.log('register')
+    } catch (e) {
+        console.error(e);
+    }
 }
 
 </script>

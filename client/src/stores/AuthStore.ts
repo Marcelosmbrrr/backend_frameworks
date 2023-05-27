@@ -10,7 +10,11 @@ export const useAuth = Pinia.defineStore('auth', () => {
     async function login({ email, password, rememberMe }) {
         try {
 
-            console.log('login')
+            // login - create session - return token
+            // set token local storage
+            // redirect to home
+            localStorage.setItem("app-personal-token", "abc");
+            router.push({ path: '/home' });
 
         } catch (e) {
             console.log(e);
@@ -19,7 +23,11 @@ export const useAuth = Pinia.defineStore('auth', () => {
     }
 
     async function logout() {
-        router.push({ path: '/' });
+
+        // logout - destroy session
+        // remove token 
+        localStorage.removeItem("app-personal-token");
+        router.push({ path: '/login' });
     }
 
     return { login, logout, user, is_authenticated }
