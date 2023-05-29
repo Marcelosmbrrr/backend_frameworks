@@ -160,18 +160,21 @@
 </template>
 
 <script setup lang="ts">
-import * as Vue from 'vue';
+import { defineEmits, defineProps, ref, onMounted } from 'vue';
 
-const open = Vue.ref(false);
-const option = Vue.ref<string | null>(null);
-const loading = Vue.ref<boolean>(false);
-const cardsContainer = Vue.ref(null);
-const backendEnabled = Vue.ref<boolean>(false);
+const open = ref(false);
+const option = ref<string | null>(null);
+const loading = ref<boolean>(false);
+const cardsContainer = ref(null);
+const emit = defineEmits(['backend-activation']);
+const { backendEnabled } = defineProps({
+    backendEnabled: Boolean
+});
 
 
-Vue.onMounted(() => {
+onMounted(() => {
     if (localStorage.getItem("app-backend")) {
-        backendEnabled.value = true;
+        emit('backend-activation', true);
     }
 });
 
@@ -180,6 +183,7 @@ function openModal() {
 }
 
 function closeModal() {
+    console.log('close')
     open.value = false;
 }
 
@@ -198,11 +202,17 @@ function handleExecute() {
 
     // access framework folder
     // execute the framework
+    // localStore.setItem("app-backend", option.value);
+    localStorage.setItem("app-backend", "test");
+    emit('backend-activation', true);
 
+    setTimeout(() => [
+        closeModal()
+    ], 500)
 }
 
 function handleStop() {
-    backendEnabled.value = false;
+    emit('backend-activation', false);
     localStorage.removeItem("app-backend");
 }
 </script>
@@ -214,19 +224,23 @@ function handleStop() {
 }
 
 @keyframes shake {
+
     10%,
     90% {
         transform: translate3d(-1px, 0, 0);
     }
+
     20%,
     80% {
         transform: translate3d(2px, 0, 0);
     }
+
     30%,
     50%,
     70% {
         transform: translate3d(-4px, 0, 0);
     }
+
     40%,
     60% {
         transform: translate3d(4px, 0, 0);

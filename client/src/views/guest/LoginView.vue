@@ -40,7 +40,7 @@
                 :class="{ 'bg-emerald-600 hover:bg-emerald-700': backendEnabled, 'bg-gray-700': !backendEnabled }"
                 class="w-full text-white focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-emerald-800">Sign
                 in</button>
-              <BackendSelect />
+              <BackendSelect @backend-activation="backendActivation" :backendEnabled="backendEnabled" />
             </div>
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
               Don’t have an account yet? <router-link to="/register"
@@ -95,6 +95,10 @@ function handleSubmit() {
 
   request();
 
+}
+
+function backendActivation(value: boolean) {
+  backendEnabled.value = value;
 }
 
 async function request() {
