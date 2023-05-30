@@ -10,6 +10,8 @@
 
 ==== ABOUT DTO ====
 
+- Validator: https://docs.nestjs.com/techniques/validation
+
 ==== ABOUT ORM ====
 
 ==== COMMANDS ====

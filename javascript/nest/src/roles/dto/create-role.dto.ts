@@ -1,4 +1,7 @@
+import { Length } from "class-validator";
+
 export class CreateRoleDto {
+  @Length(3, 255)
   name: string;
   privileges: {
     users: {
@@ -10,7 +13,7 @@ export class CreateRoleDto {
       write: boolean;
     };
   };
-  created_at: string;
-  updated_at: string;
-  deleted_at: string;
+  created_at: Date;
+  updated_at: Date;
+  deleted_at: Date;
 }

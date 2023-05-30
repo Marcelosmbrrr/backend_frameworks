@@ -5,6 +5,7 @@ import { UpdateRoleDto } from '../dto/update-role.dto';
 @Injectable()
 export class RolesService {
   create(createRoleDto: CreateRoleDto) {
+    const { name, privileges } = createRoleDto;
     return 'This action adds a new role';
   }
 
@@ -17,6 +18,7 @@ export class RolesService {
   }
 
   update(id: number, updateRoleDto: UpdateRoleDto) {
+    const { name, privileges } = updateRoleDto;
     return `This action updates a #${id} role`;
   }
 
