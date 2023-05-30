@@ -1,18 +1,68 @@
 ==== ABOUT MODULES ====
 
+A module is a class annotated with a @Module() decorator. Each application has at least one module, a root module.
+Modules is one of the cores. Each module represents a high level piece of the system, and have its own resources, like providers and controllers.
+For default, the resources of a module are for its own purposes, but they can be shared with other modules with export/import or the global decorator.
+Global modules are commonly created to share helpers, utilities and database funcionalities.
+
+- command: nest g module name
+
 ==== ABOUT SERVICES ====
+
+Providers are other fundamental concept in Nest. Many of the basic Nest classes may be treated as a provider – services, repositories, factories, helpers, and so on.
+The main idea of a provider is that it can be injected as a dependency.
+
+- command: nest g service name
 
 ==== ABOUT CONTROLLERS - https://docs.nestjs.com/controllers#controllers ====
 
-==== ABOUT MODELS ====
+Being other fundamental concept, controllers are responsible for handling incoming requests and returning responses to the client.
 
-==== ABOUT ENTITIES ====
+- command: nest g controller name 
+- command: nest g resource name
 
-==== ABOUT DTO ====
+More about before and after controllers:
+- Pipe: A pipe is a class annotated with the @Injectable() decorator, which implements the PipeTransform interface. A pipe works just before a controller method is invoked and is used for data validation and transformation.
+- DTO: A DTO is an object that defines how the data will be sent over the network. We could determine the DTO schema by using TypeScript interfaces, or by simple classes. They are like the "Form Request" of Laravel. Ver class-validator e class-transformer.
+- Middleware: Middleware is a function which is called before the route handler. Middleware functions have access to the request and response objects.
+- Guards: Guards have a single responsibility. They determine whether a given request will be handled by the route handler or not, depending on certain conditions (like permissions, roles, ACLs, etc).
+- Serialization: Serialization is a process that happens before objects are returned in a network response. This is an appropriate place to provide rules for transforming and sanitizing the data to be returned to the client. 
+- Interceptors: 
 
-- Validator: https://docs.nestjs.com/techniques/validation
+==== SECURITY ====
 
-==== ABOUT ORM ====
+- Passport and JWT:
+- Cookies:  
+- Authorization:
+- Guards:
 
-==== COMMANDS ====
+==== ABOUT DATABASE AND ORM - https://docs.nestjs.com/techniques/database#database ====
+
+Nest is database agnostic, allowing you to easily integrate with any SQL or NoSQL database. 
+Connecting Nest to a database is simply a matter of loading an appropriate Node.js driver for the database, just as you would with Express or Fastify.
+You can also directly use any general purpose Node.js database integration library or ORM.
+
+- PrismaORM: https://docs.nestjs.com/recipes/prisma
+- TypeORM: https://docs.nestjs.com/recipes/sql-typeorm
+
+==== ABOUT ENTITIES - Data Mapper pattern ====
+
+An entity is a collection of fields and associated database operations. It is used to map database table and its fields with the entities and its attributes. 
+
+- Difference between Active Record and Data Mapper:
+Using the Active Record approach, you define all your query methods inside the model itself, and you save, remove, and load objects using model methods.
+Using the Data Mapper approach, you define all your query methods in separate classes called "repositories", and you save, remove, and load objects using repositories. In data mapper your entities have just their properties.
+
+==== VIDEOS ====
+
+Authentication with JWT: https://www.youtube.com/watch?v=4JyBeN69wq4
+Authentication with Refresh Token: https://www.youtube.com/watch?v=uAKzFhE3rxU
+
+
+
+
+
+
+
+
 

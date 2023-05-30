@@ -1,11 +1,12 @@
 import { Injectable } from '@nestjs/common';
+import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
 
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    const {name, email, roleId, password, password_confirmation} = createUserDto;
+  create(data: CreateUserDto) {
+    const { name, email, roleId, password, password_confirmation } = data;
     return 'This action adds a new user';
   }
 
@@ -17,8 +18,8 @@ export class UsersService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    const {name, email, roleId, password, password_confirmation} = createUserDto;
+  update(id: number, data: UpdateUserDto) {
+    const { name, email, roleId, password, password_confirmation } = data;
     return `This action updates a #${id} user`;
   }
 
