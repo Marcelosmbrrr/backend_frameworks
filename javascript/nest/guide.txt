@@ -1,0 +1,16 @@
+==== ABOUT MODULES ====
+
+==== ABOUT SERVICES ====
+
+==== ABOUT CONTROLLERS - https://docs.nestjs.com/controllers#controllers ====
+
+==== ABOUT MODELS ====
+
+==== ABOUT ENTITIES ====
+
+==== ABOUT DTO ====
+
+==== ABOUT ORM ====
+
+==== COMMANDS ====
+
