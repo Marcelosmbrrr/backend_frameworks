@@ -2,11 +2,12 @@ import {
   Injectable,
   Req,
   Body,
-  BadRequestException,
   InternalServerErrorException,
   NotFoundException,
   ConflictException,
+  UnauthorizedException
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt/dist';
 import * as bcrypt from 'bcrypt';
 // Custom
@@ -21,7 +22,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async signin(@Body() data: SignInDTO, response: Response) {
+  async signIn(@Body() data: SignInDTO, res: Response) {
     const { email, password } = data;
 
     const user = await this.prismaService.user.findUnique({
@@ -36,14 +37,13 @@ export class AuthService {
     const comparePassword = await bcrypt.compare(hashedPassword, user.password);
 
     if (!comparePassword) {
-      throw new BadRequestException('Wrong credentials');
+      throw new UnauthorizedException('Wrong credentials');
     }
 
     const payload = {
       id: user.id,
       name: user.name,
       email: user.email,
-      email_verified_at: user.email_verified_at,
       role: user.roleId,
       created_at: user.created_at,
     };
@@ -54,14 +54,14 @@ export class AuthService {
       throw new InternalServerErrorException();
     }
 
-    response.cookie('personal_token', token);
+    res.cookie('personal_token', token);
 
     // Job - Send login notification email
 
-    response.send({ message: 'Logged Succefully!' });
+    return res.send({ message: 'Logged Succefully!' });
   }
 
-  async signup(@Body() data: SignUpDTO, response: Response) {
+  async signUp(@Body() data: SignUpDTO, res: Response) {
     const { name, email, roleId, password } = data;
 
     const user = await this.prismaService.user.findUnique({
@@ -91,12 +91,15 @@ export class AuthService {
 
     // Job - Send verification email
 
-    return response.send({ message: 'Successful registration!' });
+    return res.send({ message: 'Successful registration!' });
   }
 
-  async signout(@Req() request: Request, response: Response) {
-    response.clearCookie('personal_token');
+  async signOut(@Req() request: Request, res: Response) {
+
+    res.clearCookie('personal_token');
+
     // Job - send notification email
-    return response.send({ message: 'Session has been expired.' });
+    
+    return res.send({ message: 'Session has been expired.' });
   }
 }

@@ -1,4 +1,5 @@
 import { Controller, Post, Req, Res, Body } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { AuthService } from '../services/auth.service';
 import { SignInDTO, SignUpDTO } from '../dto/auth.dto';
 
@@ -8,17 +9,18 @@ export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
   @Post('signin')
-  signin(@Body() signInDTO: SignInDTO, @Res() response) {
-    return this.authService.signin(signInDTO, response);
+  signIn(@Body() signInDTO: SignInDTO, @Res() response: Response) {
+    return 'signin';
+    //return this.authService.signIn(signInDTO, response);
   }
 
   @Post('signup')
-  signup(@Body() signUpDTO: SignUpDTO, @Res() response) {
-    return this.authService.signup(signUpDTO, response);
+  signUp(@Body() signUpDTO: SignUpDTO, @Res() response: Response) {
+    return this.authService.signUp(signUpDTO, response);
   }
 
   @Post('signout')
-  signout(@Req() request, @Res() response) {
-    return this.authService.signout(request, response);
+  signOut(@Req() request: Request, @Res() response: Response) {
+    return this.authService.signOut(request, response);
   }
 }

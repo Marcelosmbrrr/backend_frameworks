@@ -1,8 +1,10 @@
-import { Length } from "class-validator";
+import { IsString, Length } from 'class-validator';
 
 export class CreateRoleDto {
-  @Length(3, 255)
+  @IsString()
+  @Length(3, 100)
   name: string;
+
   privileges: {
     users: {
       read: boolean;
@@ -13,7 +15,4 @@ export class CreateRoleDto {
       write: boolean;
     };
   };
-  created_at: Date;
-  updated_at: Date;
-  deleted_at: Date;
 }

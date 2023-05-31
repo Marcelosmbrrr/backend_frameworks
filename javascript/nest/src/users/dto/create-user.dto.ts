@@ -1,14 +1,21 @@
-import { IsInt, IsEmail, Length } from 'class-validator';
+import { IsInt, IsString, Matches, IsEmail, Length } from 'class-validator';
 
 export class CreateUserDto {
+  @IsString()
   @Length(3, 255)
   name: string;
+
+  @IsString()
   @IsEmail()
   email: string;
+
   @IsInt()
   roleId: number;
-  photo: string;
-  email_verified_at: string;
+
+  @IsString()
   password: string;
+
+  @IsString()
+  @Matches('password')
   password_confirmation: string;
 }

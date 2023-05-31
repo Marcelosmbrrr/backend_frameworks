@@ -1,11 +1,39 @@
-==== ABOUT MODULES ====
+==== GENERAL COMMANDS ====
+
+- npm i -g @nestjs/cli (optional)
+- nest new project-name
+- npm run start
+
+- npx prisma migrate dev --name init
+- npx prisma db seed
+
+==== ABOUT MODULES - https://docs.nestjs.com/modules ====
+
+- nest g module module-name
 
 A module is a class annotated with a @Module() decorator. Each application has at least one module, a root module.
 Modules is one of the cores. Each module represents a high level piece of the system, and have its own resources, like providers and controllers.
-For default, the resources of a module are for its own purposes, but they can be shared with other modules with export/import or the global decorator.
-Global modules are commonly created to share helpers, utilities and database funcionalities.
 
-- command: nest g module name
+@Module({
+    providers: [], -> Module resources, like services
+    controllers: [], -> Module controllers
+    imports: [], -> For import other Modules - Import foreign Module
+    exports: [], -> Exported resources from this module - Export resources to the importers
+})
+
+The import attribute not allow the module to use resources from the imported one automatically
+In reality, the imported Module need to define its shared resources with his own export 
+
+@Global() -> Global Module
+@Module({
+    providers: [], 
+    controllers: [], 
+    imports: [], 
+    exports: [], 
+})
+
+Global modules are used by many other. They are commonly created to share helpers, utilities and database funcionalities. 
+Instead of be imported by each other individual Module, they are imported by the App Module, being available to all others.
 
 ==== ABOUT SERVICES ====
 
@@ -58,7 +86,11 @@ Using the Data Mapper approach, you define all your query methods in separate cl
 Authentication with JWT: https://www.youtube.com/watch?v=4JyBeN69wq4
 Authentication with Refresh Token: https://www.youtube.com/watch?v=uAKzFhE3rxU
 
+==== PRISMA ====
 
+npm install prisma --save-dev
+npx prisma init --datasource-provider mysql
+npx prisma migrate dev --name init
 
 
 

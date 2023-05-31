@@ -6,12 +6,11 @@ import { ConfigModule } from '@nestjs/config'; // https://docs.nestjs.com/techni
 import { UsersModule } from './users/users.module';
 import { RolesModule } from './roles/roles.module';
 import { AuthModule } from './auth/auth.module';
+import { PrismaModule } from '../prisma/prisma.module';
 
-// Root Module - the root module is the starting point Nest uses to build the application graph
-// https://docs.nestjs.com/modules
 @Module({
-  imports: [UsersModule, RolesModule, AuthModule, ConfigModule.forRoot()], // Modules
+  imports: [UsersModule, RolesModule, AuthModule, PrismaModule, ConfigModule.forRoot()], 
   controllers: [AppController],
-  providers: [AppService], // Services - dependencies
+  providers: [AppService], 
 })
-export class AppModule {}
+export class AppModule { }
