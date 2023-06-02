@@ -1,8 +1,9 @@
 <template>
     <component :is="$route.meta.layout">
-        <h1>ROLES</h1>
+        <TableVue />
     </component>
 </template>
 
 <script setup lang="ts">
+import TableVue from '@/components/table/Table.vue';
 </script>
