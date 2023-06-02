@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 // Custom
-import HomeLayout from '../components/layout/HomeLayout.vue';
+import HomeLayout from '../components/layout/home/HomeLayout.vue';
+import GuestLayout from '../components/layout/guest/GuestLayout.vue';
 import axios from '../utils/api';
 
 const router = createRouter({
@@ -16,7 +17,8 @@ const router = createRouter({
       name: 'login',
       component: () => import("../views/guest/LoginView.vue"),
       meta: {
-        requireAuth: false
+        requireAuth: false,
+        layout: GuestLayout
       }
     },
     {
@@ -24,7 +26,8 @@ const router = createRouter({
       name: 'register',
       component: () => import("../views/guest/RegisterView.vue"),
       meta: {
-        requireAuth: false
+        requireAuth: false,
+        layout: GuestLayout
       }
     },
     {
@@ -78,6 +81,7 @@ router.beforeEach(async (to, from, next) => {
     try {
       await axios.get(import.meta.env.VITE_API_URL + "/auth/check-authentication");
     } catch (e) {
+      localStorage.removeItem("app-user-data");
       router.push("/login");
     }
   }

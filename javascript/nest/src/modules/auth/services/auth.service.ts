@@ -66,7 +66,13 @@ export class AuthService {
     event.datetime = new Date().toLocaleString();
     this.eventEmitter.emit('auth.signin', event);
 
-    return res.status(200).send({ message: 'Logged succefully!' });
+    return res.status(200).send({
+      message: 'Logged succefully!',
+      user: {
+        id: user.id,
+        role: user.roleId,
+      },
+    });
   }
 
   async authenticationCheck(@Req() request: Request, res: Response) {

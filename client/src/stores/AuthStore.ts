@@ -11,16 +11,21 @@ interface LoginData {
 
 export const useAuth = Pinia.defineStore('auth', () => {
 
-    const user = Vue.reactive({ name: "", email: "", password: "", role: "", status: "", created_at: "", updated_at: "" });
+    const user = Vue.reactive({});
     const is_authenticated = Vue.ref(false);
 
     async function signIn({ email, password, rememberMe }: LoginData) {
         try {
 
-            await axios.post(import.meta.env.VITE_API_URL + "/auth/signin", {
+            const response = await axios.post(import.meta.env.VITE_API_URL + "/auth/signin", {
                 email,
                 password
             });
+
+            const userData = response.data.user;
+
+            localStorage.setItem("app-user-data", JSON.stringify(userData));
+            Object.assign(user, userData);
 
             router.push({ path: '/home' });
 
@@ -31,7 +36,7 @@ export const useAuth = Pinia.defineStore('auth', () => {
 
     async function signOut() {
         await axios.post(import.meta.env.VITE_API_URL + "/auth/signout");
-        localStorage.removeItem("access-token");
+        localStorage.removeItem("app-user-data");
         router.push({ path: '/login' });
     }
 

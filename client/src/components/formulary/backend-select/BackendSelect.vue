@@ -12,12 +12,12 @@
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                 <div class="flex items-start justify-between p-4 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
-                        App backend framework
+                        Choose the backend framework
                     </h3>
                 </div>
                 <div class="p-6 space-y-6">
                     <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-                        Choose a backend framework and click save and run. It will start automatically and will be
+                        Choose one and click "Execute". The technology will start automatically and will be
                         responsible for receiving and processing your requests.
                     </p>
                 </div>
@@ -33,12 +33,8 @@
                                     <div class="w-full text-lg font-semibold">Nest</div>
                                     <div class="w-full">Javascript Framework</div>
                                 </div>
-                                <svg aria-hidden="true" class="w-6 h-6 ml-3" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-plain.svg"
+                                    className="mr-2 h-9" alt="NextJS logo" />
                             </label>
                         </li>
                         <li>
@@ -50,12 +46,8 @@
                                     <div class="w-full text-lg font-semibold">Adonis</div>
                                     <div class="w-full">Javascript Framework</div>
                                 </div>
-                                <svg aria-hidden="true" class="w-6 h-6 ml-3" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                                        clip-rule="evenodd"></path>
-                                </svg>-
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/adonisjs/adonisjs-original.svg"
+                                    className="mr-2 h-9" alt="NextJS logo" />
                             </label>
                         </li>
                         <li>
@@ -67,12 +59,8 @@
                                     <div class="w-full text-lg font-semibold">Django</div>
                                     <div class="w-full">Python Framework</div>
                                 </div>
-                                <svg aria-hidden="true" class="w-6 h-6 ml-3" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg"
+                                    className="mr-2 h-9" alt="NextJS logo" />
                             </label>
                         </li>
                         <li>
@@ -84,12 +72,8 @@
                                     <div class="w-full text-lg font-semibold">Cake PHP</div>
                                     <div class="w-full">PHP Framework</div>
                                 </div>
-                                <svg aria-hidden="true" class="w-6 h-6 ml-3" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cakephp/cakephp-original.svg"
+                                    className="mr-2 h-9" alt="NextJS logo" />
                             </label>
                         </li>
                         <li>
@@ -101,12 +85,8 @@
                                     <div class="w-full text-lg font-semibold">Zend</div>
                                     <div class="w-full">PHP Framework</div>
                                 </div>
-                                <svg aria-hidden="true" class="w-6 h-6 ml-3" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zend/zend-plain.svg"
+                                    className="mr-2 h-9" alt="NextJS logo" />
                             </label>
                         </li>
                         <li>
@@ -118,12 +98,8 @@
                                     <div class="w-full text-lg font-semibold">Code Igniter</div>
                                     <div class="w-full">PHP Framework</div>
                                 </div>
-                                <svg aria-hidden="true" class="w-6 h-6 ml-3" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/codeigniter/codeigniter-plain.svg"
+                                    className="mr-2 h-9" alt="NextJS logo" />
                             </label>
                         </li>
                         <li>
@@ -135,12 +111,21 @@
                                     <div class="w-full text-lg font-semibold">Symfony</div>
                                     <div class="w-full">PHP Framework</div>
                                 </div>
-                                <svg aria-hidden="true" class="w-6 h-6 ml-3" fill="currentColor" viewBox="0 0 20 20"
-                                    xmlns="http://www.w3.org/2000/svg">
-                                    <path fill-rule="evenodd"
-                                        d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
-                                        clip-rule="evenodd"></path>
-                                </svg>
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/symfony/symfony-original.svg"
+                                    className="mr-2 h-9" alt="NextJS logo" />
+                            </label>
+                        </li>
+                        <li>
+                            <input type="radio" id="symfony" name="option" value="php/laravel" v-model="option"
+                                class="hidden peer">
+                            <label for="symfony"
+                                class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-emerald-500 peer-checked:border-emerald-600 peer-checked:text-emerald-600 hover:text-gray-600 dark:text-gray-400 dark:bg-gray-800">
+                                <div class="block">
+                                    <div class="w-full text-lg font-semibold">Laravel</div>
+                                    <div class="w-full">PHP Framework</div>
+                                </div>
+                                <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-plain.svg"
+                                    className="mr-2 h-9" alt="NextJS logo" />
                             </label>
                         </li>
                     </ul>
@@ -212,8 +197,9 @@ function handleExecute() {
 }
 
 function handleStop() {
-    emit('backend-activation', false);
     localStorage.removeItem("app-backend");
+    option.value = null;
+    emit('backend-activation', false);
 }
 </script>
 

@@ -1,8 +1,7 @@
 import * as Vue from 'vue';
 import * as Pinia from 'pinia';
-import router from '@/router';
 
-export const useTheme = Pinia.defineStore('auth', () => {
+export const useTheme = Pinia.defineStore('theme', () => {
 
     const theme = Vue.ref("dark");
     const icon = theme.value === "dark" ? "Moon" : "Sun";
@@ -12,7 +11,7 @@ export const useTheme = Pinia.defineStore('auth', () => {
         const saved_theme = localStorage.getItem("app-theme");
 
         if (!saved_theme) {
-            localStorage.setItem("nextjs-theme", "dark");
+            localStorage.setItem("app-theme", "dark");
             return;
         }
 
@@ -33,8 +32,8 @@ export const useTheme = Pinia.defineStore('auth', () => {
             document.body.classList.add("dark");
         }
 
-        localStorage.removeItem("nextjs-theme");
-        localStorage.setItem("nextjs-theme", new_value);
+        localStorage.removeItem("app-theme");
+        localStorage.setItem("app-theme", new_value);
         theme.value = new_value;
     }
 
