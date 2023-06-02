@@ -5,14 +5,17 @@ import {
   InternalServerErrorException,
   NotFoundException,
   ConflictException,
-  UnauthorizedException
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { JwtService } from '@nestjs/jwt/dist';
 import * as bcrypt from 'bcrypt';
+import { EventEmitter2 } from '@nestjs/event-emitter';
 // Custom
+import { PrismaService } from '../../../../prisma/prisma.service';
 import { SignInDTO, SignUpDTO } from '../dto/auth.dto';
-import { PrismaService } from 'prisma/prisma.service';
+import { SignInEvent } from '../events/signin.event';
+import { SignUpEvent } from '../events/signup.event';
 
 @Injectable()
 export class AuthService {
@@ -20,7 +23,8 @@ export class AuthService {
   constructor(
     private readonly prismaService: PrismaService,
     private jwtService: JwtService,
-  ) {}
+    private eventEmitter: EventEmitter2,
+  ) { }
 
   async signIn(@Body() data: SignInDTO, res: Response) {
     const { email, password } = data;
@@ -33,11 +37,10 @@ export class AuthService {
       throw new NotFoundException('Wrong credentials');
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const comparePassword = await bcrypt.compare(hashedPassword, user.password);
+    const comparePassword = await bcrypt.compare(password, user.password);
 
     if (!comparePassword) {
-      throw new UnauthorizedException('Wrong credentials');
+      throw new UnauthorizedException('Wrong password');
     }
 
     const payload = {
@@ -54,11 +57,18 @@ export class AuthService {
       throw new InternalServerErrorException();
     }
 
-    res.cookie('personal_token', token);
+    res.cookie('access-token', token);
 
-    // Job - Send login notification email
+    // Event to send email
+    const event = new SignInEvent();
+    event.name = user.name;
+    event.email = user.email;
+    event.datetime = new Date().toLocaleString();
+    this.eventEmitter.emit('auth.signin', event);
 
-    return res.send({ message: 'Logged Succefully!' });
+    return res
+      .status(200)
+      .send({ message: 'Logged Succefully!', token: token });
   }
 
   async signUp(@Body() data: SignUpDTO, res: Response) {
@@ -89,17 +99,18 @@ export class AuthService {
       );
     }
 
-    // Job - Send verification email
+    // Event to send email
+    const event = new SignUpEvent();
+    event.name = user.name;
+    event.email = user.email;
+    event.datetime = new Date().toLocaleString();
+    this.eventEmitter.emit('auth.signup', event);
 
-    return res.send({ message: 'Successful registration!' });
+    return res.status(200).send({ message: 'Successful registration!' });
   }
 
   async signOut(@Req() request: Request, res: Response) {
-
-    res.clearCookie('personal_token');
-
-    // Job - send notification email
-    
-    return res.send({ message: 'Session has been expired.' });
+    res.clearCookie('access-token');
+    return res.status(200).send({ message: 'Session has been expired.' });
   }
 }

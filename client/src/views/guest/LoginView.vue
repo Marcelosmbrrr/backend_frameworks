@@ -1,10 +1,12 @@
 <template>
   <section class="bg-gray-50 dark:bg-gray-900">
+
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
         <img class="w-8 h-8 mr-2" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg"
           alt="logo">
       </div>
+
       <div
         class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -36,10 +38,10 @@
               </div>
             </div>
             <div class="flex flex-col gap-2">
-              <button type="submit" :disabled="!backendEnabled"
+              <button type="submit" :disabled="!backendEnabled || loading"
                 :class="{ 'bg-emerald-600 hover:bg-emerald-700': backendEnabled, 'bg-gray-700': !backendEnabled }"
-                class="w-full text-white focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-emerald-800">Sign
-                in</button>
+                class="w-full text-white focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-emerald-800">{{
+                  loading ? 'Loading....' : 'Sign in' }}</button>
               <BackendSelect @backend-activation="backendActivation" :backendEnabled="backendEnabled" />
             </div>
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
@@ -49,6 +51,15 @@
           </form>
         </div>
       </div>
+
+      <Transition>
+        <div v-if="alert.show" class="p-4 mt-2 text-sm border border-gray-700 rounded-lg bg-gray-800 text-red-400"
+          role="alert">
+          <span class="font-medium">Error!</span> {{ alert.message }}
+        </div>
+      </Transition>
+
+
     </div>
   </section>
 </template>
@@ -71,6 +82,7 @@ const initialFormError = JSON.stringify({ email: { error: false, message: "" }, 
 const { login } = useAuth();
 const formData = Vue.reactive<FormData<Fields>>(JSON.parse(initialForm));
 const formError = Vue.reactive<FormDataError<Fields>>(JSON.parse(initialFormError));
+const loading = Vue.ref(false);
 const alert = Vue.reactive({ show: false, message: "" });
 const rememberMe = Vue.ref(false);
 const backendEnabled = Vue.ref<boolean>(false);
@@ -93,6 +105,9 @@ function handleSubmit() {
     return;
   }
 
+  alert.show = false;
+  loading.value = true;
+
   request();
 
 }
@@ -106,6 +121,15 @@ async function request() {
     await login({ ...formData, rememberMe: rememberMe.value });
   } catch (e) {
     console.error(e);
+    alert.message = e.message;
+    alert.show = true;
+
+    setTimeout(() => {
+      alert.show = false;
+    }, 2000)
+  }
+  finally {
+    loading.value = false;
   }
 }
 

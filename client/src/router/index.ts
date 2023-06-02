@@ -48,7 +48,7 @@ router.beforeEach(async (to, from, next) => {
 
   if (to.meta.requireAuth) {
 
-    if (localStorage.getItem("app-personal-token") === null) {
+    if (localStorage.getItem("access-token") === null) {
       router.push("/login");
     }
 

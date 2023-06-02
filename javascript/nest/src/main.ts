@@ -10,13 +10,22 @@ import { AppModule } from './app.module';
 // https://docs.nestjs.com/techniques/cookies
 // https://docs.nestjs.com/security/helmet
 
+declare const module: any;
+
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useGlobalPipes(new ValidationPipe());
-  app.enableCors();
+  app.enableCors({
+    origin: process.env.CLIENT_URL,
+  });
   app.use(cookieParser());
   app.use(helmet());
   await app.listen(8000);
+
+  if (module.hot) {
+    module.hot.accept();
+    module.hot.dispose(() => app.close());
+  }
 }
 
 bootstrap();

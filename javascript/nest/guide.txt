@@ -1,11 +1,15 @@
-==== GENERAL COMMANDS ====
+==== INITIAL ACTIONS ====
 
 - npm i -g @nestjs/cli (optional)
 - nest new project-name
-- npm run start
+- Hot Reload: https://docs.nestjs.com/recipes/hot-reload
+- npm run start:dev
 
-- npx prisma migrate dev --name init
-- npx prisma db seed
+==== FUNDAMENTALS ====
+
+Folder structure: https://www.youtube.com/watch?v=46tR82yZTa0&t=1s
+Lifecycle: https://docs.nestjs.com/fundamentals/lifecycle-events
+Execution context (to access each proccess factors and set additional metadata): https://docs.nestjs.com/fundamentals/execution-context
 
 ==== ABOUT MODULES - https://docs.nestjs.com/modules ====
 
@@ -53,16 +57,17 @@ More about before and after controllers:
 - Pipe: A pipe is a class annotated with the @Injectable() decorator, which implements the PipeTransform interface. A pipe works just before a controller method is invoked and is used for data validation and transformation.
 - DTO: A DTO is an object that defines how the data will be sent over the network. We could determine the DTO schema by using TypeScript interfaces, or by simple classes. They are like the "Form Request" of Laravel. Ver class-validator e class-transformer.
 - Middleware: Middleware is a function which is called before the route handler. Middleware functions have access to the request and response objects.
-- Guards: Guards have a single responsibility. They determine whether a given request will be handled by the route handler or not, depending on certain conditions (like permissions, roles, ACLs, etc).
+- Guards: Guards have a single responsibility. They They are executed after all middleware and determine whether a given request will be handled by the route handler or not, depending on certain conditions (like permissions, roles, ACLs, etc).
 - Serialization: Serialization is a process that happens before objects are returned in a network response. This is an appropriate place to provide rules for transforming and sanitizing the data to be returned to the client. 
 - Interceptors: 
 
 ==== SECURITY ====
 
-- Passport and JWT:
-- Cookies:  
-- Authorization:
-- Guards:
+- Common Authentication: https://docs.nestjs.com/security/authentication#authentication
+- JWT: https://docs.nestjs.com/security/authentication#jwt-token
+- Passport (JWT + OAuth2): 
+- Middleware: Middleware is a function which is called before the route handler. It have access to the request and response objects.
+- Authorization with Guards: To protect endpoints by requiring a valid JWT and specific role permissions. They are executed after all middleware - https://docs.nestjs.com/guards#authorization-guard
 
 ==== ABOUT DATABASE AND ORM - https://docs.nestjs.com/techniques/database#database ====
 
@@ -88,9 +93,10 @@ Authentication with Refresh Token: https://www.youtube.com/watch?v=uAKzFhE3rxU
 
 ==== PRISMA ====
 
-npm install prisma --save-dev
-npx prisma init --datasource-provider mysql
-npx prisma migrate dev --name init
+- npm install prisma --save-dev
+- npx prisma init --datasource-provider mysql
+- npx prisma migrate dev --name init
+- npx prisma db seed
 
 
 

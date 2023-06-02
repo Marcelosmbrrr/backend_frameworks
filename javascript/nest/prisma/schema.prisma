@@ -22,7 +22,7 @@ model User {
   deleted_at        DateTime?
   roleId            Int
   role              Role            @relation(fields: [roleId], references: [id]) // one role
-  PersonalToken     PersonalToken[]
+  PersonalToken     PersonalToken[] // to many tokens
 
   @@map("users")
 }
@@ -33,8 +33,8 @@ model Role {
   created_at DateTime?    @default(now())
   updated_at DateTime?
   deleted_at DateTime?
-  user       User[] // many users
-  ModuleRole ModuleRole[]
+  user       User[] // to many users
+  ModuleRole ModuleRole[] // to many modules
 
   @@map("roles")
 }
@@ -45,7 +45,7 @@ model Module {
   created_at DateTime?    @default(now())
   updated_at DateTime?
   deleted_at DateTime?
-  ModuleRole ModuleRole[]
+  ModuleRole ModuleRole[] // to many moduleroles
 
   @@map("modules")
 }
@@ -55,8 +55,8 @@ model ModuleRole {
   moduleId Int
   read     Boolean
   write    Boolean
-  role     Role    @relation(fields: [roleId], references: [id]) // one role
-  module   Module  @relation(fields: [moduleId], references: [id]) // one module
+  role     Role    @relation(fields: [roleId], references: [id]) // to one role
+  module   Module  @relation(fields: [moduleId], references: [id]) // to one module
 
   @@id([roleId, moduleId])
 }
@@ -68,5 +68,5 @@ model PersonalToken {
   created_at     DateTime? @default(now())
   expirationDate DateTime?
   active         Boolean
-  user           User      @relation(fields: [userId], references: [id]) // one user
+  user           User      @relation(fields: [userId], references: [id]) // to one user
 }

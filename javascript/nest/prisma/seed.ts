@@ -23,21 +23,19 @@ async function init() {
     ],
   });
 
-  const passwordHash = await bcrypt.hash('123123', 10);
-
   const users = await prisma.user.createMany({
     data: [
       {
         name: 'Michael Corleone',
         email: 'michael@gmail.com',
-        password: passwordHash,
+        password: await bcrypt.hash('123123', 10),
         roleId: 1,
         email_verified_at: new Date(),
       },
       {
         name: 'Fredo Corleone',
         email: 'fredo@gmail.com',
-        password: passwordHash,
+        password: await bcrypt.hash('123123', 10),
         roleId: 2,
         email_verified_at: new Date(),
       },
