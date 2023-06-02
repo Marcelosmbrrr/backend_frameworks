@@ -12,3 +12,7 @@
 .v-leave-to {
     opacity: 0;
 }
+
+.active-route {
+    color: #42D392;
+}

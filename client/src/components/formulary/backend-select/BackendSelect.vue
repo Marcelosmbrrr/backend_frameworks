@@ -173,9 +173,11 @@ const { backendEnabled } = defineProps({
 
 
 onMounted(() => {
-    if (localStorage.getItem("app-backend")) {
-        emit('backend-activation', true);
+    if (localStorage.getItem("app-backend") === undefined) {
+        return;
     }
+    option.value = localStorage.getItem("app-backend");
+    emit('backend-activation', true);
 });
 
 function openModal() {
@@ -183,7 +185,6 @@ function openModal() {
 }
 
 function closeModal() {
-    console.log('close')
     open.value = false;
 }
 
@@ -202,8 +203,7 @@ function handleExecute() {
 
     // access framework folder
     // execute the framework
-    // localStore.setItem("app-backend", option.value);
-    localStorage.setItem("app-backend", "test");
+    localStorage.setItem("app-backend", option.value);
     emit('backend-activation', true);
 
     setTimeout(() => [

@@ -1,6 +1,6 @@
 <template>
     <component :is="$route.meta.layout">
-        <h1>ROLES</h1>
+        <h1>CHAT</h1>
     </component>
 </template>
 

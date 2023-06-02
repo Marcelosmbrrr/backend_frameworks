@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 // Custom
-import DashboardView from '../views/home/DashboardView.vue';
+import HomeLayout from '../components/layout/HomeLayout.vue';
 import axios from '../utils/api';
 
 const router = createRouter({
@@ -33,7 +33,34 @@ const router = createRouter({
       component: () => import("../views/home/DashboardView.vue"),
       meta: {
         requireAuth: true,
-        layout: DashboardView
+        layout: HomeLayout
+      }
+    },
+    {
+      path: '/users',
+      name: 'users',
+      component: () => import("../views/home/UsersView.vue"),
+      meta: {
+        requireAuth: true,
+        layout: HomeLayout
+      }
+    },
+    {
+      path: '/roles',
+      name: 'roles',
+      component: () => import("../views/home/RolesView.vue"),
+      meta: {
+        requireAuth: true,
+        layout: HomeLayout
+      },
+    },
+    {
+      path: '/chat',
+      name: 'chat',
+      component: () => import("../views/home/ChatView.vue"),
+      meta: {
+        requireAuth: true,
+        layout: HomeLayout
       }
     },
     {
