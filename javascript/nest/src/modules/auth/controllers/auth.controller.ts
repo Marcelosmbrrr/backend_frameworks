@@ -1,4 +1,4 @@
-import { Controller, Post, Req, Res, Body } from '@nestjs/common';
+import { Controller, Post, Get, Req, Res, Body } from '@nestjs/common';
 import { Request, Response } from 'express';
 // Custom
 import { AuthService } from '../services/auth.service';
@@ -12,6 +12,11 @@ export class AuthController {
   @Post('signin')
   signIn(@Body() signInDTO: SignInDTO, @Res() response: Response) {
     return this.authService.signIn(signInDTO, response);
+  }
+
+  @Get('check-authentication')
+  checkAuthentication(@Req() request: Request, @Res() response: Response) {
+    return this.authService.authenticationCheck(request, response);
   }
 
   @Post('signup')

@@ -9,6 +9,7 @@ import { AppModule } from './app.module';
 // https://docs.nestjs.com/security/cors
 // https://docs.nestjs.com/techniques/cookies
 // https://docs.nestjs.com/security/helmet
+// Hot reload: https://docs.nestjs.com/recipes/hot-reload
 
 declare const module: any;
 
@@ -17,6 +18,7 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
     origin: process.env.CLIENT_URL,
+    credentials: true,
   });
   app.use(cookieParser());
   app.use(helmet());

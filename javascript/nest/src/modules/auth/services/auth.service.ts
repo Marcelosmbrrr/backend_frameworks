@@ -57,7 +57,7 @@ export class AuthService {
       throw new InternalServerErrorException();
     }
 
-    res.cookie('access-token', token);
+    res.cookie('access-token', token, { httpOnly: true });
 
     // Event to send email
     const event = new SignInEvent();
@@ -66,9 +66,26 @@ export class AuthService {
     event.datetime = new Date().toLocaleString();
     this.eventEmitter.emit('auth.signin', event);
 
-    return res
-      .status(200)
-      .send({ message: 'Logged Succefully!', token: token });
+    return res.status(200).send({ message: 'Logged succefully!' });
+  }
+
+  async authenticationCheck(@Req() request: Request, res: Response) {
+    const token = request.cookies['access-token'];
+
+    if (!token) {
+      throw new UnauthorizedException('Token is missing.');
+    }
+
+    try {
+      // The token is entirely verified - with its time expiration
+      await this.jwtService.verifyAsync(token, {
+        secret: process.env.JWT_SECRET,
+      });
+
+      return res.status(200).send({ message: 'User is authorized.' });
+    } catch (e) {
+      throw new UnauthorizedException('Token is invalid.');
+    }
   }
 
   async signUp(@Body() data: SignUpDTO, res: Response) {

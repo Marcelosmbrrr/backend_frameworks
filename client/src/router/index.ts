@@ -1,5 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
+// Custom
 import DashboardView from '../views/home/DashboardView.vue';
+import axios from '../utils/api';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -45,20 +47,14 @@ const router = createRouter({
 // Navigation Guards
 // https://router.vuejs.org/guide/advanced/navigation-guards.html
 router.beforeEach(async (to, from, next) => {
-
   if (to.meta.requireAuth) {
-
-    if (localStorage.getItem("access-token") === null) {
+    try {
+      await axios.get(import.meta.env.VITE_API_URL + "/auth/check-authentication");
+    } catch (e) {
       router.push("/login");
     }
-
-    // server-side token validation
-    // next or push to login
-    next();
   }
-
   next();
-
 });
 
-export default router
+export default router;

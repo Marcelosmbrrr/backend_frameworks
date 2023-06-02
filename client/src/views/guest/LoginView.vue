@@ -79,7 +79,7 @@ type Fields = {
 const initialForm = JSON.stringify({ email: "", password: "" })
 const initialFormError = JSON.stringify({ email: { error: false, message: "" }, password: { error: false, message: "" } })
 
-const { login } = useAuth();
+const { signIn } = useAuth();
 const formData = Vue.reactive<FormData<Fields>>(JSON.parse(initialForm));
 const formError = Vue.reactive<FormDataError<Fields>>(JSON.parse(initialFormError));
 const loading = Vue.ref(false);
@@ -118,7 +118,7 @@ function backendActivation(value: boolean) {
 
 async function request() {
   try {
-    await login({ ...formData, rememberMe: rememberMe.value });
+    await signIn({ ...formData, rememberMe: rememberMe.value });
   } catch (e) {
     console.error(e);
     alert.message = e.message;
