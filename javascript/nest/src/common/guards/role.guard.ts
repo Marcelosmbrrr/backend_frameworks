@@ -4,14 +4,14 @@ import { Observable } from 'rxjs';
 // https://docs.nestjs.com/guards#authorization-guard
 
 @Injectable()
-export class RolesGuard implements CanActivate {
+export class RoleGuard implements CanActivate {
   canActivate(
     context: ExecutionContext,
   ): boolean | Promise<boolean> | Observable<boolean> {
-    return validateRequest(context);
+    return this.validateRequest(context);
   }
-}
 
-async function validateRequest(context: ExecutionContext) {
-  return true;
+  validateRequest(context: ExecutionContext) {
+    return true;
+  }
 }

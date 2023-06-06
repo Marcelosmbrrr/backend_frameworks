@@ -70,20 +70,25 @@ import { FormData, FormDataError } from '@/types/types';
 import { FormValidation } from '../../utils/FormValidation';
 import { useAuth } from '@/stores/AuthStore';
 
-type Fields = {
+type TFields = {
   email: string,
   password: string
+}
+
+interface IAlert {
+    show: boolean;
+    message: string;
 }
 
 const initialForm = JSON.stringify({ email: "", password: "" })
 const initialFormError = JSON.stringify({ email: { error: false, message: "" }, password: { error: false, message: "" } })
 
 const { signIn } = useAuth();
-const formData = Vue.reactive<FormData<Fields>>(JSON.parse(initialForm));
-const formError = Vue.reactive<FormDataError<Fields>>(JSON.parse(initialFormError));
-const loading = Vue.ref(false);
-const alert = Vue.reactive({ show: false, message: "" });
-const rememberMe = Vue.ref(false);
+const formData = Vue.reactive<FormData<TFields>>(JSON.parse(initialForm));
+const formError = Vue.reactive<FormDataError<TFields>>(JSON.parse(initialFormError));
+const loading = Vue.ref<boolean>(false);
+const alert = Vue.reactive<IAlert>({ show: false, message: "" });
+const rememberMe = Vue.ref<boolean>(false);
 const backendEnabled = Vue.ref<boolean>(false);
 
 Vue.onMounted(() => {

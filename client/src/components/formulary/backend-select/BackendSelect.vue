@@ -145,19 +145,20 @@
 </template>
 
 <script setup lang="ts">
-import { defineEmits, defineProps, ref, onMounted } from 'vue';
+import * as Vue from 'vue';
+import { defineEmits, defineProps } from 'vue';
 
-const open = ref(false);
-const option = ref<string | null>(null);
-const loading = ref<boolean>(false);
-const cardsContainer = ref(null);
+const open = Vue.ref(false);
+const option = Vue.ref<string | null>(null);
+const loading = Vue.ref<boolean>(false);
+const cardsContainer = Vue.ref(null);
 const emit = defineEmits(['backend-activation']);
 const { backendEnabled } = defineProps({
     backendEnabled: Boolean
 });
 
 
-onMounted(() => {
+Vue.onMounted(() => {
     if (localStorage.getItem("app-backend") === undefined) {
         return;
     }

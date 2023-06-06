@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-import { Request, Response } from 'express';
 import { EventEmitter2 } from '@nestjs/event-emitter';
 // Custom
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -13,36 +12,71 @@ export class UsersService {
   constructor(
     private readonly prismaService: PrismaService,
     private eventEmitter: EventEmitter2,
-  ) {}
-
+  ) { }
 
   async create(data: CreateUserDto) {
-    const { name, email, roleId, password, password_confirmation } = data;
+    const { name, email, roleId, password } = data;
 
-    // Job - Send verification email
-
-    return 'This action adds a new user';
+    await this.prismaService.user.create({
+      data: {
+        name: name,
+        email: email,
+        roleId: roleId,
+        password: await bcrypt.hash(password, 10),
+      },
+    });
   }
 
-  async findAll() {
-    return `This action returns all users`;
+  async findAll(limit: number, offset: number) {
+    const users = await this.prismaService.user.findMany({
+      skip: offset,
+      take: limit,
+      include: {
+        role: true,
+      },
+    });
+
+    return users;
   }
 
   async findOne(id: number) {
-    return `This action returns a #${id} user`;
+    const users = await this.prismaService.user.findMany({
+      where: {
+        id: id,
+      },
+      include: {
+        role: true,
+      },
+    });
+
+    return users;
   }
 
   async update(id: number, data: UpdateUserDto) {
-    const { name, email, roleId, password, password_confirmation } = data;
-    return `This action updates a #${id} user`;
+    const { name, email, roleId, password } = data;
+
+    await this.prismaService.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: name,
+        email: email,
+        roleId: roleId,
+        password: password,
+      },
+    });
   }
 
   async uploadImage(id: number, file: Express.Multer.File) {
-    console.log(file);
     return 'Upload-file';
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} user`;
+    await this.prismaService.user.delete({
+      where: {
+        id: id,
+      },
+    });
   }
 }

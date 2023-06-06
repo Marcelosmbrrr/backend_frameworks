@@ -27,15 +27,12 @@
                         </div>
                         <div
                             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                            <button type="button" id="createProductModalButton" data-modal-target="createProductModal"
+                            <CreateRole />
+                            <EditRole />
+                            <button @click="getData" type="button" id="refresh-users-table"
                                 data-modal-toggle="createProductModal"
                                 class="flex items-center justify-center text-white bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-emerald-600 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-800">
-                                Add role
-                            </button>
-                            <button type="button" id="createProductModalButton" data-modal-target="createProductModal"
-                                data-modal-toggle="createProductModal"
-                                class="flex items-center justify-center text-white bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-emerald-600 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-800">
-                                Edit role
+                                Refresh
                             </button>
                         </div>
                     </div>
@@ -43,6 +40,8 @@
                         <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
                                 <tr>
+                                    <th scope="col" class="px-4 py-4">
+                                    </th>
                                     <th scope="col" class="px-4 py-4">ID</th>
                                     <th scope="col" class="px-4 py-3">Name</th>
                                     <th scope="col" class="px-4 py-3">User Access</th>
@@ -56,23 +55,28 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr class="border-b dark:border-gray-700">
+                                <tr v-for="record in records" class="border-b dark:border-gray-700">
+                                    <td class="px-4 py-3">
+                                        <input @change="select(record.id)" type="checkbox"
+                                            class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                    </td>
                                     <th scope="row"
-                                        class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">1</th>
+                                        class="px-4 py-3 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        {{ record.id }}
+                                    </th>
                                     <td class="px-4 py-3">
-                                        Rola
+                                        {{ record.name }}
                                     </td>
                                     <td class="px-4 py-3">
                                         <div class="flex items-center gap-3">
                                             <div class="flex items-center">
-                                                <input disabled id="disabled-checkbox" type="checkbox" value=""
+                                                <input :checked="record.ModuleRole[0].read" disabled type="checkbox"
                                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                                 <label for="disabled-checkbox"
                                                     class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">Read</label>
                                             </div>
                                             <div class="flex items-center">
-                                                <input disabled checked id="disabled-checked-checkbox" type="checkbox"
-                                                    value=""
+                                                <input :checked="record.ModuleRole[0].write" disabled type="checkbox"
                                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                                 <label for="disabled-checked-checkbox"
                                                     class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">Write</label>
@@ -82,14 +86,13 @@
                                     <td class="px-4 py-3">
                                         <div class="flex items-center gap-3">
                                             <div class="flex items-center">
-                                                <input disabled id="disabled-checkbox" type="checkbox" value=""
+                                                <input :checked="record.ModuleRole[1].read" disabled type="checkbox"
                                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                                 <label for="disabled-checkbox"
                                                     class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">Read</label>
                                             </div>
                                             <div class="flex items-center">
-                                                <input disabled checked id="disabled-checked-checkbox" type="checkbox"
-                                                    value=""
+                                                <input :checked="record.ModuleRole[1].write" disabled type="checkbox"
                                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                                 <label for="disabled-checked-checkbox"
                                                     class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">Write</label>
@@ -99,34 +102,32 @@
                                     <td class="px-4 py-3">
                                         <div class="flex items-center gap-3">
                                             <div class="flex items-center">
-                                                <input disabled id="disabled-checkbox" type="checkbox" value=""
+                                                <input :checked="record.ModuleRole[2].read" disabled type="checkbox"
                                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                                 <label for="disabled-checkbox"
                                                     class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">Read</label>
                                             </div>
                                             <div class="flex items-center">
-                                                <input disabled checked id="disabled-checked-checkbox" type="checkbox"
-                                                    value=""
+                                                <input :checked="record.ModuleRole[2].write" disabled type="checkbox"
                                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                                 <label for="disabled-checked-checkbox"
                                                     class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">Write</label>
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="px-4 py-3">Date</td>
-                                    <td class="px-4 py-3">Date</td>
+                                    <td class="px-4 py-3">
+                                        {{  new Date(record.created_at).toLocaleDateString() }}
+                                    </td>
+                                    <td class="px-4 py-3">
+                                        {{  new Date(record.updated_at).toLocaleDateString() }}
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <nav class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
+                    <nav v-if="records.length > 0"
+                        class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
                         aria-label="Table navigation">
-                        <span class="text-sm font-normal text-gray-500 dark:text-gray-400">
-                            Showing
-                            <span class="font-semibold text-gray-900 dark:text-white">1-10</span>
-                            of
-                            <span class="font-semibold text-gray-900 dark:text-white">1000</span>
-                        </span>
                         <ul class="inline-flex items-stretch -space-x-px">
                             <li>
                                 <a href="#"
@@ -249,19 +250,57 @@
 
 <script setup lang="ts">
 import * as Vue from 'vue';
+// Custom
+import { useAuth } from '@/stores/AuthStore';
 import axios from '../../utils/api';
+import CreateRole from '@/components/formulary/role/CreateRole.vue';
+import EditRole from '@/components/formulary/role/EditRole.vue';
+
+interface ISelection {
+    id: number;
+    privileges: {
+        admin: {
+            read: boolean,
+            write: boolean
+        },
+        common: {
+            read: boolean,
+            write: boolean
+        }
+    }
+}
+
+interface IAlert {
+    show: boolean;
+    message: string;
+}
+
+const initialAlert = JSON.stringify({ show: false, message: "" });
+
+const { user } = useAuth();
+const records = Vue.ref([]);
+const loading = Vue.ref<boolean>(true);
+const alert = Vue.reactive<IAlert>(JSON.parse(initialAlert));
+const selection = Vue.ref<null | ISelection[]>(null);
 
 Vue.onMounted(() => {
     getData();
 });
 
 async function getData() {
-    axios.get('')
-        .then((response) => {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/roles?limit=${10}&offset=${0}`);
+        records.value = response.data.roles;
+    } catch (error) {
+        console.log(error);
+        alert.show = true;
+        alert.message = error.message;
+    } finally {
+        loading.value = false;
+    }
+}
 
-        })
-        .catch((error) => {
-            console.log(error);
-        })
+function select(recordId: number) {
+    console.log('select')
 }
 </script>

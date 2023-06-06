@@ -1,13 +1,16 @@
 import {
   Controller,
   Get,
+  Res,
   Post,
   Body,
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Query,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { UseInterceptors } from '@nestjs/common/decorators';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadedFile } from '@nestjs/common/decorators';
@@ -15,43 +18,91 @@ import { UploadedFile } from '@nestjs/common/decorators';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { UpdateUserDto } from '../dto/update-user.dto';
+import { RoleGuard } from 'src/common/guards/role.guard';
 
 @Controller('users')
 export class UsersController {
   // Dependency Injection
   constructor(private readonly usersService: UsersService) {}
 
+  @UseGuards(RoleGuard)
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+  async create(
+    @Body() createUserDto: CreateUserDto,
+    @Res() response: Response,
+  ) {
+    this.usersService.create(createUserDto);
+
+    return response.status(201).send({
+      message: 'User successful created!',
+    });
   }
 
+  @UseGuards(RoleGuard)
   @Get()
-  findAll() {
-    return this.usersService.findAll();
+  async findAll(
+    @Query('limit') limit,
+    @Query('offset') offset,
+    @Res() response: Response,
+  ) {
+    const users = await this.usersService.findAll(
+      Number(limit),
+      Number(offset),
+    );
+
+    return response.status(200).send({
+      message: 'Users found!',
+      users: users,
+    });
   }
 
+  @UseGuards(RoleGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.usersService.findOne(+id);
+  async findOne(@Param('id') id: string, @Res() response: Response) {
+    const user = this.usersService.findOne(+id);
+
+    return response.status(200).send({
+      message: 'User found!',
+      users: user,
+    });
   }
 
+  @UseGuards(RoleGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.usersService.update(+id, updateUserDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+    @Res() response: Response,
+  ) {
+    this.usersService.update(+id, updateUserDto);
+
+    response.send(200).send({
+      message: 'User has been updated!',
+    });
   }
 
+  @UseGuards(RoleGuard)
   @Patch(':id')
   @UseInterceptors(FileInterceptor('image'))
-  uploadImage(
+  async uploadImage(
     @Param('id') id: string,
     @UploadedFile() file: Express.Multer.File,
+    @Res() response: Response,
   ) {
-    return this.usersService.uploadImage(+id, file);
+    this.usersService.uploadImage(+id, file);
+
+    response.send(200).send({
+      message: 'User image has been updated!',
+    });
   }
 
+  @UseGuards(RoleGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  async remove(@Param('id') id: string, @Res() response: Response) {
+    this.usersService.remove(+id);
+
+    response.send(200).send({
+      message: 'User has been deleted!',
+    });
   }
 }

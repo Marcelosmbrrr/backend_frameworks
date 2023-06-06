@@ -62,19 +62,24 @@ import * as Vue from 'vue';
 import { FormData, FormDataError } from '@/types/types';
 import { FormValidation } from '../../utils/FormValidation';
 
-type Fields = {
+type TFields = {
     name: string,
     email: string,
     password: string,
     password_confirmation: string
 }
 
+interface IAlert {
+    show: boolean;
+    message: string;
+}
+
 const initialForm = JSON.stringify({ name: "", email: "", password: "", password_confirmation: "" })
 const initialFormError = JSON.stringify({ name: { error: false, message: "" }, email: { error: false, message: "" }, password: { error: false, message: "" }, password_confirmation: { error: false, message: "" } })
 
-const formData = Vue.reactive<FormData<Fields>>(JSON.parse(initialForm));
-const formError = Vue.reactive<FormDataError<Fields>>(JSON.parse(initialFormError));
-const alert = Vue.reactive({ show: false, message: "" });
+const formData = Vue.reactive<FormData<TFields>>(JSON.parse(initialForm));
+const formError = Vue.reactive<FormDataError<TFields>>(JSON.parse(initialFormError));
+const alert = Vue.reactive<IAlert>({ show: false, message: "" });
 
 async function handleSubmit() {
 

@@ -7,7 +7,7 @@
 
 ==== FUNDAMENTALS ====
 
-Folder structure: https://www.youtube.com/watch?v=46tR82yZTa0&t=1s
+Project structure: https://www.youtube.com/watch?v=mmbd5hcQUaY&t=193s
 Lifecycle: https://docs.nestjs.com/fundamentals/lifecycle-events
 Execution context (to access each proccess factors and set additional metadata): https://docs.nestjs.com/fundamentals/execution-context
 

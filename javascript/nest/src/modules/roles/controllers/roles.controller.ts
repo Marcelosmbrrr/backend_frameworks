@@ -1,45 +1,84 @@
 import {
   Controller,
   Get,
+  Res,
   Post,
   Body,
   Patch,
   Param,
   Delete,
+  UseGuards,
+  Query,
 } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Response } from 'express';
 // Custom
 import { RolesService } from '../services/roles.service';
 import { CreateRoleDto } from '../dto/create-role.dto';
 import { UpdateRoleDto } from '../dto/update-role.dto';
+import { RoleGuard } from 'src/common/guards/role.guard';
 
 @Controller('roles')
 export class RolesController {
   // Dependency Injection
-  constructor(private readonly rolesService: RolesService) {}
+  constructor(private readonly rolesService: RolesService) { }
 
+  @UseGuards(RoleGuard)
   @Post()
-  create(@Body() createRoleDto: CreateRoleDto) {
-    return this.rolesService.create(createRoleDto);
+  async create(@Body() createRoleDto: CreateRoleDto, @Res() response: Response) {
+    this.rolesService.create(createRoleDto);
+
+    return response.status(201).send({
+      message: 'Role successful created!',
+    });
   }
 
+  @UseGuards(RoleGuard)
   @Get()
-  findAll() {
-    return this.rolesService.findAll();
+  async findAll(
+    @Query('limit') limit,
+    @Query('offset') offset,
+    @Res() response: Response,
+  ) {
+    const roles = await this.rolesService.findAll(Number(limit), Number(offset));
+
+    return response.status(200).send({
+      message: 'Roles found!',
+      roles: roles,
+    });
   }
 
+  @UseGuards(RoleGuard)
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.rolesService.findOne(+id);
+  async findOne(@Param('id') id: string, @Res() response: Response) {
+    const role = this.rolesService.findOne(+id);
+
+    return response.status(200).send({
+      message: 'Role found!',
+      roles: role,
+    });
   }
 
+  @UseGuards(RoleGuard)
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRoleDto: UpdateRoleDto) {
-    return this.rolesService.update(+id, updateRoleDto);
+  async update(
+    @Param('id') id: string,
+    @Body() updateRoleDto: UpdateRoleDto,
+    @Res() response: Response,
+  ) {
+    this.rolesService.update(+id, updateRoleDto);
+
+    response.send(200).send({
+      message: 'Role has been updated!',
+    });
   }
 
+  @UseGuards(RoleGuard)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.rolesService.remove(+id);
+  async remove(@Param('id') id: string, @Res() response: Response) {
+    this.rolesService.remove(+id);
+
+    response.send(200).send({
+      message: 'Role has been deleted!',
+    });
   }
 }
