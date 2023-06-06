@@ -2,35 +2,34 @@
     <div>
         <nav class="w-full bg-white border-b border-gray-200 dark:border-gray-700 px-6 py-2.5 dark:bg-gray-800">
             <div class="flex justify-between items-center">
-                <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
+                <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1">
                     <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                         <li>
                             <router-link to="/home"
-                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 dark:text-gray-400 dark:hover:text-white dark:border-gray-700"
-                                aria-current="page">Home</router-link>
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 dark:text-gray-400 hover:text-emerald-500 dark:border-gray-700">Home</router-link>
                         </li>
                         <li>
                             <router-link to="/users"
-                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 dark:text-gray-400 dark:hover:text-white dark:border-gray-700">Users</router-link>
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 dark:text-gray-400 hover:text-emerald-500 dark:border-gray-700">Users</router-link>
                         </li>
                         <li>
                             <router-link to="/roles"
-                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 dark:text-gray-400 dark:hover:text-white dark:border-gray-700">Roles</router-link>
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 dark:text-gray-400 hover:text-emerald-500 dark:border-gray-700">Roles</router-link>
                         </li>
                         <li>
                             <router-link to="/chat"
-                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 dark:text-gray-400 dark:hover:text-white dark:border-gray-700">Chat</router-link>
+                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 dark:text-gray-400 hover:text-emerald-500 dark:border-gray-700">Chat</router-link>
                         </li>
                     </ul>
                 </div>
-                <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1" id="mobile-menu-2">
+                <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1">
                     <ul class="flex flex-col mt-4 font-medium lg:flex-row lg:space-x-8 lg:mt-0">
                         <li @click="toggle"
-                            class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 hover:text-emerald-500 dark:text-gray-400 dark:hover:text-white dark:border-gray-700 cursor-pointer">
+                            class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 dark:text-gray-400 hover:text-emerald-500 dark:border-gray-700 cursor-pointer">
                             <font-awesome-icon icon="fa-solid fa-sun" />
                         </li>
                         <li @click="signOut"
-                            class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 hover:text-emerald-500 dark:text-gray-400 dark:hover:text-white dark:border-gray-700 cursor-pointer">
+                            class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 dark:text-gray-400 hover:text-emerald-500 dark:border-gray-700 cursor-pointer">
                             <font-awesome-icon icon="fa-solid fa-door-open" />
                         </li>
                     </ul>
@@ -44,8 +43,8 @@
             </div>
             <div class="flex gap-2">
                 <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg" class="mr-2 h-9"
-                    alt="NextJS logo" />
-                <img :src=frameworkIcon() class="mr-2 h-9" alt="NextJS logo" />
+                    alt="VueJS icon" />
+                <img :src=frameworkIcon() class="mr-2 h-9" alt="Backend Framework icon" />
             </div>
         </div>
     </div>

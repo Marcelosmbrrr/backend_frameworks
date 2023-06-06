@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Req, Res, Body } from '@nestjs/common';
+import { Controller, Post, Get, Req, Res, Body, Query } from '@nestjs/common';
 import { Request, Response } from 'express';
 // Custom
 import { AuthService } from '../services/auth.service';
@@ -10,22 +10,36 @@ export class AuthController {
   constructor(private readonly authService: AuthService) { }
 
   @Post('signin')
-  signIn(@Body() signInDTO: SignInDTO, @Res() response: Response) {
+  async signIn(@Body() signInDTO: SignInDTO, @Res() response: Response) {
     return this.authService.signIn(signInDTO, response);
   }
 
   @Get('check-authentication')
-  checkAuthentication(@Req() request: Request, @Res() response: Response) {
-    return this.authService.authenticationCheck(request, response);
+  async checkAuthentication(
+    @Req() request: Request,
+    @Res() response: Response,
+  ) {
+    await this.authService.authenticationCheck(request);
+    return response.status(200).send({ message: 'User is authorized.' });
+  }
+
+  @Get('authenticated-user-data')
+  async authenticatedUserData(
+    @Res() response: Response,
+    @Query('userId') userId: number,
+  ) {
+    return this.authService.authenticatedUserData(Number(userId), response);
   }
 
   @Post('signup')
-  signUp(@Body() signUpDTO: SignUpDTO, @Res() response: Response) {
-    return this.authService.signUp(signUpDTO, response);
+  async signUp(@Body() signUpDTO: SignUpDTO, @Res() response: Response) {
+    await this.authService.signUp(signUpDTO);
+    return response.status(200).send({ message: 'Successful registration!' });
   }
 
   @Post('signout')
-  signOut(@Req() request: Request, @Res() response: Response) {
-    return this.authService.signOut(request, response);
+  async signOut(@Req() request: Request, @Res() response: Response) {
+    response.clearCookie('access-token');
+    return response.status(200).send({ message: 'Session has been expired.' });
   }
 }

@@ -5,9 +5,8 @@
     </button>
 
     <!-- Main modal -->
-    <div id="defaultModal" tabindex="-1" aria-hidden="true"
-        class="flex justify-center items-center fixed z-50 w-full p-4 overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm"
-        :class="{ 'hidden': !open }">
+    <div v-if="!props.disabled && open" id="edit-user-modal"
+        class="flex justify-center items-center fixed z-50 w-full p-4 overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
         <div class="relative w-full max-w-2xl max-h-full">
             <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -76,6 +75,29 @@ interface IForm {
     roleId: string;
     password: string;
 }
+
+const props = Vue.defineProps({
+    disabled: {
+        type: Boolean,
+        required: true
+    },
+    id: {
+        type: String,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    roleId: {
+        type: String,
+        required: true
+    },
+});
 
 const open = Vue.ref<boolean>(false);
 const form = Vue.reactive<IForm>({ name: "", email: "", roleId: "0", password: "" });

@@ -27,8 +27,10 @@
                         </div>
                         <div
                             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                            <CreateUser />
-                            <EditUser />
+                            <!-- CRUD modals -->
+                            <CreateUser :disabled="selection != null" />
+                            <EditUser :disabled="selection == null" :id="selection.id" :name="selection.name"
+                                :email="selection.email" :roleId="selection?.roleId" />
                             <button @click="getData" type="button" id="refresh-users-table"
                                 data-modal-toggle="createProductModal"
                                 class="flex items-center justify-center text-white bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-emerald-600 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-800">
@@ -59,7 +61,8 @@
 
                                 <tr v-for="record in records" class="border-b dark:border-gray-700">
                                     <td class="px-4 py-3">
-                                        <input @change="select(record.id)" type="checkbox" value=""
+                                        <input @change="select(record.id)" :disabled="isRecordDisabled(record.id)"
+                                            type="checkbox" value=""
                                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     </td>
                                     <th scope="row"
@@ -149,7 +152,7 @@ const { user } = useAuth();
 const records = Vue.ref([]);
 const loading = Vue.ref<boolean>(true);
 const alert = Vue.reactive<IAlert>(JSON.parse(initialAlert));
-const selection = Vue.ref<null | ISelection[]>(null);
+const selection = Vue.ref<null | ISelection>(null);
 
 Vue.onMounted(() => {
     getData();
@@ -170,6 +173,36 @@ async function getData() {
 }
 
 function select(recordId: number) {
-    console.log(recordId)
+
+    console.log(selection.value === null)
+
+    // Is an unselection
+    if (selection.value != null) {
+        if (selection.value.id == recordId) {
+            selection.value = null;
+            return;
+        }
+    }
+
+    const new_record = records.value.filter((record) => record.id == recordId)[0];
+
+    // Is a new selection when is empty or is different from previously
+    selection.value = JSON.parse(JSON.stringify(new_record));
+
+}
+
+function isRecordDisabled(recordId: number): boolean {
+
+    if (recordId == user.id) {
+        return true;
+    }
+
+    if (selection.value != null) {
+        if (selection.value.id == recordId) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }
 </script>

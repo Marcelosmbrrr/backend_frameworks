@@ -30,6 +30,13 @@ export class AuthService {
     const { email, password } = data;
 
     const user = await this.prismaService.user.findUnique({
+      include: {
+        role: {
+          include: {
+            ModuleRole: true,
+          },
+        },
+      },
       where: { email: email },
     });
 
@@ -45,10 +52,10 @@ export class AuthService {
 
     const payload = {
       id: user.id,
-      name: user.name,
-      email: user.email,
-      role: user.roleId,
-      created_at: user.created_at,
+      role: {
+        id: user.roleId,
+        privileges: user.role.ModuleRole,
+      },
     };
 
     const token = await this.jwtService.signAsync(payload);
@@ -68,14 +75,39 @@ export class AuthService {
 
     return res.status(200).send({
       message: 'Logged succefully!',
-      user: {
-        id: user.id,
-        role: user.roleId,
-      },
+      user: payload,
     });
   }
 
-  async authenticationCheck(@Req() request: Request, res: Response) {
+  async authenticatedUserData(userId: number, res: Response) {
+    const user = await this.prismaService.user.findUnique({
+      include: {
+        role: {
+          include: {
+            ModuleRole: true,
+          },
+        },
+      },
+      where: {
+        id: userId,
+      },
+    });
+
+    const payload = {
+      id: user.id,
+      role: {
+        id: user.roleId,
+        privileges: user.role.ModuleRole,
+      },
+    };
+
+    return res.status(200).send({
+      message: 'User data has been found.',
+      user: payload,
+    });
+  }
+
+  async authenticationCheck(@Req() request: Request) {
     const token = request.cookies['access-token'];
 
     if (!token) {
@@ -87,14 +119,12 @@ export class AuthService {
       await this.jwtService.verifyAsync(token, {
         secret: process.env.JWT_SECRET,
       });
-
-      return res.status(200).send({ message: 'User is authorized.' });
     } catch (e) {
       throw new UnauthorizedException('Token is invalid.');
     }
   }
 
-  async signUp(@Body() data: SignUpDTO, res: Response) {
+  async signUp(@Body() data: SignUpDTO) {
     const { name, email, roleId, password } = data;
 
     const user = await this.prismaService.user.findUnique({
@@ -128,12 +158,5 @@ export class AuthService {
     event.email = user.email;
     event.datetime = new Date().toLocaleString();
     this.eventEmitter.emit('auth.signup', event);
-
-    return res.status(200).send({ message: 'Successful registration!' });
-  }
-
-  async signOut(@Req() request: Request, res: Response) {
-    res.clearCookie('access-token');
-    return res.status(200).send({ message: 'Session has been expired.' });
   }
 }
