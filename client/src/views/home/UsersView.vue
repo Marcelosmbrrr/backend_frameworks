@@ -28,10 +28,10 @@
                         <div
                             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                             <!-- CRUD modals -->
-                            <CreateUser :disabled="selection != null" />
-                            <EditUser :disabled="selection == null" :id="selection.id" :name="selection.name"
-                                :email="selection.email" :roleId="selection?.roleId" />
-                            <button @click="getData" type="button" id="refresh-users-table"
+                            <CreateUser :disabled="selection.selected" />
+                            <EditUser :disabled="!selection.selected" :id="selection.user.id" :name="selection.user.name"
+                                :email="selection.user.email" :roleId="selection.user.roleId" />
+                            <button @click="handleFetchData" type="button" id="refresh-users-table"
                                 data-modal-toggle="createProductModal"
                                 class="flex items-center justify-center text-white bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-emerald-600 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-800">
                                 Refresh
@@ -61,7 +61,7 @@
 
                                 <tr v-for="record in records" class="border-b dark:border-gray-700">
                                     <td class="px-4 py-3">
-                                        <input @change="select(record.id)" :disabled="isRecordDisabled(record.id)"
+                                        <input @change="select(record)" :disabled="isRecordDisabled(record.id)"
                                             type="checkbox" value=""
                                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
                                     </td>
@@ -134,71 +134,77 @@ import { useAuth } from '@/stores/AuthStore';
 import axios from '../../utils/api';
 
 interface ISelection {
-    id: number;
-    verified: boolean;
-    name: string;
-    email: string;
-    roleId: number;
-}
-
-interface IAlert {
-    show: boolean;
-    message: string;
-}
-
-const initialAlert = JSON.stringify({ show: false, message: "" });
-
-const { user } = useAuth();
-const records = Vue.ref([]);
-const loading = Vue.ref<boolean>(true);
-const alert = Vue.reactive<IAlert>(JSON.parse(initialAlert));
-const selection = Vue.ref<null | ISelection>(null);
-
-Vue.onMounted(() => {
-    getData();
-});
-
-async function getData() {
-    loading.value = true;
-    try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?limit=${10}&offset=${0}`);
-        records.value = response.data.users;
-    } catch (error) {
-        console.log(error);
-        alert.show = true;
-        alert.message = error.message;
-    } finally {
-        loading.value = false;
+    selected: boolean,
+    user: {
+        id: string;
+        name: string;
+        email: string;
+        roleId: string;
     }
 }
 
-function select(recordId: number) {
+interface IPaginate {
+    limit: number;
+    offset: number;
+}
 
-    console.log(selection.value === null)
+const initialSelection = JSON.stringify({ selected: false, user: { id: "", name: "", email: "", roleId: "" } });
+const initialPaginate = JSON.stringify({ limit: 10, offset: 0});
+
+const { user } = useAuth();
+const records = Vue.ref([]);
+const paginate = Vue.reactive<IPaginate>(JSON.parse(initialPaginate));
+const selection = Vue.reactive<ISelection>(JSON.parse(initialSelection));
+
+Vue.onMounted(async () => {
+    Object.assign(paginate, JSON.parse(initialPaginate));
+    records.value = [];
+    handleFetchData();
+});
+
+
+async function handleFetchData() {
+    try {
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?limit=${paginate.limit}&offset=${paginate.offset}`);
+        records.value = response.data.users;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+function select(new_record) {
 
     // Is an unselection
-    if (selection.value != null) {
-        if (selection.value.id == recordId) {
-            selection.value = null;
+    if (selection.selected) {
+        if (selection.user.id === new_record.id) {
+            Object.assign(selection, JSON.parse(initialSelection));
             return;
         }
     }
 
-    const new_record = records.value.filter((record) => record.id == recordId)[0];
+    const record = records.value.filter((record) => record.id == new_record.id)[0];
 
     // Is a new selection when is empty or is different from previously
-    selection.value = JSON.parse(JSON.stringify(new_record));
+    Object.assign(selection, {
+        selected: true,
+        user: {
+            id: record.id,
+            name: record.name,
+            email: record.email,
+            roleId: record.roleId
+        }
+    });
 
 }
 
-function isRecordDisabled(recordId: number): boolean {
+function isRecordDisabled(recordId: string): boolean {
 
-    if (recordId == user.id) {
+    if (recordId === user.id) {
         return true;
     }
 
-    if (selection.value != null) {
-        if (selection.value.id == recordId) {
+    if (selection.selected) {
+        if (selection.user.id === recordId) {
             return false;
         } else {
             return true;

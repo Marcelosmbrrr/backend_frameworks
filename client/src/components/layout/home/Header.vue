@@ -16,10 +16,6 @@
                             <router-link to="/roles"
                                 class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 dark:text-gray-400 hover:text-emerald-500 dark:border-gray-700">Roles</router-link>
                         </li>
-                        <li>
-                            <router-link to="/chat"
-                                class="block py-2 pr-4 pl-3 text-gray-700 border-b border-gray-100 lg:border-0 lg:p-0 dark:text-gray-400 hover:text-emerald-500 dark:border-gray-700">Chat</router-link>
-                        </li>
                     </ul>
                 </div>
                 <div class="hidden justify-between items-center w-full lg:flex lg:w-auto lg:order-1">
@@ -71,10 +67,6 @@ const backendIcons = {
 
 const { signOut } = useAuth();
 const route = useRoute();
-
-function menuToggle() {
-    console.log('menu toggle');
-}
 
 function frameworkIcon() {
     const key: string = localStorage.getItem("app-backend")?.split("/")[1];

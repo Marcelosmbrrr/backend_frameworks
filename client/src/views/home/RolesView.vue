@@ -292,7 +292,7 @@ async function getData() {
         const response = await axios.get(`${import.meta.env.VITE_API_URL}/roles?limit=${10}&offset=${0}`);
         records.value = response.data.roles;
     } catch (error) {
-        console.log(error);
+        console.error(error);
         alert.show = true;
         alert.message = error.message;
     } finally {
