@@ -1,5 +1,5 @@
 <template>
-    <button @click="openModal" type="button" id="create-user"
+    <button :disabled="props.disabled" @click="openModal" type="button" id="create-user"
         class="flex items-center justify-center text-white bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-emerald-600 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-800">
         Add role
     </button>
@@ -26,7 +26,7 @@
                 <div class="p-6 space-y-6">
                     <div class="mb-6">
                         <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                        <input type="email" id="email"
+                        <input type="email" id="email" v-model="form.name"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required>
                     </div>
@@ -39,13 +39,13 @@
                             </div>
                             <div>
                                 <div class="flex items-center mb-4">
-                                    <input id="user-read" type="checkbox" value=""
+                                    <input id="user-read" type="checkbox" v-model="form.user.read"
                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     <label for="user-read"
                                         class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Read</label>
                                 </div>
                                 <div class="flex items-center">
-                                    <input id="user-write" type="checkbox" value=""
+                                    <input id="user-write" type="checkbox" v-model="form.user.write"
                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     <label for="user-write"
                                         class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Write</label>
@@ -60,36 +60,15 @@
                             </div>
                             <div>
                                 <div class="flex items-center mb-4">
-                                    <input id="role-read" type="checkbox" value=""
+                                    <input id="role-read" type="checkbox" v-model="form.role.read"
                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     <label for="role-read"
                                         class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Read</label>
                                 </div>
                                 <div class="flex items-center">
-                                    <input id="role-write" type="checkbox" value=""
+                                    <input id="role-write" type="checkbox" v-model="form.role.write"
                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     <label for="role-write"
-                                        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Write</label>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="flex flex-col gap-2">
-                            <div>
-                                <label for="email"
-                                    class="block mb-3 text-sm font-medium text-gray-900 dark:text-white">Chat</label>
-                            </div>
-                            <div>
-                                <div class="flex items-center mb-4">
-                                    <input id="chat-read" type="checkbox" value=""
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="chat-read"
-                                        class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Read</label>
-                                </div>
-                                <div class="flex items-center">
-                                    <input id="chat-write" checked type="checkbox" value=""
-                                        class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                                    <label for="chat-write"
                                         class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Write</label>
                                 </div>
                             </div>
@@ -99,7 +78,7 @@
                 </div>
                 <!-- Modal footer -->
                 <div class="flex items-center p-6 space-x-2 border-t border-gray-200 rounded-b dark:border-gray-600">
-                    <button @click="openModal" type="button"
+                    <button @click="handleSubmit" type="button"
                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Confirm</button>
                     <button @click="closeModal" type="button"
                         class="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600">Close</button>
@@ -122,14 +101,21 @@ interface IForm {
         read: boolean;
         write: boolean;
     };
-    chat: {
-        read: boolean;
-        write: boolean;
-    }
 }
 
+const props = defineProps({
+    disabled: {
+        type: Boolean,
+        required: true
+    },
+});
+
 const open = Vue.ref<boolean>(false);
-const form = Vue.reactive<IForm>({ name: "", user: { read: false, write: false }, role: { read: false, write: false }, chat: { read: false, write: false } });
+const form = Vue.reactive<IForm>({ name: "", user: { read: false, write: false }, role: { read: false, write: false } });
+
+async function handleSubmit() {
+    console.log('submit');
+}
 
 function openModal() {
     open.value = true;

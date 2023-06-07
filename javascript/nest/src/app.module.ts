@@ -8,7 +8,6 @@ import { AuthModule } from './modules/auth/auth.module';
 import { DashboardModule } from './modules/dashboard/dashboard.module';
 import { UsersModule } from './modules/users/users.module';
 import { RolesModule } from './modules/roles/roles.module';
-import { ChatModule } from './modules/chat/chat.module';
 import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
@@ -16,7 +15,6 @@ import { PrismaModule } from '../prisma/prisma.module';
     DashboardModule,
     UsersModule,
     RolesModule,
-    ChatModule,
     AuthModule,
     PrismaModule,
     ConfigModule.forRoot(),

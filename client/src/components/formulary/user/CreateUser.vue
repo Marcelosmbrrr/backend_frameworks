@@ -3,7 +3,7 @@
         class="flex items-center justify-center text-white bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-emerald-600 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-800">
         Add user
     </button>
-    
+
     <!-- Main modal -->
     <div id="create-user-modal" :class="{ 'hidden': !open }"
         class="flex justify-center items-center fixed z-50 w-full p-4 overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
@@ -40,17 +40,17 @@
                         <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an
                             role</label>
                         <select id="role" v-model="form.roleId"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Choose</option>
-                            <option value="US">Admin</option>
-                            <option value="CA">Common</option>
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                            <option selected disabled>Choose</option>
+                            <option value="1">Admin</option>
+                            <option value="2">Common</option>
                         </select>
                     </div>
                     <div class="mb-6">
                         <label for="password"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
                         <input type="text" id="password" v-model="form.password"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                             required>
                     </div>
                 </div>
@@ -86,7 +86,7 @@ const props = defineProps({
 const open = Vue.ref<boolean>(false);
 const form = Vue.reactive<IForm>({ name: "", email: "", roleId: "0", password: "" });
 
-async function handleSubmit(){
+async function handleSubmit() {
     console.log('submit');
 }
 

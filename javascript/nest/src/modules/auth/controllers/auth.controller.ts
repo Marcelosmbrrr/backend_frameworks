@@ -34,7 +34,7 @@ export class AuthController {
   @Post('signup')
   async signUp(@Body() signUpDTO: SignUpDTO, @Res() response: Response) {
     await this.authService.signUp(signUpDTO);
-    return response.status(200).send({ message: 'Successful registration!' });
+    return response.status(201).send({ message: 'Successful registration!' });
   }
 
   @Post('signout')

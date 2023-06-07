@@ -19,10 +19,6 @@ export class SignUpDTO {
   email: string;
 
   @IsString()
-  @IsInt()
-  roleId: number;
-
-  @IsString()
   password: string;
 
   @IsString()

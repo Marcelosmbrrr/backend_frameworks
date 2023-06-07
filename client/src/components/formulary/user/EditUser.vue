@@ -25,33 +25,26 @@
                 <div class="p-6 space-y-6">
                     <div class="mb-6">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                        <input type="text" id="name" v-model="form.name"
+                        <input type="text" id="name" :value="props.name"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required>
                     </div>
                     <div class="mb-6">
                         <label for="email"
                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
-                        <input type="email" id="email" v-model="form.email"
+                        <input type="email" id="email" :value="props.email"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required>
                     </div>
                     <div class="mb-6">
                         <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select
                             an role</label>
-                        <select id="role" v-model="form.roleId"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                            <option selected>Choose</option>
-                            <option value="US">Admin</option>
-                            <option value="CA">Common</option>
+                        <select id="role" :value="props.roleId"
+                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
+                            <option selected disabled>Choose</option>
+                            <option value="1">Admin</option>
+                            <option value="2">Common</option>
                         </select>
-                    </div>
-                    <div class="mb-6">
-                        <label for="email"
-                            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                        <input type="email" id="email" v-model="form.password"
-                            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                            required>
                     </div>
                 </div>
                 <!-- Modal footer -->
@@ -70,6 +63,7 @@
 import * as Vue from 'vue';
 
 interface IForm {
+    id: string;
     name: string;
     email: string;
     roleId: string;
@@ -100,7 +94,7 @@ const props = defineProps({
 });
 
 const open = Vue.ref<boolean>(false);
-const form = Vue.reactive<IForm>({ name: props.name, email: props.email, roleId: props.roleId, password: "" });
+const form = Vue.reactive<IForm>({ id: "", name: "", email: "", roleId: "", password: "" });
 
 async function handleSubmit() {
     console.log('submit');

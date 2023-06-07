@@ -107,7 +107,7 @@ export class AuthService {
     });
   }
 
-  async authenticationCheck(@Req() request: Request) {
+  async authenticationCheck(request: Request) {
     const token = request.cookies['access-token'];
 
     if (!token) {
@@ -125,7 +125,7 @@ export class AuthService {
   }
 
   async signUp(@Body() data: SignUpDTO) {
-    const { name, email, roleId, password } = data;
+    const { name, email, password } = data;
 
     const user = await this.prismaService.user.findUnique({
       where: { email: email },
@@ -139,9 +139,9 @@ export class AuthService {
 
     const create = await this.prismaService.user.create({
       data: {
-        name,
-        email,
-        roleId,
+        name: name,
+        email: email,
+        roleId: 2,
         password: hashedPassword,
       },
     });

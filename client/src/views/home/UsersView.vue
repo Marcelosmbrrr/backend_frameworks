@@ -8,7 +8,7 @@
                     <div
                         class="flex flex-col md:flex-row items-center justify-between space-y-3 md:space-y-0 md:space-x-4 p-4">
                         <div class="w-full lg:w-1/2">
-                            <form class="flex items-center">
+                            <div class="flex items-center">
                                 <label for="simple-search" class="sr-only">Search</label>
                                 <div class="relative w-full">
                                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
@@ -19,11 +19,11 @@
                                                 clip-rule="evenodd" />
                                         </svg>
                                     </div>
-                                    <input type="text" id="simple-search"
+                                    <input @keydown="fetchByID" type="text" v-model="search.value"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-emerald-500 dark:focus:border-emerald-500"
-                                        placeholder="Search">
+                                        placeholder="Search by ID">
                                 </div>
-                            </form>
+                            </div>
                         </div>
                         <div
                             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
@@ -31,7 +31,7 @@
                             <CreateUser :disabled="selection.selected" />
                             <EditUser :disabled="!selection.selected" :id="selection.user.id" :name="selection.user.name"
                                 :email="selection.user.email" :roleId="selection.user.roleId" />
-                            <button @click="handleFetchData" type="button" id="refresh-users-table"
+                            <button @click="fetchAll" type="button" id="refresh-users-table"
                                 data-modal-toggle="createProductModal"
                                 class="flex items-center justify-center text-white bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-emerald-600 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-800">
                                 Refresh
@@ -89,33 +89,29 @@
                         class="flex flex-col md:flex-row justify-between items-start md:items-center space-y-3 md:space-y-0 p-4"
                         aria-label="Table navigation">
                         <ul class="inline-flex items-stretch -space-x-px">
-                            <li>
-                                <a
-                                    class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                    <span class="sr-only">Previous</span>
-                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </a>
+                            <li @click="handlePrevPage"
+                                class="flex items-center justify-center h-full py-1.5 px-3 ml-0 text-gray-500 bg-white rounded-l-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                <span class="sr-only">Previous</span>
+                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
                             </li>
-                            <li>
-                                <a href="#"
-                                    class="flex items-center justify-center text-sm py-2 px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
+                            <li
+                                class="flex items-center justify-center text-sm px-3 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                {{ paginate.page }}
                             </li>
-                            <li>
-                                <a href="#"
-                                    class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                                    <span class="sr-only">Next</span>
-                                    <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg">
-                                        <path fill-rule="evenodd"
-                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </a>
+                            <li @click="handleNextPage"
+                                class="flex items-center justify-center h-full py-1.5 px-3 leading-tight text-gray-500 bg-white rounded-r-lg border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                <span class="sr-only">Next</span>
+                                <svg class="w-5 h-5" aria-hidden="true" fill="currentColor" viewbox="0 0 20 20"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd"
+                                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                                        clip-rule="evenodd" />
+                                </svg>
                             </li>
                         </ul>
                     </nav>
@@ -145,31 +141,46 @@ interface ISelection {
 
 interface IPaginate {
     limit: number;
-    offset: number;
+    page: number;
+}
+
+interface ISearch {
+    value: string
 }
 
 const initialSelection = JSON.stringify({ selected: false, user: { id: "", name: "", email: "", roleId: "" } });
-const initialPaginate = JSON.stringify({ limit: 10, offset: 0});
+const initialPaginate = JSON.stringify({ limit: 10, page: 1 });
 
 const { user } = useAuth();
 const records = Vue.ref([]);
 const paginate = Vue.reactive<IPaginate>(JSON.parse(initialPaginate));
+const search = Vue.reactive<ISearch>({ value: "" });
 const selection = Vue.reactive<ISelection>(JSON.parse(initialSelection));
 
 Vue.onMounted(async () => {
     Object.assign(paginate, JSON.parse(initialPaginate));
     records.value = [];
-    handleFetchData();
+    fetchAll();
 });
 
 
-async function handleFetchData() {
+async function fetchAll() {
     try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?limit=${paginate.limit}&offset=${paginate.offset}`);
+        const offset = paginate.page * paginate.limit - paginate.limit;
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?limit=${paginate.limit}&offset=${offset}`);
         records.value = response.data.users;
     } catch (error) {
         console.error(error);
     }
+}
+
+async function fetchByID(e) {
+
+    if (e.key != 'Enter') {
+        return;
+    }
+
+    console.log('enter search');
 }
 
 function select(new_record) {
@@ -209,6 +220,34 @@ function isRecordDisabled(recordId: string): boolean {
         } else {
             return true;
         }
+    }
+}
+
+function handleNextPage() {
+    // If actual page is not the last page - total is 10 pages (100 records (total records) / limit 10)
+    // Refact: Math.round() if limit is not multiple of 100 - being limit always 10 isnt necessary
+    // Refact: total records could not be 100
+    return;
+
+    if (paginate.page < (100 / paginate.limit)) {
+        Object.assign(paginate, {
+            ...paginate,
+            ["page"]: paginate.page + 1
+        });
+
+        fetchAll();
+    }
+}
+
+function handlePrevPage() {
+    // Is the actual page is not the first one
+    if (paginate.page > 1) {
+        Object.assign(paginate, {
+            ...paginate,
+            ["page"]: paginate.page - 1
+        });
+
+        fetchAll();
     }
 }
 </script>
