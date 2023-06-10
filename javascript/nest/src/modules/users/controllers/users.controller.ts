@@ -22,11 +22,11 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { RoleGuard } from 'src/common/guards/role.guard';
 
 @Controller('users')
+@UseGuards(RoleGuard)
 export class UsersController {
   // Dependency Injection
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
-  @UseGuards(RoleGuard)
   @Post()
   async create(
     @Body() createUserDto: CreateUserDto,
@@ -40,27 +40,32 @@ export class UsersController {
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @UseGuards(RoleGuard)
   @Get()
-  async findAll(@Query('limit') limit, @Query('offset') offset) {
+  async findAll(
+    @Query('limit') limit,
+    @Query('offset') offset,
+    @Res() response: Response,
+  ) {
     const users = await this.usersService.findAll(
       Number(limit),
       Number(offset),
     );
 
-    return users;
+    response.send(200).send({
+      data: users,
+    });
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @UseGuards(RoleGuard)
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string, @Res() response: Response) {
     const user = this.usersService.findOne(+id);
 
-    return user;
+    response.send(200).send({
+      data: user,
+    });
   }
 
-  @UseGuards(RoleGuard)
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -74,7 +79,6 @@ export class UsersController {
     });
   }
 
-  @UseGuards(RoleGuard)
   @Patch(':id')
   @UseInterceptors(FileInterceptor('image'))
   async uploadImage(
@@ -89,7 +93,6 @@ export class UsersController {
     });
   }
 
-  @UseGuards(RoleGuard)
   @Delete(':id')
   async remove(@Param('id') id: string, @Res() response: Response) {
     this.usersService.remove(+id);

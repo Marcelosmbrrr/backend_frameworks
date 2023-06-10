@@ -20,11 +20,11 @@ import { UpdateRoleDto } from '../dto/update-role.dto';
 import { RoleGuard } from 'src/common/guards/role.guard';
 
 @Controller('roles')
+@UseGuards(RoleGuard)
 export class RolesController {
   // Dependency Injection
   constructor(private readonly rolesService: RolesService) { }
 
-  @UseGuards(RoleGuard)
   @Post()
   async create(
     @Body() createRoleDto: CreateRoleDto,
@@ -38,27 +38,32 @@ export class RolesController {
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @UseGuards(RoleGuard)
   @Get()
-  async findAll(@Query('limit') limit, @Query('offset') offset) {
+  async findAll(
+    @Query('limit') limit,
+    @Query('offset') offset,
+    @Res() response: Response,
+  ) {
     const roles = await this.rolesService.findAll(
       Number(limit),
       Number(offset),
     );
 
-    return roles;
+    response.send(200).send({
+      data: roles,
+    });
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @UseGuards(RoleGuard)
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string, @Res() response: Response) {
     const role = this.rolesService.findOne(+id);
 
-    return role;
+    response.send(200).send({
+      data: role,
+    });
   }
 
-  @UseGuards(RoleGuard)
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -72,7 +77,6 @@ export class RolesController {
     });
   }
 
-  @UseGuards(RoleGuard)
   @Delete(':id')
   async remove(@Param('id') id: string, @Res() response: Response) {
     this.rolesService.remove(+id);
