@@ -11,8 +11,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { Response } from 'express';
-import { UseInterceptors } from '@nestjs/common/decorators';
-import { ClassSerializerInterceptor } from '@nestjs/common';
 // Custom
 import { RolesService } from '../services/roles.service';
 import { CreateRoleDto } from '../dto/create-role.dto';
@@ -30,14 +28,13 @@ export class RolesController {
     @Body() createRoleDto: CreateRoleDto,
     @Res() response: Response,
   ) {
-    this.rolesService.create(createRoleDto);
+    await this.rolesService.create(createRoleDto);
 
     return response.status(201).send({
       message: 'Role successful created!',
     });
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get()
   async findAll(
     @Query('limit') limit,
@@ -49,18 +46,17 @@ export class RolesController {
       Number(offset),
     );
 
-    response.send(200).send({
-      data: roles,
+    response.status(200).send({
+      roles: roles,
     });
   }
 
-  @UseInterceptors(ClassSerializerInterceptor)
   @Get(':id')
   async findOne(@Param('id') id: string, @Res() response: Response) {
-    const role = this.rolesService.findOne(+id);
+    const role = await this.rolesService.findOne(+id);
 
-    response.send(200).send({
-      data: role,
+    response.status(200).send({
+      role: role,
     });
   }
 
@@ -70,18 +66,18 @@ export class RolesController {
     @Body() updateRoleDto: UpdateRoleDto,
     @Res() response: Response,
   ) {
-    this.rolesService.update(+id, updateRoleDto);
+    await this.rolesService.update(+id, updateRoleDto);
 
-    response.send(200).send({
+    response.status(200).send({
       message: 'Role has been updated!',
     });
   }
 
   @Delete(':id')
   async remove(@Param('id') id: string, @Res() response: Response) {
-    this.rolesService.remove(+id);
+    await this.rolesService.remove(+id);
 
-    response.send(200).send({
+    response.status(200).send({
       message: 'Role has been deleted!',
     });
   }

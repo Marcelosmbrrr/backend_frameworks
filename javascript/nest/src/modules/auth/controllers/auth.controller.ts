@@ -14,7 +14,7 @@ export class AuthController {
     return this.authService.signIn(signInDTO, response);
   }
 
-  @Get('check-authentication')
+  @Get('verify-authentication')
   async checkAuthentication(
     @Req() request: Request,
     @Res() response: Response,
@@ -23,7 +23,7 @@ export class AuthController {
     return response.status(200).send({ message: 'User is authorized.' });
   }
 
-  @Get('authenticated-user-data')
+  @Get('refresh-data')
   async authenticatedUserData(
     @Res() response: Response,
     @Query('userId') userId: number,
