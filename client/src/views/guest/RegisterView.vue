@@ -53,6 +53,15 @@
                     </form>
                 </div>
             </div>
+
+            <Transition>
+                <div v-if="alert.show" class="p-4 mt-2 text-sm border border-gray-700 rounded-lg bg-gray-800"
+                    :class="{ 'text-red-400': alert.type === 'error', 'text-emerald-400': alert.type === 'success' }"
+                    role="alert">
+                    {{ alert.message }}
+                </div>
+            </Transition>
+
         </div>
     </component>
 </template>
@@ -61,7 +70,6 @@
 import * as Vue from 'vue';
 import router from '@/router';
 // Custom
-import { form, FormDataError } from '@/types/types';
 import { FormValidation } from '../../utils/FormValidation';
 import axios from "../../utils/api";
 
@@ -72,8 +80,21 @@ interface IForm {
     password_confirmation: string
 }
 
+interface IFieldError {
+    error: boolean,
+    message: string
+}
+
+interface IFormError {
+    name: IFieldError,
+    email: IFieldError,
+    password: IFieldError,
+    password_confirmation: IFieldError
+}
+
 interface IAlert {
     show: boolean;
+    type: string;
     message: string;
 }
 
@@ -81,8 +102,8 @@ const initialForm = JSON.stringify({ name: "", email: "", password: "", password
 const initialFormError = JSON.stringify({ name: { error: false, message: "" }, email: { error: false, message: "" }, password: { error: false, message: "" }, password_confirmation: { error: false, message: "" } })
 
 const form = Vue.reactive<IForm>(JSON.parse(initialForm));
-const formError = Vue.reactive<FormDataError<TFields>>(JSON.parse(initialFormError));
-const alert = Vue.reactive<IAlert>({ show: false, message: "" });
+const formError = Vue.reactive<IFormError>(JSON.parse(initialFormError));
+const alert = Vue.reactive<IAlert>({ show: false, type: "", message: "" });
 
 async function handleSubmit() {
 
@@ -111,12 +132,17 @@ async function request() {
             password_confirmation: form.password_confirmation
         });
 
+        alert.show = true;
+        alert.type = 'success';
+        alert.message = response.data.message;
+
         setTimeout(() => {
             router.push({ path: '/login' });
         }, 2000);
     } catch (e) {
         console.error(e);
         alert.show = true;
+        alert.type = 'error';
         alert.message = e.message;
     }
 }
