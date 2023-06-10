@@ -38,7 +38,7 @@ export class AuthController {
   }
 
   @Post('signout')
-  async signOut(@Req() request: Request, @Res() response: Response) {
+  async signOut(@Res() response: Response) {
     response.clearCookie('access-token');
     return response.status(200).send({ message: 'Session has been expired.' });
   }

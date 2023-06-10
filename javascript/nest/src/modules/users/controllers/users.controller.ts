@@ -12,6 +12,7 @@ import {
 } from '@nestjs/common';
 import { Response } from 'express';
 import { UseInterceptors } from '@nestjs/common/decorators';
+import { ClassSerializerInterceptor } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { UploadedFile } from '@nestjs/common/decorators';
 // Custom
@@ -38,33 +39,25 @@ export class UsersController {
     });
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(RoleGuard)
   @Get()
-  async findAll(
-    @Query('limit') limit,
-    @Query('offset') offset,
-    @Res() response: Response,
-  ) {
+  async findAll(@Query('limit') limit, @Query('offset') offset) {
     const users = await this.usersService.findAll(
       Number(limit),
       Number(offset),
     );
 
-    return response.status(200).send({
-      message: 'Users found!',
-      users: users,
-    });
+    return users;
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(RoleGuard)
   @Get(':id')
-  async findOne(@Param('id') id: string, @Res() response: Response) {
+  async findOne(@Param('id') id: string) {
     const user = this.usersService.findOne(+id);
 
-    return response.status(200).send({
-      message: 'User found!',
-      users: user,
-    });
+    return user;
   }
 
   @UseGuards(RoleGuard)

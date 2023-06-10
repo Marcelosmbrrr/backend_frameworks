@@ -11,6 +11,8 @@ import {
   Query,
 } from '@nestjs/common';
 import { Response } from 'express';
+import { UseInterceptors } from '@nestjs/common/decorators';
+import { ClassSerializerInterceptor } from '@nestjs/common';
 // Custom
 import { RolesService } from '../services/roles.service';
 import { CreateRoleDto } from '../dto/create-role.dto';
@@ -24,7 +26,10 @@ export class RolesController {
 
   @UseGuards(RoleGuard)
   @Post()
-  async create(@Body() createRoleDto: CreateRoleDto, @Res() response: Response) {
+  async create(
+    @Body() createRoleDto: CreateRoleDto,
+    @Res() response: Response,
+  ) {
     this.rolesService.create(createRoleDto);
 
     return response.status(201).send({
@@ -32,30 +37,25 @@ export class RolesController {
     });
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(RoleGuard)
   @Get()
-  async findAll(
-    @Query('limit') limit,
-    @Query('offset') offset,
-    @Res() response: Response,
-  ) {
-    const roles = await this.rolesService.findAll(Number(limit), Number(offset));
+  async findAll(@Query('limit') limit, @Query('offset') offset) {
+    const roles = await this.rolesService.findAll(
+      Number(limit),
+      Number(offset),
+    );
 
-    return response.status(200).send({
-      message: 'Roles found!',
-      roles: roles,
-    });
+    return roles;
   }
 
+  @UseInterceptors(ClassSerializerInterceptor)
   @UseGuards(RoleGuard)
   @Get(':id')
-  async findOne(@Param('id') id: string, @Res() response: Response) {
+  async findOne(@Param('id') id: string) {
     const role = this.rolesService.findOne(+id);
 
-    return response.status(200).send({
-      message: 'Role found!',
-      roles: role,
-    });
+    return role;
   }
 
   @UseGuards(RoleGuard)

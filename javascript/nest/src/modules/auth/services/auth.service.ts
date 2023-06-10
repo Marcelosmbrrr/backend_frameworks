@@ -1,6 +1,5 @@
 import {
   Injectable,
-  Req,
   Body,
   InternalServerErrorException,
   NotFoundException,
@@ -24,7 +23,7 @@ export class AuthService {
     private readonly prismaService: PrismaService,
     private jwtService: JwtService,
     private eventEmitter: EventEmitter2,
-  ) { }
+  ) {}
 
   async signIn(@Body() data: SignInDTO, res: Response) {
     const { email, password } = data;
@@ -124,7 +123,7 @@ export class AuthService {
     }
   }
 
-  async signUp(@Body() data: SignUpDTO) {
+  async signUp(data: SignUpDTO) {
     const { name, email, password } = data;
 
     const user = await this.prismaService.user.findUnique({
@@ -135,9 +134,13 @@ export class AuthService {
       throw new ConflictException('Email already exists.');
     }
 
+    if (user.email_verified_at === null) {
+      throw new UnauthorizedException('Verify your e-mail.');
+    }
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const create = await this.prismaService.user.create({
+    await this.prismaService.user.create({
       data: {
         name: name,
         email: email,
@@ -146,16 +149,10 @@ export class AuthService {
       },
     });
 
-    if (!create) {
-      throw new InternalServerErrorException(
-        'Registration failed. Try again later.',
-      );
-    }
-
     // Event to send email
     const event = new SignUpEvent();
-    event.name = user.name;
-    event.email = user.email;
+    event.name = name;
+    event.email = email;
     event.datetime = new Date().toLocaleString();
     this.eventEmitter.emit('auth.signup', event);
   }

@@ -1,4 +1,4 @@
-import { IsEmail, IsString, Matches, Length, IsInt } from 'class-validator';
+import { IsEmail, IsString, Length } from 'class-validator';
 
 export class SignInDTO {
   @IsString()
@@ -20,8 +20,4 @@ export class SignUpDTO {
 
   @IsString()
   password: string;
-
-  @IsString()
-  @Matches('password')
-  password_confirmation: string;
 }
