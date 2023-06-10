@@ -70,7 +70,7 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   if (to.meta.requireAuth) {
     try {
-      await axios.get(import.meta.env.VITE_API_URL + "/auth/check-authentication");
+      await axios.get(import.meta.env.VITE_API_URL + "/auth/verify-authentication");
     } catch (e) {
       localStorage.removeItem("app-user-data");
       router.push("/login");

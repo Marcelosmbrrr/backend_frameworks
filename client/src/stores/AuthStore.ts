@@ -26,7 +26,7 @@ export const useAuth = Pinia.defineStore('auth', () => {
         const userId = JSON.parse(userData).id;
 
         try {
-            const response = await axios.get(import.meta.env.VITE_API_URL + "/auth/authenticated-user-data?userId=" + userId);
+            const response = await axios.get(import.meta.env.VITE_API_URL + "/auth/refresh-data?userId=" + userId);
             localStorage.setItem("app-user-data", JSON.stringify(response.data.user));
             Object.assign(user, response.data.user);
         } catch (e) {

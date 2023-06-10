@@ -143,7 +143,7 @@ async function request() {
         console.error(e);
         alert.show = true;
         alert.type = 'error';
-        alert.message = e.message;
+        alert.message = e.response.data.message;
     }
 }
 

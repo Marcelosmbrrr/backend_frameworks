@@ -63,17 +63,33 @@
                 </div>
             </div>
         </div>
+
+        <Transition>
+            <div v-if="alert.show" class="p-4 mt-2 text-sm border border-gray-700 rounded-lg bg-gray-800 text-red-400"
+                role="alert">
+                <span class="font-medium">Error!</span> {{ alert.message }}
+            </div>
+        </Transition>
+
     </div>
 </template>
 
 <script setup lang="ts">
 import * as Vue from 'vue';
+import { FormValidation } from '@/utils/FormValidation';
+import axios from '../../../utils/api';
 
 interface IForm {
     name: string;
     email: string;
     roleId: string;
     password: string;
+}
+
+interface IAlert {
+    show: boolean;
+    type: string;
+    message: string;
 }
 
 const props = defineProps({
@@ -85,9 +101,25 @@ const props = defineProps({
 
 const open = Vue.ref<boolean>(false);
 const form = Vue.reactive<IForm>({ name: "", email: "", roleId: "0", password: "" });
+const alert = Vue.reactive<IAlert>({ show: false, type: "", message: "" });
 
 async function handleSubmit() {
-    console.log('submit');
+    try {
+        await axios.post(import.meta.env.VITE_API_URL + "/users", form);
+
+        alert.type = 'success';
+        alert.message = e.response.data.message;
+
+        setTimeout(() => {
+            closeModal();
+        }, 2000);
+    } catch (e) {
+        console.error(e);
+        alert.type = 'error';
+        alert.message = e.response.data.message;
+    } finally {
+        alert.show = true;
+    }
 }
 
 function openModal() {

@@ -5,8 +5,7 @@
     </button>
 
     <!-- Main modal -->
-    <div id="defaultModal" tabindex="-1" aria-hidden="true"
-        class="flex justify-center items-center fixed z-50 w-full p-4 overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm"
+    <div class="flex justify-center items-center fixed z-50 w-full p-4 overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm"
         :class="{ 'hidden': !open }">
         <div class="relative w-full max-w-2xl max-h-full">
             <!-- Modal content -->
@@ -85,11 +84,21 @@
                 </div>
             </div>
         </div>
+
+        <Transition>
+            <div v-if="alert.show" class="p-4 mt-2 text-sm border border-gray-700 rounded-lg bg-gray-800 text-red-400"
+                role="alert">
+                <span class="font-medium">Error!</span> {{ alert.message }}
+            </div>
+        </Transition>
+
     </div>
 </template>
 
 <script setup lang="ts">
 import * as Vue from 'vue';
+import { FormValidation } from '@/utils/FormValidation';
+import axios from '../../../utils/api';
 
 interface IForm {
     id: string;
@@ -102,6 +111,12 @@ interface IForm {
         read: boolean;
         write: boolean;
     };
+}
+
+interface IAlert {
+    show: boolean;
+    type: string;
+    message: string;
 }
 
 const props = defineProps({
@@ -129,9 +144,25 @@ const props = defineProps({
 
 const open = Vue.ref<boolean>(false);
 const form = Vue.reactive<IForm>({ id: "", name: "", user: { read: false, write: false }, role: { read: false, write: false } });
+const alert = Vue.reactive<IAlert>({ show: false, type: "", message: "" });
 
 async function handleSubmit() {
-    console.log('submit');
+    try {
+        await axios.patch(import.meta.env.VITE_API_URL + "/roles/" + form.id, form);
+
+        alert.type = 'success';
+        alert.message = e.response.data.message;
+
+        setTimeout(() => {
+            closeModal();
+        }, 2000);
+    } catch (e) {
+        console.error(e);
+        alert.type = 'error';
+        alert.message = e.response.data.message;
+    } finally {
+        alert.show = true;
+    }
 }
 
 function openModal() {
