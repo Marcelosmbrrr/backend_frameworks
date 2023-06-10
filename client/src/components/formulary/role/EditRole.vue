@@ -25,7 +25,7 @@
                 <div class="p-6 space-y-6">
                     <div class="mb-6">
                         <label for="name" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Name</label>
-                        <input type="text" id="name" :value="props.name"
+                        <input type="text" id="name" v-model="form.name"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required>
                     </div>
@@ -38,13 +38,13 @@
                             </div>
                             <div>
                                 <div class="flex items-center mb-4">
-                                    <input type="checkbox" :checked="props.users.read"
+                                    <input type="checkbox" v-model="form.users.read"
                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     <label for="default-checkbox"
                                         class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Read</label>
                                 </div>
                                 <div class="flex items-center">
-                                    <input id="checked-checkbox" type="checkbox" :checked="props.users.write"
+                                    <input id="checked-checkbox" type="checkbox" v-model="form.users.write"
                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     <label for="checked-checkbox"
                                         class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Write</label>
@@ -59,13 +59,13 @@
                             </div>
                             <div>
                                 <div class="flex items-center mb-4">
-                                    <input type="checkbox" :checked="props.roles.read"
+                                    <input type="checkbox" v-model="form.roles.read"
                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     <label for="default-checkbox"
                                         class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Read</label>
                                 </div>
                                 <div class="flex items-center">
-                                    <input id="checked-checkbox" type="checkbox" :checked="props.roles.write"
+                                    <input id="checked-checkbox" type="checkbox" v-model="form.roles.write"
                                         class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                     <label for="checked-checkbox"
                                         class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Write</label>
@@ -97,17 +97,15 @@
 
 <script setup lang="ts">
 import * as Vue from 'vue';
-import { FormValidation } from '@/utils/FormValidation';
-import axios from '../../../utils/api';
 
 interface IForm {
     id: string;
     name: string;
-    user: {
+    users: {
         read: boolean;
         write: boolean;
     };
-    role: {
+    roles: {
         read: boolean;
         write: boolean;
     };
@@ -122,47 +120,37 @@ interface IAlert {
 const props = defineProps({
     disabled: {
         type: Boolean,
-        required: true,
-    },
-    id: {
-        type: String,
         required: true
     },
-    name: {
-        type: String,
-        required: true
-    },
-    users: {
-        type: Object,
-        required: true
-    },
-    roles: {
+    role: {
         type: Object,
         required: true
     }
 });
 
+// Update prefix for v-model child-parent communication
+// Source: https://learnvue.co/articles/v-model-guide#using-vue-v-model-in-custom-components
+const emits = defineEmits(['update:role'])
+
+const initialForm = JSON.stringify({
+    id: props.role.id,
+    name: props.role.name,
+    users: {
+        read: props.role.users.read,
+        write: props.role.users.write,
+    },
+    roles: {
+        read: props.role.roles.read,
+        write: props.role.roles.write,
+    },
+});
+
 const open = Vue.ref<boolean>(false);
-const form = Vue.reactive<IForm>({ id: "", name: "", user: { read: false, write: false }, role: { read: false, write: false } });
+const form = Vue.ref<IForm>(JSON.parse(initialForm));
 const alert = Vue.reactive<IAlert>({ show: false, type: "", message: "" });
 
 async function handleSubmit() {
-    try {
-        await axios.patch(import.meta.env.VITE_API_URL + "/roles/" + form.id, form);
-
-        alert.type = 'success';
-        alert.message = e.response.data.message;
-
-        setTimeout(() => {
-            closeModal();
-        }, 2000);
-    } catch (e) {
-        console.error(e);
-        alert.type = 'error';
-        alert.message = e.response.data.message;
-    } finally {
-        alert.show = true;
-    }
+    emits('update:role', form.value)
 }
 
 function openModal() {

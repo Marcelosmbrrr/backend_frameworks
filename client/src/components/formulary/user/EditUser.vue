@@ -69,9 +69,6 @@
 
 <script setup lang="ts">
 import * as Vue from 'vue';
-import { FormValidation } from '@/utils/FormValidation';
-import axios from '../../../utils/api';
-import { formToJSON } from 'axios';
 
 interface IForm {
     id: string;
@@ -91,52 +88,25 @@ const props = defineProps({
         type: Boolean,
         required: true
     },
-    id: {
-        type: String,
+    user: {
+        type: Object,
         required: true
-    },
-    name: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    roleId: {
-        type: String,
-        required: true
-    },
+    }
 });
 
-const initialForm = JSON.stringify({
-    id: props.id,
-    name: props.name,
-    email: props.email,
-    roleId: props.roleId
-});
+// Update prefix for v-model child-parent communication
+// Source: https://learnvue.co/articles/v-model-guide#using-vue-v-model-in-custom-components
+const emits = defineEmits(['update:user'])
+
+const initialForm = JSON.stringify(props.user);
 
 const open = Vue.ref<boolean>(false);
-const form = Vue.reactive<IForm>({ id: "", name: "", email: "", roleId: "" });
+const form = Vue.ref<IForm>(JSON.parse(initialForm));
 const alert = Vue.reactive<IAlert>({ show: false, type: "", message: "" });
 
 async function handleSubmit() {
-    try {
-        await axios.patch(import.meta.env.VITE_API_URL + "/users/" + form.id, form);
-
-        alert.type = 'success';
-        alert.message = e.response.data.message;
-
-        setTimeout(() => {
-            closeModal();
-        }, 2000);
-    } catch (e) {
-        console.error(e);
-        alert.type = 'error';
-        alert.message = e.response.data.message;
-    } finally {
-        alert.show = true;
-    }
+    console.log(props.user)
+    //emits('update:user', form.value)
 }
 
 function openModal() {
