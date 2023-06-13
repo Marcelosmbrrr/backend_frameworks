@@ -1,12 +1,10 @@
 <template>
   <component :is="$route.meta.layout">
-
     <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
       <div class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
         <img class="w-8 h-8 mr-2" src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vuejs/vuejs-original.svg"
           alt="logo">
       </div>
-
       <div
         class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
         <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -16,13 +14,13 @@
           <form class="space-y-4 md:space-y-6" @submit.prevent="handleSubmit">
             <div>
               <label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-              <input type="text" name="email" id="email" v-model="formData.email"
+              <input type="text" name="email" id="email" v-model="form.email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-emerald-600 focus:border-emerald-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <span className="text-sm text-red-400">{{ formError.email.message }}</span>
             </div>
             <div>
               <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-              <input type="password" name="password" id="password" v-model="formData.password"
+              <input type="password" name="password" id="password" v-model="form.password"
                 class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-emerald-600 focus:border-emerald-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
               <span className="text-sm text-red-400">{{ formError.password.message }}</span>
             </div>
@@ -51,41 +49,49 @@
           </form>
         </div>
       </div>
-
       <Transition>
         <div v-if="alert.show" class="p-4 mt-2 text-sm border border-gray-700 rounded-lg bg-gray-800 text-red-400"
           role="alert">
           <span class="font-medium">Error!</span> {{ alert.message }}
         </div>
       </Transition>
-
     </div>
   </component>
 </template>
 
 <script setup lang="ts">
 import * as Vue from 'vue';
+import { DeepCopy } from '../../utils/DeepCopy';
 import BackendSelect from '@/components/formulary/backend-select/BackendSelect.vue';
-import { FormData, FormDataError } from '@/types/types';
 import { FormValidation } from '../../utils/FormValidation';
 import { useAuth } from '@/stores/AuthStore';
 
-type TFields = {
-  email: string,
-  password: string
+interface IForm {
+  email: string;
+  password: string;
+}
+
+interface IFieldError {
+  error: boolean,
+  message: string
+}
+
+interface IFormError {
+  email: IFieldError,
+  password: IFieldError
 }
 
 interface IAlert {
-    show: boolean;
-    message: string;
+  show: boolean;
+  message: string;
 }
 
-const initialForm = JSON.stringify({ email: "", password: "" })
-const initialFormError = JSON.stringify({ email: { error: false, message: "" }, password: { error: false, message: "" } })
+const initialForm = { email: "", password: "" }
+const initialFormError = { email: { error: false, message: "" }, password: { error: false, message: "" } }
 
 const { signIn } = useAuth();
-const formData = Vue.reactive<FormData<TFields>>(JSON.parse(initialForm));
-const formError = Vue.reactive<FormDataError<TFields>>(JSON.parse(initialFormError));
+const form = Vue.reactive<IForm>(DeepCopy(initialForm));
+const formError = Vue.reactive<IFormError>(DeepCopy(initialFormError));
 const loading = Vue.ref<boolean>(false);
 const alert = Vue.reactive<IAlert>({ show: false, message: "" });
 const rememberMe = Vue.ref<boolean>(false);
@@ -99,13 +105,9 @@ Vue.onMounted(() => {
 
 function handleSubmit() {
 
-  const obj = new FormValidation(formData, JSON.parse(initialFormError));
-  const { validation, is_valid } = obj.exec();
-  const validationCopy = JSON.parse(JSON.stringify(validation));
-  Object.assign(formError, validationCopy);
+  const validation = validationBeforeRequest();
 
-  if (!is_valid) {
-    Object.assign(alert, { show: true, message: "Data is invalid!" });
+  if (!validation) {
     return;
   }
 
@@ -116,13 +118,23 @@ function handleSubmit() {
 
 }
 
-function backendActivation(value: boolean) {
-  backendEnabled.value = value;
+function validationBeforeRequest(): boolean {
+
+  const { validation, is_valid } = FormValidation(form, DeepCopy(initialFormError));
+  const validationCopy = DeepCopy(validation);;
+  Object.assign(formError, validationCopy);
+
+  if (!is_valid) {
+    Object.assign(alert, { show: true, message: "Data is invalid!" });
+    return false;
+  }
+
+  return true;
 }
 
 async function request() {
   try {
-    await signIn({ ...formData, rememberMe: rememberMe.value });
+    await signIn({ ...form, rememberMe: rememberMe.value });
   } catch (e) {
     console.error(e);
     alert.message = e.response.data.message;
@@ -135,6 +147,10 @@ async function request() {
   finally {
     loading.value = false;
   }
+}
+
+function backendActivation(value: boolean) {
+  backendEnabled.value = value;
 }
 
 </script>

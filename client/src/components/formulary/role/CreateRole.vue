@@ -28,6 +28,7 @@
                         <input type="email" id="email" v-model="form.name"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required>
+                        <span className="text-sm text-red-400">{{ formError.name.message }}</span>
                     </div>
                     <div class="flex gap-10 mb-6">
 
@@ -97,6 +98,7 @@
 
 <script setup lang="ts">
 import * as Vue from 'vue';
+import { DeepCopy } from '@/utils/DeepCopy';
 import { FormValidation } from '@/utils/FormValidation';
 import axios from '../../../utils/api';
 
@@ -109,6 +111,13 @@ interface IForm {
     role: {
         read: boolean;
         write: boolean;
+    };
+}
+
+interface IFormError {
+    name: {
+        error: boolean;
+        message: string
     };
 }
 
@@ -125,11 +134,36 @@ const props = defineProps({
     },
 });
 
-const open = Vue.ref<boolean>(false);
-const form = Vue.reactive<IForm>({ name: "", user: { read: false, write: false }, role: { read: false, write: false } });
-const alert = Vue.reactive<IAlert>({ show: false, type: "", message: "" });
+const initialForm = { name: "", user: { read: false, write: false }, role: { read: false, write: false } };
+const initialFormError = { name: { error: false, message: "" } }
 
-async function handleSubmit() {
+const open = Vue.ref<boolean>(false);
+const form = Vue.reactive<IForm>(DeepCopy(initialForm));
+const formError = Vue.reactive<IFormError>(DeepCopy(initialFormError));
+const alert = Vue.reactive<IAlert>({ show: false, type: "", message: "" });
+const loading = Vue.ref<boolean>(false);
+
+function handleSubmit() {
+    const validation = validationBeforeRequest();
+    if (!validation) {
+        return;
+    }
+    alert.show = false;
+    loading.value = true;
+    request();
+}
+
+function validationBeforeRequest(): boolean {
+    const { validation, is_valid } = FormValidation(form, DeepCopy(initialFormError));
+    const validationCopy = DeepCopy(validation);;
+    Object.assign(formError, validationCopy);
+    if (!is_valid) {
+        return false;
+    }
+    return true;
+}
+
+async function request() {
     try {
         await axios.post(import.meta.env.VITE_API_URL + "/roles", form);
 

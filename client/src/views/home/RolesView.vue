@@ -27,9 +27,10 @@
                         </div>
                         <div
                             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                            <!-- CRUD modals -->
+                            <!-- CRUD MODALS -->
                             <CreateRole :disabled="selection.selected" />
-                            <EditRole :disabled="!selection.selected" v-model:role="selection.user" /> <!-- v-model for props mutation -->
+                            <EditRole :disabled="!selection.selected" :role="selection.role" />
+                            <!---- -->
                             <button @click="fetchAll" type="button" id="refresh-users-table"
                                 data-modal-toggle="createProductModal"
                                 class="flex items-center justify-center text-white bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-emerald-600 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-800">
@@ -155,10 +156,10 @@ import EditRole from '@/components/formulary/role/EditRole.vue';
 
 interface ISelection {
     selected: boolean,
-    user: {
+    role: {
         id: string;
         name: string;
-        privileges: {
+        modules: {
             users: {
                 read: boolean,
                 write: boolean
@@ -180,7 +181,7 @@ interface ISearch {
     value: string
 }
 
-const initialSelection = JSON.stringify({ selected: false, user: { id: "", privileges: { users: { read: false, write: false }, roles: { read: false, write: false } } } });
+const initialSelection = JSON.stringify({ selected: false, role: { id: "", modules: { users: { read: false, write: false }, roles: { read: false, write: false } } } });
 const initialPaginate = JSON.stringify({ limit: 10, page: 1 });
 
 const { user } = useAuth();
@@ -218,7 +219,7 @@ function select(new_record) {
 
     // Is an unselection
     if (selection.selected) {
-        if (selection.user.id === new_record.id) {
+        if (selection.role.id === new_record.id) {
             Object.assign(selection, JSON.parse(initialSelection));
             return;
         }
@@ -229,10 +230,10 @@ function select(new_record) {
     // Is a new selection when is empty or is different from previously
     Object.assign(selection, {
         selected: true,
-        user: {
+        role: {
             id: record.id,
             name: record.name,
-            privileges: {
+            modules: {
                 users: {
                     read: record.ModuleRole[0].read,
                     write: record.ModuleRole[0].write,

@@ -27,9 +27,10 @@
                         </div>
                         <div
                             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
-                            <!-- CRUD modals -->
+                            <!-- CRUD MODALS -->
                             <CreateUser :disabled="selection.selected" />
-                            <EditUser :disabled="!selection.selected" v-model:user="selection.user" /> <!-- v-model for props mutation -->
+                            <EditUser :disabled="!selection.selected" :user="selection.user" /> <!-- v-model for props mutation -->
+                            <!---- -->
                             <button @click="fetchAll" type="button" id="refresh-users-table"
                                 data-modal-toggle="createProductModal"
                                 class="flex items-center justify-center text-white bg-emerald-700 hover:bg-emerald-800 focus:ring-4 focus:ring-emerald-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-emerald-600 dark:hover:bg-emerald-700 focus:outline-none dark:focus:ring-emerald-800">

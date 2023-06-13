@@ -1,36 +1,37 @@
-export class FormValidation {
+interface IFormData {
+    [field: string]: any
+}
 
-    #formData;
-    #formValidation;
-    #is_valid = true;
-
-    constructor(formData, formValidation) {
-        this.#formData = formData;
-        this.#formValidation = formValidation;
+interface IFormError {
+    [field: string]: {
+        error: boolean;
+        message: string;
     }
+}
 
-    exec() {
+export function FormValidation(formData: IFormData, formError: IFormError) {
 
-        for (let field in this.#formData) {
-            if (this.#formData[field].length === 0) {
-                this.#formValidation[field] = {
-                    error: true,
-                    message: `Inform the ${field}`
-                }
-                this.#is_valid = false;
-            } else if (this.#formData[field].length > 0) {
-                this.#formValidation[field] = {
-                    error: false,
-                    message: ""
-                }
+    let is_valid = true;
+
+    for (let field in formData) {
+        if (formData[field].length === 0 || formData[field] === null) {
+            formError[field] = {
+                error: true,
+                message: `Inform the ${field}`
+            }
+            is_valid = false;
+        } else if (formData[field].length > 0) {
+            formError[field] = {
+                error: false,
+                message: ""
             }
         }
-
-        return {
-            validation: this.#formValidation,
-            is_valid: this.#is_valid
-        };
-
     }
+
+    return {
+        validation: formError,
+        is_valid: is_valid
+    };
+
 
 }

@@ -53,7 +53,6 @@
                     </form>
                 </div>
             </div>
-
             <Transition>
                 <div v-if="alert.show" class="p-4 mt-2 text-sm border border-gray-700 rounded-lg bg-gray-800"
                     :class="{ 'text-red-400': alert.type === 'error', 'text-emerald-400': alert.type === 'success' }"
@@ -61,7 +60,6 @@
                     {{ alert.message }}
                 </div>
             </Transition>
-
         </div>
     </component>
 </template>
@@ -69,7 +67,7 @@
 <script setup lang="ts">
 import * as Vue from 'vue';
 import router from '@/router';
-// Custom
+import { DeepCopy } from '../../utils/DeepCopy';
 import { FormValidation } from '../../utils/FormValidation';
 import axios from "../../utils/api";
 
@@ -98,29 +96,38 @@ interface IAlert {
     message: string;
 }
 
-const initialForm = JSON.stringify({ name: "", email: "", password: "", password_confirmation: "" })
-const initialFormError = JSON.stringify({ name: { error: false, message: "" }, email: { error: false, message: "" }, password: { error: false, message: "" }, password_confirmation: { error: false, message: "" } })
+const initialForm = { name: "", email: "", password: "", password_confirmation: "" };
+const initialFormError = { name: { error: false, message: "" }, email: { error: false, message: "" }, password: { error: false, message: "" }, password_confirmation: { error: false, message: "" } };
 
-const form = Vue.reactive<IForm>(JSON.parse(initialForm));
-const formError = Vue.reactive<IFormError>(JSON.parse(initialFormError));
+const form = Vue.reactive<IForm>(DeepCopy(initialForm));
+const formError = Vue.reactive<IFormError>(DeepCopy(initialFormError));
 const alert = Vue.reactive<IAlert>({ show: false, type: "", message: "" });
 
-async function handleSubmit() {
+function handleSubmit() {
 
-    const obj = new FormValidation(form, JSON.parse(initialForm));
-    const { validation, is_valid } = obj.exec();
-    const validationCopy = JSON.parse(JSON.stringify(validation));
-    Object.assign(formError, validationCopy);
+    const validation = validationBeforeRequest();
 
-    if (!is_valid) {
-        Object.assign(alert, { show: true, message: "Data is invalid!" });
+    if (!validation) {
         return;
     }
 
     alert.show = false;
-    alert.message = "";
     request();
 
+}
+
+function validationBeforeRequest(): boolean {
+
+    const { validation, is_valid } = FormValidation(form, DeepCopy(initialFormError));
+    const validationCopy = DeepCopy(validation);;
+    Object.assign(formError, validationCopy);
+
+    if (!is_valid) {
+        Object.assign(alert, { show: true, message: "Data is invalid!" });
+        return false;
+    }
+
+    return true;
 }
 
 async function request() {

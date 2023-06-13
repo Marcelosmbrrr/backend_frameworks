@@ -6,7 +6,7 @@
 
     <!-- Main modal -->
     <div id="create-user-modal" :class="{ 'hidden': !open }"
-        class="flex justify-center items-center fixed z-50 w-full p-4 overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
+        class="flex flex-col justify-center items-center fixed z-50 w-full p-4 overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
         <div class="relative w-full max-w-2xl max-h-full">
             <!-- Modal content -->
             <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -28,6 +28,7 @@
                         <input type="text" id="name" v-model="form.name"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required>
+                        <span className="text-sm text-red-400">{{ formError.name.message }}</span>
                     </div>
                     <div class="mb-6">
                         <label for="email"
@@ -35,6 +36,7 @@
                         <input type="email" id="email" v-model="form.email"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                             required>
+                        <span className="text-sm text-red-400">{{ formError.email.message }}</span>
                     </div>
                     <div class="mb-6">
                         <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an
@@ -52,6 +54,7 @@
                         <input type="text" id="password" v-model="form.password"
                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
                             required>
+                        <span className="text-sm text-red-400">{{ formError.password.message }}</span>
                     </div>
                 </div>
                 <!-- Modal footer -->
@@ -76,6 +79,7 @@
 
 <script setup lang="ts">
 import * as Vue from 'vue';
+import { DeepCopy } from '@/utils/DeepCopy';
 import { FormValidation } from '@/utils/FormValidation';
 import axios from '../../../utils/api';
 
@@ -84,6 +88,18 @@ interface IForm {
     email: string;
     roleId: string;
     password: string;
+}
+
+interface IFieldError {
+    error: boolean;
+    message: string;
+}
+
+interface IFormError {
+    name: IFieldError;
+    email: IFieldError;
+    roleId: IFieldError;
+    password: IFieldError;
 }
 
 interface IAlert {
@@ -99,11 +115,36 @@ const props = defineProps({
     },
 });
 
+const initialForm = { name: "", email: "", roleId: "0", password: "" };
+const initialFormError = { name: { error: false, message: "" }, email: { error: false, message: "" }, roleId: { error: false, message: "" }, password: { error: false, message: "" } }
+
 const open = Vue.ref<boolean>(false);
 const form = Vue.reactive<IForm>({ name: "", email: "", roleId: "0", password: "" });
+const formError = Vue.reactive<IFormError>(DeepCopy(initialFormError));
 const alert = Vue.reactive<IAlert>({ show: false, type: "", message: "" });
+const loading = Vue.ref<boolean>(false);
 
-async function handleSubmit() {
+function handleSubmit() {
+    const validation = validationBeforeRequest();
+    if (!validation) {
+        return;
+    }
+    alert.show = false;
+    loading.value = true;
+    request();
+}
+
+function validationBeforeRequest(): boolean {
+    const { validation, is_valid } = FormValidation(form, DeepCopy(initialFormError));
+    const validationCopy = DeepCopy(validation);;
+    Object.assign(formError, validationCopy);
+    if (!is_valid) {
+        return false;
+    }
+    return true;
+}
+
+async function request() {
     try {
         await axios.post(import.meta.env.VITE_API_URL + "/users", form);
 
