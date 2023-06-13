@@ -3,7 +3,9 @@
   "commands": [
     "./commands",
     "@adonisjs/core/build/commands/index.js",
-    "@adonisjs/repl/build/commands"
+    "@adonisjs/repl/build/commands",
+    "@adonisjs/mail/build/commands",
+    "@adonisjs/lucid/build/commands"
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
@@ -14,11 +16,14 @@
   },
   "preloads": [
     "./start/routes",
-    "./start/kernel"
+    "./start/kernel",
+    "./start/events"
   ],
   "providers": [
     "./providers/AppProvider",
-    "@adonisjs/core"
+    "@adonisjs/core",
+    "@adonisjs/mail",
+    "@adonisjs/lucid"
   ],
   "aceProviders": [
     "@adonisjs/repl"
