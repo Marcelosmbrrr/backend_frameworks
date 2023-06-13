@@ -14,12 +14,4 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   @IsString()
   @IsInt()
   roleId: number;
-
-  @IsString()
-  @IsOptional()
-  password: string;
-
-  @IsString()
-  @IsOptional()
-  password_confirmation: string;
 }

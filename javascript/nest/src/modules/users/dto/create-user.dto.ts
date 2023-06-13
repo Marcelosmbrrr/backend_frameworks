@@ -11,11 +11,4 @@ export class CreateUserDto {
 
   @IsInt()
   roleId: number;
-
-  @IsString()
-  password: string;
-
-  @IsString()
-  @Matches('password')
-  password_confirmation: string;
 }

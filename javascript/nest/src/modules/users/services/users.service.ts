@@ -15,14 +15,14 @@ export class UsersService {
   ) { }
 
   async create(data: CreateUserDto) {
-    const { name, email, roleId, password } = data;
+    const { name, email, roleId } = data;
 
     await this.prismaService.user.create({
       data: {
         name: name,
         email: email,
         roleId: roleId,
-        password: await bcrypt.hash(password, 10),
+        password: await bcrypt.hash('123123', 10),
       },
     });
   }
@@ -53,7 +53,7 @@ export class UsersService {
   }
 
   async update(id: number, data: UpdateUserDto) {
-    const { name, email, roleId, password } = data;
+    const { name, email, roleId } = data;
 
     await this.prismaService.user.update({
       where: {
@@ -63,7 +63,7 @@ export class UsersService {
         name: name,
         email: email,
         roleId: roleId,
-        password: password,
+        password: await bcrypt.hash('123123', 10),
       },
     });
   }
