@@ -49,13 +49,14 @@ export class AuthService {
       throw new UnauthorizedException('Wrong password');
     }
 
-    const token = await this.jwtService.signAsync({ userId: user.id });
+    const token = await this.jwtService.signAsync({
+      userId: user.id,
+      roleId: user.roleId,
+    });
 
     if (!token) {
       throw new InternalServerErrorException();
     }
-
-    res.cookie('access_token', token, { httpOnly: true });
 
     // Event to send email
     const event = new SignInEvent();
@@ -65,21 +66,24 @@ export class AuthService {
     this.eventEmitter.emit('auth.signin', event);
 
     const payload = {
-      id: user.id,
-      role: {
-        id: user.roleId,
-        privileges: user.role.ModuleRole,
+      user: {
+        id: user.id,
+        role: {
+          id: user.roleId,
+          privileges: user.role.ModuleRole,
+        },
       },
+      token: token,
     };
 
     return payload;
   }
 
   async refreshAndVerifyAuthentication(req: Request, res: Response) {
-    const token = req.cookies['access_token'];
+    const token = this.extractTokenFromHeader(req);
 
     if (!token) {
-      throw new UnauthorizedException('Token is missing.');
+      throw new UnauthorizedException('Authorization header is missing.');
     }
 
     const token_payload = await this.jwtService.verifyAsync(token, {
@@ -104,14 +108,21 @@ export class AuthService {
     });
 
     const payload = {
-      id: user.id,
-      role: {
-        id: user.roleId,
-        privileges: user.role.ModuleRole,
+      user: {
+        id: user.id,
+        role: {
+          id: user.roleId,
+          privileges: user.role.ModuleRole,
+        },
       },
     };
 
     return payload;
+  }
+
+  private extractTokenFromHeader(request: Request): string | undefined {
+    const [type, token] = request.headers.authorization?.split(' ') ?? [];
+    return type === 'Bearer' ? token : undefined;
   }
 
   async signUp(data: SignUpDTO) {

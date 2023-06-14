@@ -15,7 +15,7 @@ export class AuthController {
 
     return response.status(200).send({
       message: 'Sucessful authentication.',
-      user: data,
+      ...data,
     });
   }
 
@@ -31,7 +31,7 @@ export class AuthController {
 
     return response.status(200).send({
       message: 'User data has been loaded.',
-      user: data,
+      ...data,
     });
   }
 
@@ -43,7 +43,6 @@ export class AuthController {
 
   @Post('signout')
   async signOut(@Res() response: Response) {
-    response.clearCookie('access_token');
     return response.status(200).send({ message: 'Session has been expired.' });
   }
 }
