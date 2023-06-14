@@ -199,7 +199,7 @@ Vue.onMounted(() => {
 async function fetchAll() {
     try {
         const offset = paginate.page * paginate.limit - paginate.limit;
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/roles?limit=${paginate.limit}&offset=${offset}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/roles?search=${search.value}&limit=${paginate.limit}&offset=${offset}`);
         records.value = response.data.roles;
     } catch (error) {
         console.error(error);
@@ -212,7 +212,8 @@ async function fetchByID(e) {
         return;
     }
 
-    console.log('enter search');
+    search.value = e.target.value;
+    fetchAll();
 }
 
 function select(new_record) {

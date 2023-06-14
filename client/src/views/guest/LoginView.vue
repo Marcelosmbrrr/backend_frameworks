@@ -36,10 +36,10 @@
               </div>
             </div>
             <div class="flex flex-col gap-2">
-              <button type="submit" :disabled="!backendEnabled || loading"
-                :class="{ 'bg-emerald-600 hover:bg-emerald-700': backendEnabled, 'bg-gray-700': !backendEnabled }"
-                class="w-full text-white focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-emerald-800">{{
-                  loading ? 'Loading....' : 'Sign in' }}</button>
+              <button type="submit" :disabled="backendEnabled === false || loading === true"
+                class="w-full bg-emerald-600 hover:bg-emerald-700 text-white focus:ring-4 focus:outline-none focus:ring-emerald-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:focus:ring-emerald-800">
+                Sign In
+              </button>
               <BackendSelect @backend-activation="backendActivation" :backendEnabled="backendEnabled" />
             </div>
             <p class="text-sm font-light text-gray-500 dark:text-gray-400">
@@ -96,12 +96,6 @@ const loading = Vue.ref<boolean>(false);
 const alert = Vue.reactive<IAlert>({ show: false, message: "" });
 const rememberMe = Vue.ref<boolean>(false);
 const backendEnabled = Vue.ref<boolean>(false);
-
-Vue.onMounted(() => {
-  if (localStorage.getItem("app-backend")) {
-    backendEnabled.value = true;
-  }
-});
 
 function handleSubmit() {
 

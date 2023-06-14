@@ -29,7 +29,8 @@
                             class="w-full md:w-auto flex flex-col md:flex-row space-y-2 md:space-y-0 items-stretch md:items-center justify-end md:space-x-3 flex-shrink-0">
                             <!-- CRUD MODALS -->
                             <CreateUser :disabled="selection.selected" />
-                            <EditUser :disabled="!selection.selected" :user="selection.user" /> <!-- v-model for props mutation -->
+                            <EditUser :disabled="!selection.selected" :user="selection.user" />
+                            <!-- v-model for props mutation -->
                             <!---- -->
                             <button @click="fetchAll" type="button" id="refresh-users-table"
                                 data-modal-toggle="createProductModal"
@@ -167,7 +168,7 @@ Vue.onMounted(async () => {
 async function fetchAll() {
     try {
         const offset = paginate.page * paginate.limit - paginate.limit;
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?limit=${paginate.limit}&offset=${offset}`);
+        const response = await axios.get(`${import.meta.env.VITE_API_URL}/users?search=${search.value}&limit=${paginate.limit}&offset=${offset}`);
         records.value = response.data.users;
     } catch (error) {
         console.error(error);
@@ -180,7 +181,8 @@ async function fetchByID(e) {
         return;
     }
 
-    console.log('enter search');
+    search.value = e.target.value;
+    fetchAll();
 }
 
 function select(new_record) {

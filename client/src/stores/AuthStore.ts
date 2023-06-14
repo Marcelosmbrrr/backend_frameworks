@@ -15,39 +15,22 @@ export const useAuth = Pinia.defineStore('auth', () => {
     const is_authenticated = Vue.ref(false);
 
     async function refresh() {
-
-        const userData = localStorage.getItem("app-user-data");
-
-        if (!userData) {
-            signOut();
-            return;
-        }
-
-        const userId = JSON.parse(userData).id;
-
         try {
-            const response = await axios.get(import.meta.env.VITE_API_URL + "/auth/refresh-data?userId=" + userId);
-            localStorage.setItem("app-user-data", JSON.stringify(response.data.user));
+            const response = await axios.get(import.meta.env.VITE_API_URL + "/auth/refresh-data");
             Object.assign(user, response.data.user);
         } catch (e) {
             console.error(e);
             signOut();
         }
-
     }
 
     async function signIn({ email, password, rememberMe }: LoginData) {
         try {
 
-            const response = await axios.post(import.meta.env.VITE_API_URL + "/auth/signin", {
+            await axios.post(import.meta.env.VITE_API_URL + "/auth/signin", {
                 email,
                 password
             });
-
-            const userData = response.data.user;
-
-            localStorage.setItem("app-user-data", JSON.stringify(userData));
-            Object.assign(user, userData);
 
             router.push({ path: '/home' });
 
