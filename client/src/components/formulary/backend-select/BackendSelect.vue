@@ -15,7 +15,7 @@
                             Choose the backend framework
                         </h3>
                     </div>
-                    <div class="p-6 space-y-6">
+                    <div class="p-6 space-y-3">
                         <p class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
                             Choose one and click "Execute". The technology will start automatically and will be
                             responsible for receiving and processing your requests.
@@ -23,7 +23,7 @@
                     </div>
                     <div class="px-6 py-2">
 
-                        <ul class="grid w-full gap-6 md:grid-cols-2" ref="cardsContainer">
+                        <ul class="grid w-full gap-3 md:grid-cols-2" ref="cardsContainer">
                             <li>
                                 <input type="radio" id="nest" name="option" value="javascript/nest" v-model="option"
                                     class="hidden peer">
@@ -34,7 +34,7 @@
                                         <div class="w-full">Javascript Framework</div>
                                     </div>
                                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nestjs/nestjs-plain.svg"
-                                        className="mr-2 h-9" alt="NextJS logo" />
+                                        className="mr-2 h-9" alt="Nest icon" />
                                 </label>
                             </li>
                             <li>
@@ -47,7 +47,7 @@
                                         <div class="w-full">Javascript Framework</div>
                                     </div>
                                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/adonisjs/adonisjs-original.svg"
-                                        className="mr-2 h-9" alt="NextJS logo" />
+                                        className="mr-2 h-9" alt="Adonis icon" />
                                 </label>
                             </li>
                             <li>
@@ -60,7 +60,7 @@
                                         <div class="w-full">Python Framework</div>
                                     </div>
                                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg"
-                                        className="mr-2 h-9" alt="NextJS logo" />
+                                        className="mr-2 h-9" alt="Django icon" />
                                 </label>
                             </li>
                             <li>
@@ -69,11 +69,11 @@
                                 <label for="cakephp"
                                     class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-emerald-500 peer-checked:border-emerald-600 peer-checked:text-emerald-600 hover:text-gray-600 dark:text-gray-400 dark:bg-gray-800">
                                     <div class="block">
-                                        <div class="w-full text-lg font-semibold">Cake PHP</div>
+                                        <div class="w-full text-lg font-semibold">CakePHP</div>
                                         <div class="w-full">PHP Framework</div>
                                     </div>
                                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cakephp/cakephp-original.svg"
-                                        className="mr-2 h-9" alt="NextJS logo" />
+                                        className="mr-2 h-9" alt="CakePHP icon" />
                                 </label>
                             </li>
                             <li>
@@ -86,7 +86,7 @@
                                         <div class="w-full">PHP Framework</div>
                                     </div>
                                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/zend/zend-plain.svg"
-                                        className="mr-2 h-9" alt="NextJS logo" />
+                                        className="mr-2 h-9" alt="Zend icon" />
                                 </label>
                             </li>
                             <li>
@@ -95,11 +95,11 @@
                                 <label for="codeigniter"
                                     class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-emerald-500 peer-checked:border-emerald-600 peer-checked:text-emerald-600 hover:text-gray-600 dark:text-gray-400 dark:bg-gray-800">
                                     <div class="block">
-                                        <div class="w-full text-lg font-semibold">Code Igniter</div>
+                                        <div class="w-full text-lg font-semibold">CodeIgniter</div>
                                         <div class="w-full">PHP Framework</div>
                                     </div>
                                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/codeigniter/codeigniter-plain.svg"
-                                        className="mr-2 h-9" alt="NextJS logo" />
+                                        className="mr-2 h-9" alt="Code Igniter icon" />
                                 </label>
                             </li>
                             <li>
@@ -112,7 +112,7 @@
                                         <div class="w-full">PHP Framework</div>
                                     </div>
                                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/symfony/symfony-original.svg"
-                                        className="mr-2 h-9" alt="NextJS logo" />
+                                        className="mr-2 h-9" alt="Symfony icon" />
                                 </label>
                             </li>
                             <li>
@@ -125,7 +125,20 @@
                                         <div class="w-full">PHP Framework</div>
                                     </div>
                                     <img src="https://cdn.jsdelivr.net/gh/devicons/devicon/icons/laravel/laravel-plain.svg"
-                                        className="mr-2 h-9" alt="NextJS logo" />
+                                        className="mr-2 h-9" alt="Laravel icon" />
+                                </label>
+                            </li>
+                            <li>
+                                <input type="radio" id="swoole" name="option" value="php/swoole" v-model="option"
+                                    class="hidden peer">
+                                <label for="swoole"
+                                    class="inline-flex items-center justify-between w-full p-5 text-gray-500 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-700 dark:peer-checked:text-emerald-500 peer-checked:border-emerald-600 peer-checked:text-emerald-600 hover:text-gray-600 dark:text-gray-400 dark:bg-gray-800">
+                                    <div class="block">
+                                        <div class="w-full text-lg font-semibold">Swoole</div>
+                                        <div class="w-full">PHP Framework</div>
+                                    </div>
+                                    <img src="https://camo.githubusercontent.com/209dd5562393bba77e9fdd37d9da3caa6b5dc646611b1199d1d7d6583982caef/68747470733a2f2f692e696d6775722e636f6d2f6c4845693872542e706e67"
+                                        className="mr-2 h-9" alt="Swoole icon" />
                                 </label>
                             </li>
                         </ul>
