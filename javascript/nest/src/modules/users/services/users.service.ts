@@ -27,7 +27,7 @@ export class UsersService {
     });
   }
 
-  async findAll(limit: number, offset: number) {
+  async findAll(limit: number, offset: number, search: string) {
     const users = await this.prismaService.user.findMany({
       skip: offset,
       take: limit,

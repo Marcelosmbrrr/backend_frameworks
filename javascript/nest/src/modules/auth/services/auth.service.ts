@@ -23,7 +23,7 @@ export class AuthService {
     private readonly prismaService: PrismaService,
     private jwtService: JwtService,
     private eventEmitter: EventEmitter2,
-  ) {}
+  ) { }
 
   async signIn(@Body() data: SignInDTO, res: Response) {
     const { email, password } = data;
@@ -49,21 +49,13 @@ export class AuthService {
       throw new UnauthorizedException('Wrong password');
     }
 
-    const payload = {
-      id: user.id,
-      role: {
-        id: user.roleId,
-        privileges: user.role.ModuleRole,
-      },
-    };
-
-    const token = await this.jwtService.signAsync(payload);
+    const token = await this.jwtService.signAsync({ userId: user.id });
 
     if (!token) {
       throw new InternalServerErrorException();
     }
 
-    res.cookie('access-token', token, { httpOnly: true });
+    res.cookie('access_token', token, { httpOnly: true });
 
     // Event to send email
     const event = new SignInEvent();
@@ -72,13 +64,32 @@ export class AuthService {
     event.datetime = new Date().toLocaleString();
     this.eventEmitter.emit('auth.signin', event);
 
-    return res.status(200).send({
-      message: 'Logged succefully!',
-      user: payload,
-    });
+    const payload = {
+      id: user.id,
+      role: {
+        id: user.roleId,
+        privileges: user.role.ModuleRole,
+      },
+    };
+
+    return payload;
   }
 
-  async authenticatedUserData(userId: number, res: Response) {
+  async refreshAndVerifyAuthentication(req: Request, res: Response) {
+    const token = req.cookies['access_token'];
+
+    if (!token) {
+      throw new UnauthorizedException('Token is missing.');
+    }
+
+    const token_payload = await this.jwtService.verifyAsync(token, {
+      secret: process.env.JWT_SECRET,
+    });
+
+    if (!token_payload) {
+      throw new UnauthorizedException('Token is invalid.');
+    }
+
     const user = await this.prismaService.user.findUnique({
       include: {
         role: {
@@ -88,7 +99,7 @@ export class AuthService {
         },
       },
       where: {
-        id: userId,
+        id: token_payload.userId,
       },
     });
 
@@ -100,27 +111,7 @@ export class AuthService {
       },
     };
 
-    return res.status(200).send({
-      message: 'User data has been found.',
-      user: payload,
-    });
-  }
-
-  async authenticationCheck(request: Request) {
-    const token = request.cookies['access-token'];
-
-    if (!token) {
-      throw new UnauthorizedException('Token is missing.');
-    }
-
-    try {
-      // The token is entirely verified - with its time expiration
-      await this.jwtService.verifyAsync(token, {
-        secret: process.env.JWT_SECRET,
-      });
-    } catch (e) {
-      throw new UnauthorizedException('Token is invalid.');
-    }
+    return payload;
   }
 
   async signUp(data: SignUpDTO) {

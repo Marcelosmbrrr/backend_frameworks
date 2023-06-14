@@ -1,5 +1,5 @@
-import { Controller, Post, Get, Req, Res, Body, Query } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Controller, Post, Get, Res, Req, Body, Query } from '@nestjs/common';
+import { Response, Request } from 'express';
 // Custom
 import { AuthService } from '../services/auth.service';
 import { SignInDTO, SignUpDTO } from '../dto/auth.dto';
@@ -11,24 +11,28 @@ export class AuthController {
 
   @Post('signin')
   async signIn(@Body() signInDTO: SignInDTO, @Res() response: Response) {
-    return this.authService.signIn(signInDTO, response);
-  }
+    const data = await this.authService.signIn(signInDTO, response);
 
-  @Get('verify-authentication')
-  async checkAuthentication(
-    @Req() request: Request,
-    @Res() response: Response,
-  ) {
-    await this.authService.authenticationCheck(request);
-    return response.status(200).send({ message: 'User is authorized.' });
+    return response.status(200).send({
+      message: 'Sucessful authentication.',
+      user: data,
+    });
   }
 
   @Get('refresh-data')
-  async authenticatedUserData(
+  async refreshAndVerifyAuthentication(
     @Res() response: Response,
-    @Query('userId') userId: number,
+    @Req() request: Request,
   ) {
-    return this.authService.authenticatedUserData(Number(userId), response);
+    const data = await this.authService.refreshAndVerifyAuthentication(
+      request,
+      response,
+    );
+
+    return response.status(200).send({
+      message: 'User data has been loaded.',
+      user: data,
+    });
   }
 
   @Post('signup')
@@ -39,7 +43,7 @@ export class AuthController {
 
   @Post('signout')
   async signOut(@Res() response: Response) {
-    response.clearCookie('access-token');
+    response.clearCookie('access_token');
     return response.status(200).send({ message: 'Session has been expired.' });
   }
 }

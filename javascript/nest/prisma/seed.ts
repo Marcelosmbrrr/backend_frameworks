@@ -4,30 +4,28 @@ import * as bcrypt from 'bcrypt';
 const prisma = new PrismaClient();
 
 async function init() {
-  const modules = await prisma.module.createMany({
-    data: [{ name: 'Users' }, { name: 'Roles' }, { name: 'Chat' }],
+  await prisma.module.createMany({
+    data: [{ name: 'Users' }, { name: 'Roles' }],
   });
 
-  const roles = await prisma.role.createMany({
-    data: [{ name: 'Master' }, { name: 'Common' }],
+  await prisma.role.createMany({
+    data: [{ name: 'Admin' }, { name: 'Common' }],
   });
 
-  const module_role = await prisma.moduleRole.createMany({
+  await prisma.moduleRole.createMany({
     data: [
       { roleId: 1, moduleId: 1, read: true, write: true },
       { roleId: 1, moduleId: 2, read: true, write: true },
-      { roleId: 1, moduleId: 3, read: true, write: true },
       { roleId: 2, moduleId: 1, read: true, write: false },
       { roleId: 2, moduleId: 2, read: true, write: false },
-      { roleId: 2, moduleId: 3, read: true, write: true },
     ],
   });
 
-  const users = await prisma.user.createMany({
+  await prisma.user.createMany({
     data: [
       {
-        name: 'Michael Corleone',
-        email: 'michael@gmail.com',
+        name: 'Administrator',
+        email: 'admin@gmail.com',
         password: await bcrypt.hash('123123', 10),
         roleId: 1,
         email_verified_at: new Date(),

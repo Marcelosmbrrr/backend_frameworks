@@ -24,7 +24,7 @@ import { RoleGuard } from 'src/common/guards/role.guard';
 @UseGuards(RoleGuard)
 export class UsersController {
   // Dependency Injection
-  constructor(private readonly usersService: UsersService) { }
+  constructor(private readonly usersService: UsersService) {}
 
   @Post()
   async create(
@@ -40,6 +40,7 @@ export class UsersController {
 
   @Get()
   async findAll(
+    @Query('search') search,
     @Query('limit') limit,
     @Query('offset') offset,
     @Res() response: Response,
@@ -47,6 +48,7 @@ export class UsersController {
     const users = await this.usersService.findAll(
       Number(limit),
       Number(offset),
+      search,
     );
 
     response.status(200).send({

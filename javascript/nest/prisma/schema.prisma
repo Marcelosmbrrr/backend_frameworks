@@ -15,14 +15,13 @@ model User {
   email             String          @unique
   email_verified_at DateTime?
   name              String
-  image             String?         @default("storage/images/default.jpeg")
+  image             String?         @default("default.jpeg")
   password          String
   created_at        DateTime?       @default(now())
   updated_at        DateTime?
   deleted_at        DateTime?
   roleId            Int
   role              Role            @relation(fields: [roleId], references: [id]) // one role
-  PersonalToken     PersonalToken[] // to many tokens
 
   @@map("users")
 }
@@ -59,14 +58,5 @@ model ModuleRole {
   module   Module  @relation(fields: [moduleId], references: [id]) // to one module
 
   @@id([roleId, moduleId])
-}
-
-model PersonalToken {
-  id             Int       @id @default(autoincrement())
-  userId         Int
-  token          String    @unique
-  created_at     DateTime? @default(now())
-  expirationDate DateTime?
-  active         Boolean
-  user           User      @relation(fields: [userId], references: [id]) // to one user
+  @@map("module_role")
 }

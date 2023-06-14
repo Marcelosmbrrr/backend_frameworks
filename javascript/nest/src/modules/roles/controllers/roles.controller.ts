@@ -37,6 +37,7 @@ export class RolesController {
 
   @Get()
   async findAll(
+    @Query('search') search,
     @Query('limit') limit,
     @Query('offset') offset,
     @Res() response: Response,
@@ -44,6 +45,7 @@ export class RolesController {
     const roles = await this.rolesService.findAll(
       Number(limit),
       Number(offset),
+      search,
     );
 
     response.status(200).send({

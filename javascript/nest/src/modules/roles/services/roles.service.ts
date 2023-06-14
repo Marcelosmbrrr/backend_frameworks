@@ -23,7 +23,7 @@ export class RolesService {
     */
   }
 
-  async findAll(limit: number, offset: number) {
+  async findAll(limit: number, offset: number, search: string) {
     const roles = await this.prismaService.role.findMany({
       include: {
         ModuleRole: true,

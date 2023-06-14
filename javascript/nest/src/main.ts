@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import * as cookieParser from 'cookie-parser';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/exception-filter/all-exceptions.filter';
+//import * as session from 'express-session';
 
 // Custom adds:
 // Global Pipes - ValidationPipe - https://docs.nestjs.com/techniques/validation#auto-validation - execute defined dto validations automatically
@@ -20,6 +21,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   // Adds
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
   app.enableCors({
     origin: process.env.CLIENT_URL,
