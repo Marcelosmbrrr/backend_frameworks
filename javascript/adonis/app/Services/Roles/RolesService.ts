@@ -1,15 +1,11 @@
 export default class RolesService {
 
     async index() {
-        //
+        return {}
     }
 
     async store() {
         // 
-    }
-
-    async show() {
-        //
     }
 
     async update() {
