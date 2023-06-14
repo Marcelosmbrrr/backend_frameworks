@@ -27,10 +27,13 @@ export const useAuth = Pinia.defineStore('auth', () => {
     async function signIn({ email, password, rememberMe }: LoginData) {
         try {
 
-            await axios.post(import.meta.env.VITE_API_URL + "/auth/signin", {
+            const response = await axios.post(import.meta.env.VITE_API_URL + "/auth/signin", {
                 email,
                 password
             });
+
+            localStorage.setItem("access_token", response.data.token);
+            Object.assign(user, response.data.user);
 
             router.push({ path: '/home' });
 
@@ -41,7 +44,7 @@ export const useAuth = Pinia.defineStore('auth', () => {
 
     async function signOut() {
         await axios.post(import.meta.env.VITE_API_URL + "/auth/signout");
-        localStorage.removeItem("app-user-data");
+        localStorage.removeItem("access_token");
         router.push({ path: '/login' });
     }
 
