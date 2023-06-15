@@ -1,5 +1,6 @@
 import * as Vue from 'vue';
 import * as Pinia from 'pinia';
+import { useRoute } from 'vue-router';
 import router from '@/router';
 import axios from '../utils/api';
 
@@ -13,6 +14,13 @@ export const useAuth = Pinia.defineStore('auth', () => {
 
     const user = Vue.reactive({});
     const is_authenticated = Vue.ref(false);
+    const route = useRoute();
+
+    Vue.onMounted(() => {
+        if (route.path.includes('home')) {
+            refresh();
+        }
+    });
 
     async function refresh() {
         try {
@@ -32,12 +40,10 @@ export const useAuth = Pinia.defineStore('auth', () => {
                 password
             });
 
-            console.log(response.data)
+            localStorage.setItem("access_token", response.data.token.token);
+            Object.assign(user, response.data.user);
 
-            //localStorage.setItem("access_token", response.data.token);
-            //Object.assign(user, response.data.user);
-
-            //router.push({ path: '/home' });
+            router.push({ path: '/home' });
 
         } catch (e) {
             throw e;

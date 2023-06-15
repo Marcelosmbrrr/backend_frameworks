@@ -8,13 +8,5 @@
 </template>
 
 <script setup lang="ts">
-import * as Vue from 'vue';
 import HeaderVue from './Header.vue';
-import { useAuth } from '@/stores/AuthStore';
-
-const { refresh } = useAuth();
-
-Vue.onMounted(() => {
-    refresh();
-})
 </script>
