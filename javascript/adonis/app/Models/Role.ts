@@ -27,17 +27,18 @@ export default class Role extends BaseModel {
   public deletedAt: DateTime
 
   @hasMany(() => User, {
-    foreignKey: 'roleId',
+    foreignKey: 'role_id',
     localKey: 'id'
   })
   public users: HasMany<typeof User>
 
   @manyToMany(() => Module, {
     pivotTable: 'module_role',
+    pivotColumns: ['read', 'write'],
     localKey: 'id',
-    pivotForeignKey: 'roleId',
+    pivotForeignKey: 'role_id',
     relatedKey: 'id',
-    pivotRelatedForeignKey: 'moduleId',
+    pivotRelatedForeignKey: 'module_id',
   })
   public modules: ManyToMany<typeof Module>
 }

@@ -34,7 +34,7 @@ export default class User extends BaseModel {
   public deletedAt: DateTime
 
   @belongsTo(() => Role, {
-    foreignKey: 'roleId',
+    foreignKey: 'role_id',
     localKey: 'id'
   })
   public role: BelongsTo<typeof Role>

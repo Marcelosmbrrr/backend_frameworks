@@ -54,7 +54,7 @@ export default class AuthService {
         const user = await User.create({
             name,
             email,
-            password
+            password: await Hash.make(password)
         });
 
         if (!user) {

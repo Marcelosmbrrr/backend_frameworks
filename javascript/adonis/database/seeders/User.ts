@@ -8,7 +8,7 @@ export default class extends BaseSeeder {
       {
         name: 'Admin',
         email: 'admin@adonisjs.com',
-        roleId: '1',
+        role_id: '1',
         password: await Hash.make('123123'),
       }
     ])
