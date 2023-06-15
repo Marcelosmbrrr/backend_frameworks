@@ -1,9 +1,11 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import { inject } from '@adonisjs/fold';
 // Custom
 import AuthService from 'App/Services/Auth/AuthService';
 import SignInValidator from 'App/Validators/Authentication/SignInValidator';
 import SignUpValidator from 'App/Validators/Authentication/SignUpValidator';
 
+@inject()
 export default class AuthController {
 
     // Dependency Injection - injected by IoC container

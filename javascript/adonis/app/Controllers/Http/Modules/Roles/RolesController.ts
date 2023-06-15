@@ -1,9 +1,11 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import { inject } from '@adonisjs/fold';
 // Custom
 import CreateRoleValidator from 'App/Validators/Modules/Roles/CreateRoleValidator';
 import UpdateRoleValidator from 'App/Validators/Modules/Roles/UpdateRoleValidator';
-import RolesService from 'App/Services/Roles/RolesService';
+import RolesService from 'App/Services/Modules/Roles/RolesService';
 
+@inject()
 export default class RolesController {
     // Dependency Injection - injected by IoC container
     constructor(private readonly rolesService: RolesService) { }

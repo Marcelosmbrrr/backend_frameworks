@@ -18,7 +18,9 @@ export default class AuthService {
 
     async signIn({ email, password, auth }: ISignIn) {
 
-        const user = await User.findBy('email', email);
+        const user = await User.query().where('email', email).preload('role', (roleQuery) => {
+            roleQuery.preload('modules');
+        }).first();
 
         if (!user) {
             throw new Error('Invalid credentials.');
@@ -35,12 +37,22 @@ export default class AuthService {
         // Event to send email
         // Event.emit('signIn', {name: '', email: '', datetime: ''})
 
+        const modules_access = user.role.modules.map((module) => {
+            return {
+                module_id: module.$extras.pivot_module_id,
+                role_id: module.$extras.pivot_role_id,
+                module_name: module.name,
+                read: module.$extras.pivot_read,
+                write: module.$extras.pivot_write
+            }
+        })
+
         const payload = {
             user: {
                 id: user.id,
                 role: {
-                    id: user.roleId,
-                    privileges: user.role.modules,
+                    id: user.role_id,
+                    access: modules_access,
                 },
             },
             token: token
@@ -69,14 +81,28 @@ export default class AuthService {
 
         await auth.use('api').authenticate();
 
-        const user = auth.use('api').user;
+        const userId = auth.use('api').user.id;
+
+        const user = await User.query().where('id', userId).preload('role', (roleQuery) => {
+            roleQuery.preload('modules');
+        }).first();
+
+        const modules_access = user.role.modules.map((module) => {
+            return {
+                module_id: module.$extras.pivot_module_id,
+                role_id: module.$extras.pivot_role_id,
+                module_name: module.name,
+                read: module.$extras.pivot_read,
+                write: module.$extras.pivot_write
+            }
+        })
 
         const payload = {
             user: {
                 id: user.id,
                 role: {
-                    id: user.roleId,
-                    privileges: user.role.modules,
+                    id: user.role_id,
+                    access: modules_access,
                 },
             }
         };

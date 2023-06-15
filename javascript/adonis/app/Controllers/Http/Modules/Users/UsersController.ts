@@ -1,9 +1,11 @@
 import type { HttpContextContract } from '@ioc:Adonis/Core/HttpContext';
+import { inject } from '@adonisjs/fold';
 // Custom
 import CreateUserValidator from 'App/Validators/Modules/Users/CreateUserValidator';
 import UpdateUserValidator from 'App/Validators/Modules/Users/UpdateUserValidator';
-import UsersService from 'App/Services/Users/UsersService';
+import UsersService from 'App/Services/Modules/Users/UsersService';
 
+@inject()
 export default class UsersController {
     // Dependency Injection - injected by IoC container
     constructor(private readonly usersService: UsersService) { }

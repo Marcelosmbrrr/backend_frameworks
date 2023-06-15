@@ -11,6 +11,7 @@ import User from './User';
 import Module from './Module';
 
 export default class Role extends BaseModel {
+
   @column({ isPrimary: true })
   public id: number
 
