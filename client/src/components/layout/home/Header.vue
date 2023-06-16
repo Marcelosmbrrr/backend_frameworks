@@ -65,7 +65,7 @@ const backendIcons = {
     django: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/django/django-plain.svg"
 }
 
-const { signOut } = useAuth();
+const { signOut, user, is_authenticated } = useAuth();
 const route = useRoute();
 
 function frameworkIcon() {

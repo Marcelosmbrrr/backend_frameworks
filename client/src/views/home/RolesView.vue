@@ -19,7 +19,7 @@
                                                 clip-rule="evenodd" />
                                         </svg>
                                     </div>
-                                    <input @keydown="fetchByID" type="text" v-model="search.value"
+                                    <input @keydown="fetchBy" type="text" v-model="search.value"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-emerald-500 dark:focus:border-emerald-500"
                                         placeholder="Search by ID">
                                 </div>
@@ -46,8 +46,8 @@
                                     </th>
                                     <th scope="col" class="px-4 py-4">ID</th>
                                     <th scope="col" class="px-4 py-3">Name</th>
-                                    <th scope="col" class="px-4 py-3">User Access</th>
-                                    <th scope="col" class="px-4 py-3">Role Access</th>
+                                    <th scope="col" class="px-4 py-3">User modules</th>
+                                    <th scope="col" class="px-4 py-3">Role modules</th>
                                     <th scope="col" class="px-4 py-3">Created at</th>
                                     <th scope="col" class="px-4 py-3">Updated at</th>
                                     <th scope="col" class="px-4 py-3">
@@ -71,13 +71,13 @@
                                     <td class="px-4 py-3">
                                         <div class="flex items-center gap-3">
                                             <div class="flex items-center">
-                                                <input :checked="record.ModuleRole[0].read" disabled type="checkbox"
+                                                <input :checked="record.modules[0].read" disabled type="checkbox"
                                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                                 <label for="disabled-checkbox"
                                                     class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">Read</label>
                                             </div>
                                             <div class="flex items-center">
-                                                <input :checked="record.ModuleRole[0].write" disabled type="checkbox"
+                                                <input :checked="record.modules[0].write" disabled type="checkbox"
                                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                                 <label for="disabled-checked-checkbox"
                                                     class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">Write</label>
@@ -87,13 +87,13 @@
                                     <td class="px-4 py-3">
                                         <div class="flex items-center gap-3">
                                             <div class="flex items-center">
-                                                <input :checked="record.ModuleRole[1].read" disabled type="checkbox"
+                                                <input :checked="record.modules[1].read" disabled type="checkbox"
                                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                                 <label for="disabled-checkbox"
                                                     class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">Read</label>
                                             </div>
                                             <div class="flex items-center">
-                                                <input :checked="record.ModuleRole[1].write" disabled type="checkbox"
+                                                <input :checked="record.modules[1].write" disabled type="checkbox"
                                                     class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                                 <label for="disabled-checked-checkbox"
                                                     class="ml-2 text-sm font-medium text-gray-400 dark:text-gray-500">Write</label>
@@ -206,12 +206,10 @@ async function fetchAll() {
     }
 }
 
-async function fetchByID(e) {
-
+async function fetchBy(e) {
     if (e.key != 'Enter') {
         return;
     }
-
     search.value = e.target.value;
     fetchAll();
 }
@@ -236,12 +234,12 @@ function select(new_record) {
             name: record.name,
             modules: {
                 users: {
-                    read: record.ModuleRole[0].read,
-                    write: record.ModuleRole[0].write,
+                    read: record.modules[0].read,
+                    write: record.modules[0].write,
                 },
                 roles: {
-                    read: record.ModuleRole[1].read,
-                    write: record.ModuleRole[1].write,
+                    read: record.modules[1].read,
+                    write: record.modules[1].write,
                 }
             }
         }

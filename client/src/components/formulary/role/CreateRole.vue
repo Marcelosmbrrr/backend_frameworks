@@ -106,14 +106,16 @@ import axios from '../../../utils/api';
 
 interface IForm {
     name: string;
-    user: {
-        read: boolean;
-        write: boolean;
-    };
-    role: {
-        read: boolean;
-        write: boolean;
-    };
+    modules: {
+        users: {
+            read: boolean;
+            write: boolean;
+        },
+        roles: {
+            read: boolean;
+            write: boolean;
+        }
+    }
 }
 
 interface IFormError {
@@ -136,7 +138,7 @@ const props = defineProps({
     },
 });
 
-const initialForm = { name: "", user: { read: false, write: false }, role: { read: false, write: false } };
+const initialForm = { name: "", modules: { user: { read: false, write: false }, role: { read: false, write: false } } };
 const initialFormError = { name: { error: false, message: "" } }
 
 const open = Vue.ref<boolean>(false);

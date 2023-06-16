@@ -19,7 +19,7 @@
                                                 clip-rule="evenodd" />
                                         </svg>
                                     </div>
-                                    <input @keydown="fetchByID" type="text" v-model="search.value"
+                                    <input @keydown="fetchBy" type="text" v-model="search.value"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-emerald-500 focus:border-emerald-500 block w-full pl-10 p-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-emerald-500 dark:focus:border-emerald-500"
                                         placeholder="Search by ID">
                                 </div>
@@ -175,12 +175,10 @@ async function fetchAll() {
     }
 }
 
-async function fetchByID(e) {
-
+async function fetchBy(e) {
     if (e.key != 'Enter') {
         return;
     }
-
     search.value = e.target.value;
     fetchAll();
 }
