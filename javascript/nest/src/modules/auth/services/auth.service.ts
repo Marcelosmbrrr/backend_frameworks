@@ -25,7 +25,7 @@ export class AuthService {
     private eventEmitter: EventEmitter2,
   ) { }
 
-  async signIn(@Body() data: SignInDTO, res: Response) {
+  async signIn(@Body() data: SignInDTO) {
     const { email, password } = data;
 
     const user = await this.prismaService.user.findUnique({
@@ -51,7 +51,7 @@ export class AuthService {
 
     const token = await this.jwtService.signAsync({
       userId: user.id,
-      roleId: user.roleId,
+      role_id: user.role_id,
     });
 
     if (!token) {
@@ -69,7 +69,7 @@ export class AuthService {
       user: {
         id: user.id,
         role: {
-          id: user.roleId,
+          id: user.role_id,
           privileges: user.role.ModuleRole,
         },
       },
@@ -79,7 +79,7 @@ export class AuthService {
     return payload;
   }
 
-  async refreshAndVerifyAuthentication(req: Request, res: Response) {
+  async refreshAndVerifyAuthentication(req: Request) {
     const token = this.extractTokenFromHeader(req);
 
     if (!token) {
@@ -111,7 +111,7 @@ export class AuthService {
       user: {
         id: user.id,
         role: {
-          id: user.roleId,
+          id: user.role_id,
           privileges: user.role.ModuleRole,
         },
       },
@@ -136,7 +136,7 @@ export class AuthService {
       throw new ConflictException('Email already exists.');
     }
 
-    if (user.email_verified_at === null) {
+    if (!user.active) {
       throw new UnauthorizedException('Verify your e-mail.');
     }
 
@@ -146,7 +146,7 @@ export class AuthService {
       data: {
         name: name,
         email: email,
-        roleId: 2,
+        role_id: 2,
         password: hashedPassword,
       },
     });

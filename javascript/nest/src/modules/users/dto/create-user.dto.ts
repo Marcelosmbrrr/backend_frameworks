@@ -10,5 +10,5 @@ export class CreateUserDto {
   email: string;
 
   @IsInt()
-  roleId: number;
+  role_id: number;
 }

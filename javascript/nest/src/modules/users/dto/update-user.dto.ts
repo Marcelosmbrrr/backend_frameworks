@@ -13,5 +13,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
 
   @IsString()
   @IsInt()
-  roleId: number;
+  role_id: number;
 }

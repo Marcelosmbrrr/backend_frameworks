@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Res, Req, Body, Query } from '@nestjs/common';
+import { Controller, Post, Get, Res, Req, Body } from '@nestjs/common';
 import { Response, Request } from 'express';
 // Custom
 import { AuthService } from '../services/auth.service';
@@ -11,7 +11,7 @@ export class AuthController {
 
   @Post('signin')
   async signIn(@Body() signInDTO: SignInDTO, @Res() response: Response) {
-    const data = await this.authService.signIn(signInDTO, response);
+    const data = await this.authService.signIn(signInDTO);
 
     return response.status(200).send({
       message: 'Sucessful authentication.',
@@ -24,10 +24,7 @@ export class AuthController {
     @Res() response: Response,
     @Req() request: Request,
   ) {
-    const data = await this.authService.refreshAndVerifyAuthentication(
-      request,
-      response,
-    );
+    const data = await this.authService.refreshAndVerifyAuthentication(request);
 
     return response.status(200).send({
       message: 'User data has been loaded.',

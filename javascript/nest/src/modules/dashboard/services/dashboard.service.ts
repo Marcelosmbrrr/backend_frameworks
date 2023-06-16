@@ -18,7 +18,7 @@ export class DashboardService {
     return {
       users: {
         created: users.length,
-        verified: users.filter((user) => user.email_verified_at != null).length,
+        verified: users.filter((user) => user.active).length,
         deleted: users.filter((user) => user.deleted_at != null).length,
       },
       roles: {

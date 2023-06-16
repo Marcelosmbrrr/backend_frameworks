@@ -11,17 +11,18 @@ datasource db {
 }
 
 model User {
-  id                Int             @id @default(autoincrement())
-  email             String          @unique
-  email_verified_at DateTime?
-  name              String
-  image             String?         @default("default.jpeg")
-  password          String
-  created_at        DateTime?       @default(now())
-  updated_at        DateTime?
-  deleted_at        DateTime?
-  roleId            Int
-  role              Role            @relation(fields: [roleId], references: [id]) // one role
+  id         Int        @id @default(autoincrement())
+  email      String     @unique
+  active     Boolean    @default(false)
+  name       String
+  image      String?    @default("default.jpeg")
+  password   String
+  created_at DateTime?  @default(now())
+  updated_at DateTime?
+  deleted_at DateTime?
+  role_id     Int
+  role       Role       @relation(fields: [role_id], references: [id]) // one role
+  ApiToken   ApiToken[]
 
   @@map("users")
 }
@@ -50,13 +51,26 @@ model Module {
 }
 
 model ModuleRole {
-  roleId   Int
-  moduleId Int
+  role_id   Int
+  module_id Int
   read     Boolean
   write    Boolean
-  role     Role    @relation(fields: [roleId], references: [id]) // to one role
-  module   Module  @relation(fields: [moduleId], references: [id]) // to one module
+  role     Role    @relation(fields: [role_id], references: [id]) // to one role
+  module   Module  @relation(fields: [module_id], references: [id]) // to one module
 
-  @@id([roleId, moduleId])
+  @@id([role_id, module_id])
   @@map("module_role")
+}
+
+model ApiToken {
+  id         Int       @id @default(autoincrement())
+  user_id     Int
+  type       String    @default("bearer")
+  token      String    @unique
+  expires_in DateTime
+  created_at DateTime? @default(now())
+  is_valid   Boolean   @default(true)
+  user       User      @relation(fields: [user_id], references: [id]) // to one role
+
+  @@map("api_tokens")
 }

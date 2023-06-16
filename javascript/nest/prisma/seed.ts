@@ -14,10 +14,10 @@ async function init() {
 
   await prisma.moduleRole.createMany({
     data: [
-      { roleId: 1, moduleId: 1, read: true, write: true },
-      { roleId: 1, moduleId: 2, read: true, write: true },
-      { roleId: 2, moduleId: 1, read: true, write: false },
-      { roleId: 2, moduleId: 2, read: true, write: false },
+      { role_id: 1, module_id: 1, read: true, write: true },
+      { role_id: 1, module_id: 2, read: true, write: true },
+      { role_id: 2, module_id: 1, read: true, write: false },
+      { role_id: 2, module_id: 2, read: true, write: false },
     ],
   });
 
@@ -27,15 +27,15 @@ async function init() {
         name: 'Administrator',
         email: 'admin@gmail.com',
         password: await bcrypt.hash('123123', 10),
-        roleId: 1,
-        email_verified_at: new Date(),
+        role_id: 1,
+        active: true,
       },
       {
         name: 'Fredo Corleone',
         email: 'fredo@gmail.com',
         password: await bcrypt.hash('123123', 10),
-        roleId: 2,
-        email_verified_at: new Date(),
+        role_id: 2,
+        active: true,
       },
     ],
   });
