@@ -43,7 +43,7 @@
                         <div class="mb-6">
                             <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select
                                 role</label>
-                            <select id="role" v-model="form.roleId"
+                            <select id="role" v-model="form.role_id"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white">
                                 <option selected disabled>Choose</option>
                                 <option value="1">Admin</option>
@@ -81,7 +81,7 @@ interface IForm {
     id: string;
     name: string;
     email: string;
-    roleId: string;
+    role_id: string;
 }
 
 interface IFieldError {
@@ -92,7 +92,7 @@ interface IFieldError {
 interface IFormError {
     name: IFieldError;
     email: IFieldError;
-    roleId: IFieldError;
+    role_id: IFieldError;
     password: IFieldError;
 }
 
@@ -113,7 +113,7 @@ const props = defineProps({
     }
 });
 
-const initialFormError = { name: { error: false, message: "" }, email: { error: false, message: "" }, roleId: { error: false, message: "" }, password: { error: false, message: "" } }
+const initialFormError = { name: { error: false, message: "" }, email: { error: false, message: "" }, role_id: { error: false, message: "" }, password: { error: false, message: "" } }
 
 const open = Vue.ref<boolean>(false);
 const form = Vue.ref<IForm>(DeepCopy(props.user));

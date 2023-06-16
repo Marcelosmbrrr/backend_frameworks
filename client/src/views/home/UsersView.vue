@@ -72,8 +72,8 @@
                                     </th>
                                     <td class="px-4 py-3">
                                         <div class="h-2.5 w-2.5 rounded-full mr-2" :class="{
-                                            'bg-green-500':
-                                                record.email_verified_at != null, 'bg-red-500': record.email_verified_at === null
+                                            'bg-green-500': record.active,
+                                            'bg-red-500': !record.active
                                         }"></div>
                                     </td>
                                     <td class="px-4 py-3">{{ record.name }}</td>
@@ -136,7 +136,7 @@ interface ISelection {
         id: string;
         name: string;
         email: string;
-        roleId: string;
+        role_id: string;
     }
 }
 
@@ -149,7 +149,7 @@ interface ISearch {
     value: string
 }
 
-const initialSelection = JSON.stringify({ selected: false, user: { id: "", name: "", email: "", roleId: "" } });
+const initialSelection = JSON.stringify({ selected: false, user: { id: "", name: "", email: "", role_id: "" } });
 const initialPaginate = JSON.stringify({ limit: 10, page: 1 });
 
 const { user } = useAuth();
@@ -204,7 +204,7 @@ function select(new_record) {
             id: record.id,
             name: record.name,
             email: record.email,
-            roleId: record.roleId
+            role_id: record.role_id
         }
     });
 

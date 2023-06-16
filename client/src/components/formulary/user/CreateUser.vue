@@ -43,7 +43,7 @@
                         <div class="mb-6">
                             <label for="role" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Select an
                                 role</label>
-                            <select id="role" v-model="form.roleId"
+                            <select id="role" v-model="form.role_id"
                                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                                 <option selected disabled>Choose</option>
                                 <option value="1">Admin</option>
@@ -80,7 +80,7 @@ import axios from '../../../utils/api';
 interface IForm {
     name: string;
     email: string;
-    roleId: string;
+    role_id: string;
     password: string;
 }
 
@@ -92,7 +92,7 @@ interface IFieldError {
 interface IFormError {
     name: IFieldError;
     email: IFieldError;
-    roleId: IFieldError;
+    role_id: IFieldError;
     password: IFieldError;
 }
 
@@ -109,8 +109,8 @@ const props = defineProps({
     },
 });
 
-const initialForm = { name: "", email: "", roleId: "0" };
-const initialFormError = { name: { error: false, message: "" }, email: { error: false, message: "" }, roleId: { error: false, message: "" } }
+const initialForm = { name: "", email: "", role_id: "0" };
+const initialFormError = { name: { error: false, message: "" }, email: { error: false, message: "" }, role_id: { error: false, message: "" } }
 
 const open = Vue.ref<boolean>(false);
 const form = Vue.reactive<IForm>(DeepCopy(initialForm));
