@@ -1,0 +1,10 @@
+==== INITIAL ACTIONS ====
+
+npm init adonis-ts-app@latest app-name
+node ace serve --watch
+
+==== FUNDAMENTALS ====
+
+Project structure: is automatically generated, like Laravel
+Documentation: https://docs.adonisjs.com/guides/introduction
+
