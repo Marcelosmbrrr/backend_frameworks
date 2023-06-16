@@ -32,13 +32,13 @@ export default class User extends BaseModel {
   public image: string
 
   @column.dateTime({ autoCreate: true })
-  public createdAt: DateTime
+  public created_at: DateTime
 
   @column.dateTime({ autoCreate: true, autoUpdate: true })
-  public updatedAt: DateTime
+  public updated_at: DateTime
 
   @column.dateTime({ serializeAs: null })
-  public deletedAt: DateTime
+  public deleted_at: DateTime
 
   @beforeSave()
   public static async hashPassword(user: User) {

@@ -9,7 +9,7 @@ export default class CreateRoleValidator {
       rules.minLength(3),
       rules.maxLength(100)
     ]),
-    privileges: schema.object()
+    modules: schema.object()
   });
 
   public messages: CustomMessages = {}

@@ -8,7 +8,7 @@ export default class extends BaseSchema {
       table.increments('id')
       table.string('name')
       table.string('email').unique()
-      table.timestamp("active").defaultTo(false);
+      table.boolean("active").defaultTo(false);
       table.string('password')
       table.string('image').defaultTo('default.jpg')
       table.integer('role_id').unsigned().references('id').inTable('roles')

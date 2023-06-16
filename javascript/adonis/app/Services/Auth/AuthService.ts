@@ -40,7 +40,6 @@ export default class AuthService {
         const modules_access = user.role.modules.map((module) => {
             return {
                 module_id: module.$extras.pivot_module_id,
-                role_id: module.$extras.pivot_role_id,
                 module_name: module.name,
                 read: module.$extras.pivot_read,
                 write: module.$extras.pivot_write
@@ -52,7 +51,7 @@ export default class AuthService {
                 id: user.id,
                 role: {
                     id: user.role_id,
-                    access: modules_access,
+                    modules: modules_access,
                 },
             },
             token: token
@@ -81,7 +80,7 @@ export default class AuthService {
 
         await auth.use('api').authenticate();
 
-        const userId = auth.use('api').user.id;
+        const userId = auth.use('api').user?.id;
 
         const user = await User.query().where('id', userId).preload('role', (roleQuery) => {
             roleQuery.preload('modules');
@@ -90,7 +89,6 @@ export default class AuthService {
         const modules_access = user.role.modules.map((module) => {
             return {
                 module_id: module.$extras.pivot_module_id,
-                role_id: module.$extras.pivot_role_id,
                 module_name: module.name,
                 read: module.$extras.pivot_read,
                 write: module.$extras.pivot_write
@@ -102,7 +100,7 @@ export default class AuthService {
                 id: user.id,
                 role: {
                     id: user.role_id,
-                    access: modules_access,
+                    modules: modules_access,
                 },
             }
         };

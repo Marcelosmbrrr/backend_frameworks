@@ -23,7 +23,6 @@ export default class AuthController {
     }
 
     async refreshAndVerifyAuthentication({ response, auth }: HttpContextContract) {
-
         const data = await this.authService.refreshAndVerifyAuthentication(auth);
 
         response.status(200).send({

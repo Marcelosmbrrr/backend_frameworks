@@ -10,7 +10,7 @@ Route.group(() => {
     Route.get('/auth/refresh-data', "AuthController.refreshAndVerifyAuthentication").namespace("App/Controllers/Http/Auth");
     Route.get('/dashboard', "Modules/Dashboard/DashboardController");
     Route.resource('/users', "Modules/Users/UsersController").apiOnly();
-    Route.resource('/posts', "Modules/Roles/RolesController").apiOnly();
+    Route.resource('/roles', "Modules/Roles/RolesController").apiOnly();
   }).middleware('auth');
 
 }).prefix("/api");

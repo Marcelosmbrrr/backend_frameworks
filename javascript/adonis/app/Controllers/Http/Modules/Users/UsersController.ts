@@ -10,8 +10,11 @@ export default class UsersController {
     // Dependency Injection - injected by IoC container
     constructor(private readonly usersService: UsersService) { }
 
-    async index({ request, response }: HttpContextContract) {
-        const users = await this.usersService.index();
+    async index({ request, response, bouncer }: HttpContextContract) {
+        await bouncer.authorize('users:read')
+
+        const { limit, offset, search } = request.qs();
+        const users = await this.usersService.index(limit, offset, search);
 
         response.status(200).send({
             message: 'Users was found.',
@@ -19,26 +22,34 @@ export default class UsersController {
         });
     }
 
-    async store({ request, response }: HttpContextContract) {
-        const payload = await request.validate(CreateUserValidator)
-        await this.usersService.store();
+    async store({ request, response, bouncer }: HttpContextContract) {
+        await bouncer.authorize('users:write')
+
+        const payload = await request.validate(CreateUserValidator);
+        await this.usersService.store(payload);
 
         response.status(201).send({
             message: 'User has been created.'
         });
     }
 
-    async update({ request, response }: HttpContextContract) {
+    async update({ request, response, bouncer }: HttpContextContract) {
+        await bouncer.authorize('users:write')
+
         const payload = await request.validate(UpdateUserValidator)
-        await this.usersService.update();
+        const { id } = request.params();
+        await this.usersService.update(payload, +id);
 
         response.status(201).send({
             message: 'User has been updated.'
         });
     }
 
-    async destroy({ request, response }: HttpContextContract) {
-        await this.usersService.destroy();
+    async destroy({ request, response, bouncer }: HttpContextContract) {
+        await bouncer.authorize('users:write')
+        
+        const { id } = request.params();
+        await this.usersService.destroy(id);
 
         response.status(201).send({
             message: 'User has been deleted.'
