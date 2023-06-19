@@ -4,42 +4,88 @@ namespace App\Http\Controllers\Authentication;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Services\Authentication\AuthenticationService;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class AuthenticationController extends Controller
 {
 
-    function __construct(AuthenticationService $service)
+    function __construct(User $model)
     {
-        $this->service = $service;
+        $this->model = $model;
     }
 
-    function signIn()
+    function signIn(Request $request)
     {
-        $this->signIn();
-        return response(["message" => "Successful login!"], 200);
+        try {
+
+            if (!Auth::attempt($request->validated())) {
+                throw new \Exception("Invalid credentials.", 401);
+            }
+
+            $request->session()->regenerate();
+
+            return response(["message" => "Successful login!"], 200);
+        } catch (\Exception $e) {
+            return response(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 
-    function signUp()
+    function signUp(Request $request)
     {
-        $this->signUp();
-        return response(["message" => "Successful registration!"], 200);
+        try {
+            $user = $this->model->create($request->validated());
+            return response(["message" => "Successful registration!"], 200);
+        } catch (\Exception $e) {
+            return response(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 
     function refreshAndVerifyAuthentication()
     {
-        $data = $this->refreshAndVerifyAuthentication();
-        return response([
-            "message" => "Authentication verified.",
-            ...$data
-        ], 200);
+        try {
+
+            if (!Auth::check()) {
+                throw new \Exception("Unauthorized.", 401);
+            }
+
+            $user = Auth::user();
+
+            $modules = [];
+            foreach ($user->role->modules as $index => $module) {
+                $modules[$index] = $module->pivot;
+            }
+
+            $payload = [
+                "id" => $user->id,
+                "role" => [
+                    "id" => $user->role->id,
+                    "modules" => $modules
+                ]
+            ];
+
+            return response([
+                "message" => "Authentication verified.",
+                ...$payload
+            ], 200);
+        } catch (\Exception $e) {
+            return response(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 
-    function signOut()
+    function signOut(Request $request)
     {
-        $this->signOut();
-        return response([
-            "message" => "User has been logged out."
-        ]);
+        try {
+
+            Auth::logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+
+            return response([
+                "message" => "User has been logged out."
+            ]);
+        } catch (\Exception $e) {
+            return response(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 }

@@ -22,4 +22,16 @@ class Role extends Model
     {
         $this->belongsToMany(Module::class, "module_role", "role_id")->withPivot('read', 'write');;
     }
+
+    function scopeSearch($query, $value)
+    {
+        return $query->when((bool) $value, function ($query) use ($value) {
+
+            if (is_numeric($value)) {
+                $query->where('roles.id', $value);
+            } else {
+                $query->where('roles.name', 'LIKE', '%' . $value . '%');
+            }
+        });
+    }
 }

@@ -15,7 +15,11 @@ class DashboardController extends Controller
 
     public function __invoke(Request $request)
     {
-        $data = $this->service->index();
-        return response($data, 200);
+        try {
+            $data = $this->service->index();
+            return response($data, 200);
+        } catch (\Exception $e) {
+            return response(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 }

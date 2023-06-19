@@ -21,7 +21,8 @@ class User extends Authenticatable
         'password'
     ];
 
-    function role(){
+    function role()
+    {
         return $this->belongsTo(Role::class, "role_id", "role");
     }
 
@@ -39,5 +40,17 @@ class User extends Authenticatable
         return Attribute::make(
             set: fn (string $value) => Hash::make($value),
         );
+    }
+
+    function scopeSearch($query, $value)
+    {
+        return $query->when((bool) $value, function ($query) use ($value) {
+
+            if (is_numeric($value)) {
+                $query->where('users.id', $value);
+            } else {
+                $query->where('users.name', 'LIKE', '%' . $value . '%')->orWhere('users.email', 'LIKE', '%' . $value);
+            }
+        });
     }
 }

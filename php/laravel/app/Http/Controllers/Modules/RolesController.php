@@ -16,42 +16,58 @@ class RolesController extends Controller
 
     public function index()
     {
-        Gate::authorize('roles:read');
+        try {
+            Gate::authorize('roles:read');
 
-        $roles = $this->service->index(request()->limit, request()->page, request()->search);
-        return response([
-            "message" => "Roles found.",
-            "roles" => $roles
-        ]);
+            $roles = $this->service->index(request()->limit, request()->page, request()->search);
+            return response([
+                "message" => "Roles found.",
+                "roles" => $roles
+            ]);
+        } catch (\Exception $e) {
+            return response(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function store(Request $request)
     {
-        Gate::authorize('roles:write');
+        try {
+            Gate::authorize('roles:write');
 
-        $this->service->store($request->validated());
-        return response([
-            "message" => "Role successful created."
-        ], 201);
+            $this->service->store($request->validated());
+            return response([
+                "message" => "Role successful created."
+            ], 201);
+        } catch (\Exception $e) {
+            return response(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function update(Request $request, string $id)
     {
-        Gate::authorize('roles:write');
+        try {
+            Gate::authorize('roles:write');
 
-        $this->service->store($request->validated(), $id);
-        return response([
-            "message" => "Role successful updated."
-        ], 200);
+            $this->service->store($request->validated(), $id);
+            return response([
+                "message" => "Role successful updated."
+            ], 200);
+        } catch (\Exception $e) {
+            return response(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function destroy(string $id)
     {
-        Gate::authorize('roles:write');
-        
-        $this->service->destroy($id);
-        return response([
-            "message" => "Role successful deleted."
-        ], 200);
+        try {
+            Gate::authorize('roles:write');
+
+            $this->service->destroy($id);
+            return response([
+                "message" => "Role successful deleted."
+            ], 200);
+        } catch (\Exception $e) {
+            return response(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 }

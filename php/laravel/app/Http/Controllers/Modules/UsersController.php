@@ -16,42 +16,58 @@ class UsersController extends Controller
 
     public function index()
     {
-        Gate::authorize('users:read');
+        try {
+            Gate::authorize('users:read');
 
-        $users = $this->service->index(request()->limit, request()->page, request()->search);
-        return response([
-            "message" => "Users found.",
-            "users" => $users
-        ]);
+            $users = $this->service->index(request()->limit, request()->page, request()->search);
+            return response([
+                "message" => "Users found.",
+                "users" => $users
+            ]);
+        } catch (\Exception $e) {
+            return response(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function store(Request $request)
     {
-        Gate::authorize('users:write');
+        try {
+            Gate::authorize('users:write');
 
-        $this->service->store($request->validated());
-        return response([
-            "message" => "User successful created."
-        ], 201);
+            $this->service->store($request->validated());
+            return response([
+                "message" => "User successful created."
+            ], 201);
+        } catch (\Exception $e) {
+            return response(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function update(Request $request, string $id)
     {
-        Gate::authorize('users:write');
+        try {
+            Gate::authorize('users:write');
 
-        $this->service->store($request->validated(), $id);
-        return response([
-            "message" => "User successful updated."
-        ], 200);
+            $this->service->store($request->validated(), $id);
+            return response([
+                "message" => "User successful updated."
+            ], 200);
+        } catch (\Exception $e) {
+            return response(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 
     public function destroy(string $id)
     {
-        Gate::authorize('users:write');
+        try {
+            Gate::authorize('users:write');
 
-        $this->service->destroy($id);
-        return response([
-            "message" => "User successful deleted."
-        ], 200);
+            $this->service->destroy($id);
+            return response([
+                "message" => "User successful deleted."
+            ], 200);
+        } catch (\Exception $e) {
+            return response(["message" => $e->getMessage()], $e->getCode());
+        }
     }
 }
