@@ -11,8 +11,8 @@ class SignInEvent
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(User $userModel)
+    public function __construct(User $user)
     {
-        $this->userModel = $userModel;
+        $this->user = $user;
     }
 }

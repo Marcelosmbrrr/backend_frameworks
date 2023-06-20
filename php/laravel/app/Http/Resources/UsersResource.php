@@ -24,6 +24,7 @@ class UsersResource extends JsonResource
                 "id" => $user->id,
                 "email" => $user->email,
                 "name" => $user->name,
+                "role_id" => $user->role_id,
                 "active" => $user->active,
                 "image" => $user->image,
                 "created_at" => $user->created_at,

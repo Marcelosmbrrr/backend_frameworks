@@ -16,7 +16,12 @@ class SignUpController extends Controller
 
     public function __invoke(SignUpRequest $request)
     {
-        $user = $this->userModel->create($request->validated());
+        $user = $this->userModel->create([
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => $request->password,
+            "role_id" => 2
+        ]);
         SignUpEvent::dispatch($user);
 
         return response(["message" => "Successful registration."], 201);
