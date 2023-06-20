@@ -20,7 +20,7 @@ class Role extends Model
 
     function modules()
     {
-        $this->belongsToMany(Module::class, "module_role", "role_id")->withPivot('read', 'write');;
+        return $this->belongsToMany(Module::class, "module_role")->withPivot('read', 'write');;
     }
 
     function scopeSearch($query, $value)

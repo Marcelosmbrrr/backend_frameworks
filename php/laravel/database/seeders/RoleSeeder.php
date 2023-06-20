@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Role;
 
@@ -12,9 +11,18 @@ class RoleSeeder extends Seeder
     {
 
         $admin = Role::create(["name" => "Admin"]);
-        // attach
-
         $common = Role::create(["name" => "Common"]);
-        // attach
+
+        // Admin -> modules
+        $admin->modules()->attach([
+            1 => ['read' => true, 'write' => true],
+            2 => ['read' => true, 'write' => true],
+        ]);
+
+        // Common -> modules
+        $common->modules()->attach([
+            1 => ['read' => true, 'write' => false],
+            2 => ['read' => true, 'write' => false],
+        ]);
     }
 }

@@ -1,21 +1,25 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Authentication\AuthenticationController;
+use App\Http\Controllers\Authentication\{
+    SignInController,
+    SignOutController,
+    SignUpController,
+    RefreshAndVerifyAuthenticationController
+};
 use App\Http\Controllers\Modules\{
     DashboardController,
     UsersController,
     RolesController
 };
 
-Route::post("/auth/signin", [AuthenticationController::class, "signIn"]);
-Route::post("/auth/signup", [AuthenticationController::class, "signUp"]);
+Route::post("/auth/signin", SignInController::class);
+Route::post("/auth/signup", SignUpController::class);
 
 Route::middleware(["auth"])->group(function () {
-    Route::post("/auth/signout", [AuthenticationController::class, "signOut"]);
-    Route::get("/auth/refresh-data", [AuthenticationController::class, "refreshAndVerifyAuthentication"]);
+    Route::post("/auth/signout", SignOutController::class);
+    Route::get("/auth/refresh-data", RefreshAndVerifyAuthenticationController::class);
     Route::get("/dashboard", DashboardController::class);
-    Route::resource("/users", UsersController::class);
-    Route::resource("/roles", RolesController::class);
+    Route::apiResource("/users", UsersController::class);
+    Route::apiResource("/roles", RolesController::class);
 });

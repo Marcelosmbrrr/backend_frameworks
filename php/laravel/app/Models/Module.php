@@ -12,7 +12,7 @@ class Module extends Model
 
     function roles()
     {
-        $this->belongsToMany(Role::class, "module_role", "module_id")->withPivot('read', 'write');
+        return $this->belongsToMany(Role::class, "module_role")->withPivot('read', 'write');
     }
 
     protected $guarded = [];

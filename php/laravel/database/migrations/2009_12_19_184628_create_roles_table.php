@@ -21,6 +21,8 @@ return new class extends Migration
         Schema::create('module_role', function (Blueprint $table) {
             $table->foreignId('module_id')->constrained('modules');
             $table->foreignId('role_id')->constrained('roles');
+            $table->boolean('read')->default(false);
+            $table->boolean('write')->default(false);
             $table->timestamps();
             $table->softDeletes();
         });
