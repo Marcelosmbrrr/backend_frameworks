@@ -12,7 +12,6 @@ use App\Http\Requests\Authentication\{
     SignUpRequest
 };
 
-
 class AuthenticationController extends Controller
 {
 

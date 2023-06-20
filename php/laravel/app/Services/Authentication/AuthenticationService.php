@@ -5,6 +5,10 @@ namespace App\Services\Modules;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Events\Authentication\{
+    SignInEvent,
+    SignUpEvent
+};
 
 class AuthenticationService
 {
@@ -41,16 +45,15 @@ class AuthenticationService
             "token" => $token->plainTextToken
         ];
 
-        // Send email
+        SignInEvent::dispatch($user);
 
         return $payload;
     }
 
     function signUp($data)
     {
-        $this->model->create($data);
-
-        // Send email
+        $user = $this->model->create($data);
+        SignUpEvent::dispatch($user);
     }
 
     function refreshAndVerifyAuthentication()
