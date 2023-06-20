@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Auth\Access\Gate;
 use App\Services\Modules\RolesService;
+use App\Http\Requests\Modules\Roles\{
+    CreateRoleRequest,
+    UpdateRoleRequest
+};
 
 class RolesController extends Controller
 {
@@ -29,7 +32,7 @@ class RolesController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(CreateRoleRequest $request)
     {
         try {
             Gate::authorize('roles:write');
@@ -43,7 +46,7 @@ class RolesController extends Controller
         }
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateRoleRequest $request, string $id)
     {
         try {
             Gate::authorize('roles:write');

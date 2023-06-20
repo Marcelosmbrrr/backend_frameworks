@@ -3,9 +3,12 @@
 namespace App\Http\Controllers\Modules;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Auth\Access\Gate;
 use App\Services\Modules\UsersService;
+use App\Http\Requests\Modules\Users\{
+    CreateUserRequest,
+    UpdateUserRequest
+};
 
 class UsersController extends Controller
 {
@@ -29,7 +32,7 @@ class UsersController extends Controller
         }
     }
 
-    public function store(Request $request)
+    public function store(CreateUserRequest $request)
     {
         try {
             Gate::authorize('users:write');
@@ -43,7 +46,7 @@ class UsersController extends Controller
         }
     }
 
-    public function update(Request $request, string $id)
+    public function update(UpdateUserRequest $request, string $id)
     {
         try {
             Gate::authorize('users:write');

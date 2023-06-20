@@ -13,7 +13,7 @@ class DashboardController extends Controller
         $this->service = $service;
     }
 
-    public function __invoke(Request $request)
+    public function __invoke()
     {
         try {
             $data = $this->service->index();

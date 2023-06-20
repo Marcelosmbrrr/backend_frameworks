@@ -6,35 +6,36 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Services\Modules\AuthenticationService;
+use App\Http\Requests\Authentication\{
+    SignInRequest,
+    SignUpRequest
+};
+
 
 class AuthenticationController extends Controller
 {
 
-    function __construct(User $model)
+    function __construct(AuthenticationService $service, User $model)
     {
+        $this->service = $service;
         $this->model = $model;
     }
 
-    function signIn(Request $request)
+    function signIn(SignInRequest $request)
     {
         try {
-
-            if (!Auth::attempt($request->validated())) {
-                throw new \Exception("Invalid credentials.", 401);
-            }
-
-            $request->session()->regenerate();
-
-            return response(["message" => "Successful login!"], 200);
+            $payload = $this->service->signIn($request);
+            return response($payload, 200);
         } catch (\Exception $e) {
             return response(["message" => $e->getMessage()], $e->getCode());
         }
     }
 
-    function signUp(Request $request)
+    function signUp(SignUpRequest $request)
     {
         try {
-            $user = $this->model->create($request->validated());
+            $this->service->signUp($request->validated());
             return response(["message" => "Successful registration!"], 200);
         } catch (\Exception $e) {
             return response(["message" => $e->getMessage()], $e->getCode());
@@ -45,24 +46,7 @@ class AuthenticationController extends Controller
     {
         try {
 
-            if (!Auth::check()) {
-                throw new \Exception("Unauthorized.", 401);
-            }
-
-            $user = Auth::user();
-
-            $modules = [];
-            foreach ($user->role->modules as $index => $module) {
-                $modules[$index] = $module->pivot;
-            }
-
-            $payload = [
-                "id" => $user->id,
-                "role" => [
-                    "id" => $user->role->id,
-                    "modules" => $modules
-                ]
-            ];
+            $payload = $this->service->refreshAndVerifyAuthentication();
 
             return response([
                 "message" => "Authentication verified.",
@@ -80,6 +64,7 @@ class AuthenticationController extends Controller
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
+            $request->user()->tokens()->delete();
 
             return response([
                 "message" => "User has been logged out."
