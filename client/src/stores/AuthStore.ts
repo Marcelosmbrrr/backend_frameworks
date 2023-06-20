@@ -43,7 +43,7 @@ export const useAuth = Pinia.defineStore('auth', () => {
                 password
             });
 
-            localStorage.setItem("access_token", response.data.token.token);
+            localStorage.setItem("access_token", response.data.token);
             Object.assign(user, response.data.user);
 
             router.push({ path: '/home' });

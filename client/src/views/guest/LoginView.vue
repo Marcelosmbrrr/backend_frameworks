@@ -131,9 +131,8 @@ async function request() {
     await signIn({ ...form, rememberMe: rememberMe.value });
   } catch (e) {
     console.error(e);
-    alert.message = e.response.data.message;
+    alert.message = e.message;
     alert.show = true;
-
     setTimeout(() => {
       alert.show = false;
     }, 2000)

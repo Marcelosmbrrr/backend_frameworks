@@ -190,7 +190,7 @@ const paginate = Vue.reactive<IPaginate>(JSON.parse(initialPaginate));
 const search = Vue.reactive<ISearch>({ value: "" });
 const selection = Vue.reactive<ISelection>(JSON.parse(initialSelection));
 
-Vue.onMounted(() => {
+Vue.onMounted(async () => {
     Object.assign(paginate, JSON.parse(initialPaginate));
     records.value = [];
     fetchAll();
@@ -234,12 +234,12 @@ function select(new_record) {
             name: record.name,
             modules: {
                 users: {
-                    read: record.modules[0].read,
-                    write: record.modules[0].write,
+                    read: Boolean(record.modules[0].read),
+                    write: Boolean(record.modules[0].write),
                 },
                 roles: {
-                    read: record.modules[1].read,
-                    write: record.modules[1].write,
+                    read: Boolean(record.modules[1].read),
+                    write: Boolean(record.modules[1].write),
                 }
             }
         }

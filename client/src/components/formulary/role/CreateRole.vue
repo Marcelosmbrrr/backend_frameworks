@@ -6,8 +6,8 @@
 
     <!-- Main modal -->
     <Transition>
-        <div class="flex justify-center items-center fixed z-50 w-full p-4 overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm"
-            v-if="open">
+        <div id="create-role-modal" v-if="open"
+            class="flex justify-center items-center fixed z-50 w-full p-4 overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full backdrop-blur-sm">
             <div class="relative w-full max-w-2xl max-h-full">
                 <!-- Modal content -->
                 <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
@@ -41,13 +41,13 @@
                                 </div>
                                 <div>
                                     <div class="flex items-center mb-4">
-                                        <input id="user-read" type="checkbox" v-model="form.user.read"
+                                        <input id="user-read" type="checkbox" v-model="form.modules.users.read"
                                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                         <label for="user-read"
                                             class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Read</label>
                                     </div>
                                     <div class="flex items-center">
-                                        <input id="user-write" type="checkbox" v-model="form.user.write"
+                                        <input id="user-write" type="checkbox" v-model="form.modules.users.write"
                                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                         <label for="user-write"
                                             class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Write</label>
@@ -62,13 +62,13 @@
                                 </div>
                                 <div>
                                     <div class="flex items-center mb-4">
-                                        <input id="role-read" type="checkbox" v-model="form.role.read"
+                                        <input id="role-read" type="checkbox" v-model="form.modules.roles.read"
                                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                         <label for="role-read"
                                             class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Read</label>
                                     </div>
                                     <div class="flex items-center">
-                                        <input id="role-write" type="checkbox" v-model="form.role.write"
+                                        <input id="role-write" type="checkbox" v-model="form.modules.roles.write"
                                             class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
                                         <label for="role-write"
                                             class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Write</label>
@@ -138,7 +138,7 @@ const props = defineProps({
     },
 });
 
-const initialForm = { name: "", modules: { user: { read: false, write: false }, role: { read: false, write: false } } };
+const initialForm = { name: "", modules: { users: { read: false, write: false }, roles: { read: false, write: false } } };
 const initialFormError = { name: { error: false, message: "" } }
 
 const open = Vue.ref<boolean>(false);
@@ -184,6 +184,7 @@ async function request() {
 }
 
 function openModal() {
+    console.log('ok')
     open.value = true;
 }
 

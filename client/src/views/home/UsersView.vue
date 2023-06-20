@@ -30,7 +30,6 @@
                             <!-- CRUD MODALS -->
                             <CreateUser :disabled="selection.selected" />
                             <EditUser :disabled="!selection.selected" :user="selection.user" />
-                            <!-- v-model for props mutation -->
                             <!---- -->
                             <button @click="fetchAll" type="button" id="refresh-users-table"
                                 data-modal-toggle="createProductModal"
@@ -208,7 +207,7 @@ function select(new_record) {
 
 }
 
-function isRecordDisabled(recordId: string): boolean {
+function isRecordDisabled(recordId: string) {
 
     if (recordId === user.id) {
         return true;
