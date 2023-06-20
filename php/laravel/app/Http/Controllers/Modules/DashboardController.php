@@ -19,7 +19,7 @@ class DashboardController extends Controller
             $data = $this->service->index();
             return response($data, 200);
         } catch (\Exception $e) {
-            return response(["message" => $e->getMessage()], $e->getCode());
+            return response(["message" => $e->getMessage()], 500);
         }
     }
 }

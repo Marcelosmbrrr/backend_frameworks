@@ -14,7 +14,7 @@ class RolesService
 
     public function index($limit, $page, $search = null)
     {
-        return $this->model->with(["role:id,name"])
+        return $this->model->with(["modules"])
             ->search($search)
             ->paginate((int) $limit, $columns = ['*'], $pageName = 'users', (int) $page);
     }

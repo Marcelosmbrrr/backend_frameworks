@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use App\Events\Authentication\SignInEvent;
 use App\Http\Requests\Authentication\SignInRequest;
+
 use App\Models\User;
 
 class SignInController extends Controller
@@ -23,7 +24,6 @@ class SignInController extends Controller
                 throw new \Exception("Invalid credentials.", 401);
             }
 
-            $request->session()->regenerate();
             $token = $request->user()->createToken("access_token");
 
             $user = Auth::user();
@@ -32,6 +32,7 @@ class SignInController extends Controller
             foreach ($user->role->modules as $index => $module) {
                 $modules[$index] = $module->pivot;
             }
+
 
             $payload = [
                 "user" => [
@@ -48,7 +49,7 @@ class SignInController extends Controller
 
             return response($payload, 200);
         } catch (\Exception $e) {
-            return response(["message" => $e->getMessage()], $e->getCode());
+            return response(["message" => $e->getMessage()], 500);
         }
     }
 }

@@ -17,27 +17,27 @@ class DashboardService
     function index()
     {
 
-        $users = $this->userModel->withTrashed()->get();
-        $roles = $this->roleModel->withTrashed()->get();
+        $users = $this->userModel->all();
+        $roles = $this->roleModel->all();
 
         $data = [
             "users" => [
                 "created" => $users->count(),
-                "verified" => count(array_filter($users, function ($user) {
-                    return $user['active'];
-                })),
-                "deleted" => count(array_filter($users, function ($user) {
-                    return $user['deleted_at'];
-                }))
+                "verified" => $users->filter(function ($user) {
+                    return $user["active"];
+                })->count(),
+                "deleted" => $users->filter(function ($user) {
+                    return $user["deleted_at"] != null;
+                })->count()
             ],
             "roles" => [
                 "created" => $roles->count(),
-                "used" => count(array_filter($roles, function ($role) {
-                    return $role->users->exists();
-                })),
-                "deleted" => count(array_filter($roles, function ($role) {
-                    return $role['deleted_at'];
-                }))
+                "used" => $roles->filter(function ($role) {
+                    return $role->users()->exists();
+                })->count(),
+                "deleted" => $roles->filter(function ($role) {
+                    return $role["deleted_at"] != null;
+                })->count()
             ]
         ];
 
