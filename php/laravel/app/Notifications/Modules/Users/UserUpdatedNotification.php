@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Notifications\Authentication;
+namespace App\Notifications\Modules\Users;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class SignInNotification extends Notification
+class UserUpdatedNotification extends Notification
 {
     use Queueable;
 

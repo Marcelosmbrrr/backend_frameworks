@@ -3,46 +3,32 @@
 namespace App\Observers\Users;
 
 use App\Models\User;
+use App\Notifications\Modules\Users\{
+    UserCreatedNotification,
+    UserUpdatedNotification,
+    UserDeletedNotification,
+    UserRestoredNotification
+};
 
 class UserObserver
 {
-    /**
-     * Handle the User "created" event.
-     */
     public function created(User $user): void
     {
-        //
+        $user->notify(new UserCreatedNotification());
     }
 
-    /**
-     * Handle the User "updated" event.
-     */
     public function updated(User $user): void
     {
-        //
+        $user->notify(new UserUpdatedNotification());
     }
 
-    /**
-     * Handle the User "deleted" event.
-     */
     public function deleted(User $user): void
     {
-        //
+        $user->notify(new UserDeletedNotification());
     }
 
-    /**
-     * Handle the User "restored" event.
-     */
     public function restored(User $user): void
     {
-        //
-    }
-
-    /**
-     * Handle the User "force deleted" event.
-     */
-    public function forceDeleted(User $user): void
-    {
-        //
+        $user->notify(new UserRestoredNotification());
     }
 }
