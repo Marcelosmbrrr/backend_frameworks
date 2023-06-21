@@ -29,7 +29,13 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
+$routes->post("/api/auth/singin", ['controller' => 'App\Controllers\Authentication\SignInController::index']);
+$routes->post("/api/auth/singup", ['controller' => 'App\Controllers\Authentication\SignUpController::index']);
+$routes->post("/api/auth/singout", ['controller' => 'App\Controllers\Authentication\SignOutController::index']);
+$routes->get("/api/auth/refresh-data", ['controller' => 'App\Controllers\Authentication\VerifyAuthenticationController::index']);
+$routes->get("/api/dashboard", ['controller' => 'App\Controllers\Modules\DashboardController::index']);
+$routes->resource("/api/users", ['controller' => 'App\Controllers\Modules\UsersController']);
+$routes->resource("/api/users", ['controller' => 'App\Controllers\Modules\RolesController']);
 
 /*
  * --------------------------------------------------------------------
