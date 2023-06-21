@@ -26,6 +26,7 @@ class SignInController extends BaseController
             "email" => $this->request->getVar("email"),
             "password" => $this->request->getVar("password")
         ]);
+        
         return $this->respond($payload, 200);
     }
 }

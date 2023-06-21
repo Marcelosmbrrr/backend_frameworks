@@ -28,6 +28,7 @@ class SignUpController extends BaseController
             "email" => $this->request->getVar("email"),
             "password" => $this->request->getVar("password")
         ]);
+        
         return $this->respondCreated(null, "Successful registration!");
     }
 }

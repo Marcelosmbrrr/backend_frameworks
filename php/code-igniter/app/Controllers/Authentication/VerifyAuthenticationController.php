@@ -17,6 +17,13 @@ class VerifyAuthenticationController extends BaseController
 
     public function index()
     {
+
+        $token = $this->request->getServer('HTTP_AUTHORIZATION');
+
+        if (!$token) {
+            return $this->failUnauthorized();
+        }
+
         $payload = $this->service->index($this->request->getServer('HTTP_AUTHORIZATION'));
         return $this->respond($payload, 200, "Authentication verified.");
     }

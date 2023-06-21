@@ -15,8 +15,8 @@ class DashboardService
 
     public function index()
     {
-        $users = [];
-        $roles = [];
+        $users = $this->userModel->findAll();
+        $roles = $this->roleModel->findAll();
 
         $data = [
             "users" => [

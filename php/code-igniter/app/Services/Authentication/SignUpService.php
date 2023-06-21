@@ -13,6 +13,11 @@ class SignUpService
 
     public function index($data)
     {
-        return $data;
+        $this->model->insert([
+            "name" => $data["name"],
+            "email" => $data["email"],
+            "password" => password_hash($data["password"], PASSWORD_DEFAULT),
+            "role_id" => 2
+        ]);
     }
 }

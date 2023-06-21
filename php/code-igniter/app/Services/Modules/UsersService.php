@@ -2,22 +2,34 @@
 
 namespace App\Services\Modules;
 
-class RolesService
+use App\Models\User;
+
+class UsersService
 {
-    public function index(string $limit, string $page, $search = null)
+    public function __construct(User $model)
+    {
+        $this->model = $model;
+    }
+
+    public function index(string $limit, int $page, $search = null)
+    {
+        $paginate = $this->model->paginate($limit, 'users', $page);
+
+        return $paginate;
+    }
+
+    public function create()
     {
         //
     }
 
-    public function create(){
-       //
-    }
-
-    public function update(){
+    public function update()
+    {
         //
     }
 
-    public function delete(){
+    public function delete()
+    {
         //
     }
 }

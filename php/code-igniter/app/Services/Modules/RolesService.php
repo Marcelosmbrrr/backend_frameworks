@@ -1,12 +1,20 @@
 <?php
 
 namespace App\Services\Modules;
+use App\Models\Role;
 
-class UsersService
+class RolesService
 {
-    public function index(string $limit, string $page, $search = null)
+    public function __construct(Role $model)
     {
-        //
+        $this->model = $model;
+    }
+
+    public function index(string $limit, int $page, $search = null)
+    {
+        $paginate = $this->model->paginate($limit, 'roles', $page);
+
+        return $paginate;
     }
 
     public function create(){

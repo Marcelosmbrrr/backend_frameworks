@@ -4,9 +4,8 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class Roles extends Migration
+class Users extends Migration
 {
-
     public function up()
     {
         $this->forge->addField([
@@ -18,6 +17,22 @@ class Roles extends Migration
             "name" => [
                 'type' => 'VARCHAR',
                 'constraint' => '100',
+            ],
+            "email" => [
+                'type' => 'VARCHAR',
+                'constraint' => '100',
+            ],
+            "active" => [
+                'type' => 'boolean',
+                'default' => false
+            ],
+            "role_id" => [
+                'type' => 'INT',
+                'unsigned' => true,
+            ],
+            "image" => [
+                'type' => 'VARCHAR',
+                'default' => 'default.jpg',
             ],
             "created_at" => [
                 'type' => 'timestamp',
@@ -32,36 +47,15 @@ class Roles extends Migration
                 'null' => true,
             ]
         ]);
-        $this->forge->createTable('roles');
-
-        $this->forge->addField([
-            "role_id" => [
-                'type' => 'INT',
-                'unsigned' => true,
-            ],
-            "module_id" => [
-                'type' => 'INT',
-                'unsigned' => true,
-            ],
-            "read" => [
-                'type' => 'boolean',
-                'default' => false,
-            ],
-            "write" => [
-                'type' => 'boolean',
-                'default' => false,
-            ]
-        ]);
-        $this->forge->createTable('module_role');
+        $this->forge->addKey('role_id', true);
+        $this->forge->createTable('users');
 
         // Foreign Keys
         $this->forge->addForeignKey('role_id', 'roles', 'id');
-        $this->forge->addForeignKey('module_id', 'modules', 'id');
     }
 
     public function down()
     {
-        $this->forge->dropTable('module_role');
-        $this->forge->dropTable('roles');
+        $this->forge->dropTable('users');
     }
 }
