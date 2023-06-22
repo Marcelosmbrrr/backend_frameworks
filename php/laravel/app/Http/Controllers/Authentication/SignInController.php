@@ -33,7 +33,6 @@ class SignInController extends Controller
                 $modules[$index] = $module->pivot;
             }
 
-
             $payload = [
                 "user" => [
                     "id" => $user->id,
