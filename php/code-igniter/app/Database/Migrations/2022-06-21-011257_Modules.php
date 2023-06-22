@@ -3,6 +3,7 @@
 namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
+use CodeIgniter\Database\RawSql;
 
 class Modules extends Migration
 {
@@ -10,8 +11,8 @@ class Modules extends Migration
     {
         $this->forge->addField([
             "id" => [
-                'type' => 'INT',
-                'unsigned' => true,
+                'type'           => 'INT',
+                'unsigned'       => true,
                 'auto_increment' => true,
             ],
             "name" => [
@@ -19,18 +20,22 @@ class Modules extends Migration
                 'constraint' => '100',
             ],
             "created_at" => [
-                'type' => 'timestamp',
-                'default' => 'CURRENT_TIMESTAMP',
+                'type'    => 'TIMESTAMP',
+                'default' => new RawSql('CURRENT_TIMESTAMP'),
             ],
             "updated_at" => [
-                'type' => 'timestamp',
+                'type' => 'TIMESTAMP',
                 'null' => true,
             ],
             "deleted_at" => [
-                'type' => 'timestamp',
+                'type' => 'TIMESTAMP',
                 'null' => true,
             ]
         ]);
+        // Primary key
+        $this->forge->addKey('id', true);
+
+        // Generate
         $this->forge->createTable('modules');
     }
 

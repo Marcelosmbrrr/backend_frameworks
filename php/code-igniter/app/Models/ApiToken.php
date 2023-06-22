@@ -3,21 +3,20 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
-use App\Entities\RoleEntity;
 
-class Role extends Model
+class ApiToken extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'roles';
+    protected $table            = 'api_tokens';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
-    protected $returnType       = RoleEntity::class;
-    protected $useSoftDeletes   = true;
+    protected $returnType       = 'array';
+    protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = ['name', 'created_at', 'updated_at', 'deleted_at'];
+    protected $allowedFields    = ['id', 'user_id', 'is_valid', 'token'];
 
     // Dates
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';

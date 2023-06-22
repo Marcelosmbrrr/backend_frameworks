@@ -3,6 +3,7 @@
 namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
+use CodeIgniter\Database\RawSql;
 
 class Users extends Migration
 {
@@ -22,36 +23,39 @@ class Users extends Migration
                 'type' => 'VARCHAR',
                 'constraint' => '100',
             ],
+            "image" => [
+                'type' => 'VARCHAR',
+                'constraint' => '100',
+                'default' => 'default.jpg',
+            ],
             "active" => [
-                'type' => 'boolean',
+                'type' => 'BOOLEAN',
                 'default' => false
             ],
             "role_id" => [
                 'type' => 'INT',
                 'unsigned' => true,
             ],
-            "image" => [
-                'type' => 'VARCHAR',
-                'default' => 'default.jpg',
-            ],
             "created_at" => [
-                'type' => 'timestamp',
-                'default' => 'CURRENT_TIMESTAMP'
+                'type'    => 'TIMESTAMP',
+                'default' => new RawSql('CURRENT_TIMESTAMP'),
             ],
             "updated_at" => [
-                'type' => 'timestamp',
+                'type' => 'TIMESTAMP',
                 'null' => true,
             ],
             "deleted_at" => [
-                'type' => 'timestamp',
+                'type' => 'TIMESTAMP',
                 'null' => true,
             ]
         ]);
-        $this->forge->addKey('role_id', true);
-        $this->forge->createTable('users');
-
-        // Foreign Keys
+        // Primary key
+        $this->forge->addKey('id', true);
+        // Foreign key
         $this->forge->addForeignKey('role_id', 'roles', 'id');
+
+        // Generate
+        $this->forge->createTable('users');
     }
 
     public function down()

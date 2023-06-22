@@ -6,6 +6,8 @@ use App\Controllers\BaseController;
 use CodeIgniter\API\ResponseTrait;
 use App\Services\Authentication\VerifyAuthenticationService;
 
+helper("bearer_token_extraction");
+
 class VerifyAuthenticationController extends BaseController
 {
     use ResponseTrait;
@@ -18,13 +20,13 @@ class VerifyAuthenticationController extends BaseController
     public function index()
     {
 
-        $token = $this->request->getServer('HTTP_AUTHORIZATION');
+        $token = extractBearerToken($this->request);
 
         if (!$token) {
-            return $this->failUnauthorized();
+            return $this->failUnauthorized(null, null, "Token is missing or is invalid.");
         }
 
-        $payload = $this->service->index($this->request->getServer('HTTP_AUTHORIZATION'));
+        $payload = $this->service->index($token);
         return $this->respond($payload, 200, "Authentication verified.");
     }
 }

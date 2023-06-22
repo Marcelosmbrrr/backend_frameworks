@@ -16,8 +16,6 @@ class VerifyAuthenticationService
     public function index(string $token)
     {
 
-        $token = explode(" ", $token)[1]; // Bearer value
-
         $decoded = (array) JWT::decode($token, new Key(getenv("JWT_SECRET"), 'HS256'));
 
         if(!$decoded){

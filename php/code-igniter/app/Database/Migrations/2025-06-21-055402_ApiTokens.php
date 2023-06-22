@@ -19,7 +19,7 @@ class ApiTokens extends Migration
                 'unsigned' => true,
             ],
             "is_valid" => [
-                'type' => 'boolean',
+                'type' => 'BOOLEAN',
                 'default' => true,
             ],
             "token" => [
@@ -27,10 +27,13 @@ class ApiTokens extends Migration
                 'constraint' => '100',
             ]
         ]);
-        $this->forge->createTable('api_tokens');
-
-        // Foreign Keys
+        // Primary key
+        $this->forge->addKey('id', true);
+        // Foreign key
         $this->forge->addForeignKey('user_id', 'users', 'id');
+
+        // Generate
+        $this->forge->createTable('api_tokens');
     }
 
     public function down()
