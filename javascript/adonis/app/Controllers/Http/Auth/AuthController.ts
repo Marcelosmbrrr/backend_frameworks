@@ -26,7 +26,7 @@ export default class AuthController {
         const data = await this.authService.refreshAndVerifyAuthentication(auth);
 
         response.status(200).send({
-            message: 'User data has been loaded.',
+            message: 'Authentication verified.',
             ...data
         });
     }
