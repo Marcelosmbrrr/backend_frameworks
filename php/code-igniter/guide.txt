@@ -1,0 +1,2 @@
+Documentation: https://www.codeigniter.com/user_guide/index.html
+Video guide: https://www.youtube.com/playlist?list=PLOnQtvVd3KIQ3WHHbxbPe6a3KBwo3wynD
