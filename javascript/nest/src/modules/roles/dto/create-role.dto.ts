@@ -5,7 +5,7 @@ export class CreateRoleDto {
   @Length(3, 100)
   name: string;
 
-  privileges: {
+  modules: {
     users: {
       read: boolean;
       write: boolean;

@@ -10,9 +10,9 @@ export class RolesService {
   constructor(private readonly prismaService: PrismaService) { }
 
   async create(data: CreateRoleDto) {
-    const { name, privileges } = data;
+    const { name, modules } = data;
 
-    console.log(privileges);
+    console.log(modules);
 
     /*
     await this.prismaService.role.create({
@@ -26,7 +26,7 @@ export class RolesService {
   async findAll(limit: number, offset: number, search: string) {
     const roles = await this.prismaService.role.findMany({
       include: {
-        ModuleRole: true,
+        modules: true,
       },
       skip: offset,
       take: limit,
@@ -46,7 +46,7 @@ export class RolesService {
   }
 
   async update(id: number, data: UpdateRoleDto) {
-    const { name, privileges } = data;
+    const { name, modules } = data;
 
     await this.prismaService.user.update({
       where: {

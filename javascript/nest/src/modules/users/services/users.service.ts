@@ -14,9 +14,7 @@ export class UsersService {
     private eventEmitter: EventEmitter2,
   ) { }
 
-  async create(data: CreateUserDto) {
-    const { name, email, role_id } = data;
-
+  async create({ name, email, role_id }: CreateUserDto) {
     await this.prismaService.user.create({
       data: {
         name: name,
@@ -52,9 +50,7 @@ export class UsersService {
     return users;
   }
 
-  async update(id: number, data: UpdateUserDto) {
-    const { name, email, role_id } = data;
-
+  async update(id: number, { name, email, role_id }: UpdateUserDto) {
     await this.prismaService.user.update({
       where: {
         id: id,

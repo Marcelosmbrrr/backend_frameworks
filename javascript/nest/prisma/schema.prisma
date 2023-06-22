@@ -34,7 +34,7 @@ model Role {
   updated_at DateTime?
   deleted_at DateTime?
   user       User[] // to many users
-  ModuleRole ModuleRole[] // to many modules
+  modules ModuleRole[] // to many modules
 
   @@map("roles")
 }
@@ -45,7 +45,7 @@ model Module {
   created_at DateTime?    @default(now())
   updated_at DateTime?
   deleted_at DateTime?
-  ModuleRole ModuleRole[] // to many moduleroles
+  roles ModuleRole[] // to many moduleroles
 
   @@map("modules")
 }

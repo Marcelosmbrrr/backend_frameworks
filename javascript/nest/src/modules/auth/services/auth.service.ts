@@ -32,7 +32,7 @@ export class AuthService {
       include: {
         role: {
           include: {
-            ModuleRole: true,
+            modules: true,
           },
         },
       },
@@ -70,7 +70,7 @@ export class AuthService {
         id: user.id,
         role: {
           id: user.role_id,
-          privileges: user.role.ModuleRole,
+          privileges: user.role.modules,
         },
       },
       token: token,
@@ -98,7 +98,7 @@ export class AuthService {
       include: {
         role: {
           include: {
-            ModuleRole: true,
+            modules: true,
           },
         },
       },
@@ -112,7 +112,7 @@ export class AuthService {
         id: user.id,
         role: {
           id: user.role_id,
-          privileges: user.role.ModuleRole,
+          privileges: user.role.modules,
         },
       },
     };

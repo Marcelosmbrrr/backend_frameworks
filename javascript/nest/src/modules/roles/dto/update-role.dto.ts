@@ -7,7 +7,7 @@ export class UpdateRoleDto extends PartialType(CreateRoleDto) {
   @Length(3, 100)
   name: string;
 
-  privileges: {
+  modules: {
     users: {
       read: boolean;
       write: boolean;
