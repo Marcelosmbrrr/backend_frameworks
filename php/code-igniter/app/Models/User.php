@@ -24,7 +24,12 @@ class User extends Model
     protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules      = [];
+    protected $validationRules      = [
+        "name" => "required|min_length[3]|max_length[100]",
+        "email" => "required|valid_email|is_unique[users.email]",
+        "password" => "required",
+        "role_id" => "required|integer"
+    ];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
@@ -32,11 +37,23 @@ class User extends Model
     // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
-    protected $afterInsert    = [];
+    protected $afterInsert    = ['sendRegistrationNotification'];
     protected $beforeUpdate   = [];
-    protected $afterUpdate    = [];
+    protected $afterUpdate    = ['sendUpdateNotification'];
     protected $beforeFind     = [];
     protected $afterFind      = [];
     protected $beforeDelete   = [];
-    protected $afterDelete    = [];
+    protected $afterDelete    = ['sendDeletionNotification'];
+
+    protected function sendRegistrationNotification(array $data){
+        //
+    }
+
+    protected function sendUpdateNotification(array $data){
+        //
+    }
+
+    protected function sendDeletionNotification(array $data){
+        //
+    }
 }

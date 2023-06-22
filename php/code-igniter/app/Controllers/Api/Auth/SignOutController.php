@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Authentication;
+namespace App\Controllers\Api\Auth;
 
 use App\Controllers\BaseController;
 use CodeIgniter\API\ResponseTrait;
@@ -20,6 +20,9 @@ class SignOutController extends BaseController
     public function index()
     {
 
+        echo "sign out";
+
+        /*
         $token = extractBearerToken($this->request);
 
         if (!$token) {
@@ -29,5 +32,6 @@ class SignOutController extends BaseController
         $this->model->where("token", $token)->set(["is_valid" => false])->update();
 
         return $this->respond(null, 200, "User has been logged out.");
+        */
     }
 }

@@ -8,36 +8,37 @@ use Firebase\JWT\JWT;
 
 class SignInService
 {
-    public function __construct(User $model)
+    public function __construct()
     {
-        $this->model = $model;
+        $this->userModel = new User();
+        $this->apiTokenModel = new ApiToken();
     }
 
     public function index($data)
     {
-        $user = $this->model->where("email", $data["email"])->first();
+        $user = $this->userModel->where("email", $data["email"])->first();
 
         return $user;
 
-        if(!$user){
+        if (!$user) {
             throw new \Exception("Email not found.", 404);
         }
 
         $password_verify = password_verify($data["password"], $user->password);
 
-        if(!$password_verify){
+        if (!$password_verify) {
             throw new \Exception("Invalid password.", 401);
         }
 
-        $token = JWT::encode(["user_id" => 1], getenv("JWT_SECRET"), 'HS256');
+        $token = JWT::encode(["user_id" => $user->id], getenv("JWT_SECRET"), 'HS256');
 
-        $this->saveApiToken($token, $user["id"]);
+        $this->saveApiToken($token, $user->id);
 
         $data = [
             "user" => [
-                "id" => 1,
+                "id" => $user->id,
                 "role" => [
-                    "id" => $user["role_id"],
+                    "id" => $user->role_id,
                     "modules" => []
                 ]
             ],
@@ -47,9 +48,11 @@ class SignInService
         return $data;
     }
 
-    public function saveApiToken($token, $user_id){
-
-        
-
+    public function saveApiToken($token, $user_id)
+    {
+        $this->apiTokenModel->insert([
+            "user_id" => $user_id,
+            "token" => $token
+        ]);
     }
 }

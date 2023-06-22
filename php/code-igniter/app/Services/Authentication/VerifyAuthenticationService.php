@@ -8,9 +8,9 @@ use Firebase\JWT\JWT;
 
 class VerifyAuthenticationService
 {
-    public function __construct(User $model)
+    public function __construct()
     {
-        $this->model = $model;
+        $this->model = new User();
     }
 
     public function index(string $token)

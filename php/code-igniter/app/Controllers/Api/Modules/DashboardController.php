@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controllers\Modules;
+namespace App\Controllers\Api\Modules;
 
 use App\Controllers\BaseController;
 use CodeIgniter\API\ResponseTrait;
@@ -10,9 +10,9 @@ class DashboardController extends BaseController
 {
     use ResponseTrait;
 
-    function __construct(DashboardService $service)
+    function __construct()
     {
-        $this->service = $service;
+        $this->service = new DashboardService();
     }
 
     public function index()

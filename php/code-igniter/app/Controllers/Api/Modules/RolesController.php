@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Controllers\Modules;
+namespace App\Controllers\Api\Modules;
 
-use App\Controllers\BaseController;
+use CodeIgniter\RESTful\ResourceController; // must add mannually
 use CodeIgniter\API\ResponseTrait;
 use App\Services\Modules\RolesService;
 
-class RolesController extends BaseController
+class RolesController extends ResourceController
 {
     use ResponseTrait;
 
-    function __construct(RolesService $service)
+    function __construct()
     {
-        $this->service = $service;
+        $this->service = new RolesService();
     }
 
     public function index()
@@ -25,7 +25,7 @@ class RolesController extends BaseController
 
         return $this->respond([
             "message" => "Users found.",
-            "users" => $users
+            "users" => $roles
         ], 200);
     }
 
@@ -36,24 +36,24 @@ class RolesController extends BaseController
             "modules" => "required"
         ]);
 
-        $this->service->create();
+        $this->service->create($this->request->getJSON());
         return $this->respondCreated(null, "Role successful created.");
     }
 
-    public function update()
+    public function update($id = null)
     {
         $this->validate([
             "name" => "required|min_length[3]|max_length[100]",
             "modules" => "required"
         ]);
 
-        $this->service->update();
+        $this->service->update($id, $this->request->getJSON());
         return $this->respondUpdated(null, "Role successful updated.");
     }
 
-    public function delete()
+    public function delete($id = null)
     {
-        $this->service->delete();
+        $this->service->delete($id);
         return $this->respondDeleted(null, "Role successful deleted.");
     }
 }

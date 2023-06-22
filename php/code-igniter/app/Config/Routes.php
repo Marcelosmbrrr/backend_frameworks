@@ -11,7 +11,7 @@ $routes = Services::routes();
  * --------------------------------------------------------------------
  */
 $routes->setDefaultNamespace('App\Controllers');
-$routes->setDefaultController('Home');
+$routes->setDefaultController('TestController');
 $routes->setDefaultMethod('index');
 $routes->setTranslateURIDashes(false);
 $routes->set404Override();
@@ -19,7 +19,7 @@ $routes->set404Override();
 // where controller filters or CSRF protection are bypassed.
 // If you don't want to define all routes, please use the Auto Routing (Improved).
 // Set `$autoRoutesImproved` to true in `app/Config/Feature.php` and set the following to true.
-// $routes->setAutoRoute(false);
+//$routes->setAutoRoute(true);
 
 /*
  * --------------------------------------------------------------------
@@ -29,13 +29,17 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->post("/api/auth/singin", ['controller' => 'App\Controllers\Authentication\SignInController::index']);
-$routes->post("/api/auth/singup", ['controller' => 'App\Controllers\Authentication\SignUpController::index']);
-$routes->post("/api/auth/singout", ['controller' => 'App\Controllers\Authentication\SignOutController::index']);
-$routes->get("/api/auth/refresh-data", ['controller' => 'App\Controllers\Authentication\VerifyAuthenticationController::index']);
-$routes->get("/api/dashboard", ['controller' => 'App\Controllers\Modules\DashboardController::index']);
-$routes->resource("/api/users", ['controller' => 'App\Controllers\Modules\UsersController']);
-$routes->resource("/api/users", ['controller' => 'App\Controllers\Modules\RolesController']);
+$routes->get('/', 'TestController');
+
+$routes->group("api", ["namespace" => "App\Controllers\Api"], function ($routes) {
+    $routes->get("auth/signin", 'Auth\SignInController');
+    $routes->get("auth/signup", 'Auth\SignUpController');
+    $routes->get("auth/signout", 'Auth\SignOutController');
+    $routes->get("auth/refresh-data", 'Auth\VerifyAuthenticationController');
+    $routes->get("dashboard", 'Modules\DashboardController');
+    $routes->resource("users", ['controller' => 'Modules\UsersController']);
+    $routes->resource("roles", ['controller' => 'Modules\RolesController']);
+});
 
 /*
  * --------------------------------------------------------------------

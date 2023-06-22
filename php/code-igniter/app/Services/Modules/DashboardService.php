@@ -7,10 +7,10 @@ use App\Models\Role;
 
 class DashboardService
 {
-    public function __construct(User $userModel, Role $roleModel)
+    public function __construct()
     {
-        $this->userModel = $userModel;
-        $this->roleModel = $roleModel;
+        $this->userModel = new User();
+        $this->roleModel = new Role();
     }
 
     public function index()

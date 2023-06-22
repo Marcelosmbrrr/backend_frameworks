@@ -9,6 +9,11 @@ class ModuleRole extends Migration
     public function up()
     {
         $this->forge->addField([
+            "id" => [
+                'type' => 'INT',
+                'unsigned' => true,
+                'auto_increment' => true,
+            ],
             "role_id" => [
                 'type' => 'INT',
                 'unsigned' => true,
@@ -26,6 +31,8 @@ class ModuleRole extends Migration
                 'default' => false,
             ]
         ]);
+        // Primary key
+        $this->forge->addKey('id', true);
         // Foreign key
         $this->forge->addForeignKey('role_id', 'roles', 'id');
         $this->forge->addForeignKey('module_id', 'modules', 'id');

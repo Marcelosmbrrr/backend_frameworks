@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Controllers\Modules;
+namespace App\Controllers\Api\Modules;
 
-use App\Controllers\BaseController;
+use CodeIgniter\RESTful\ResourceController; // must add mannually
 use CodeIgniter\API\ResponseTrait;
 use App\Services\Modules\UsersService;
 
-class UsersController extends BaseController
+class UsersController extends ResourceController
 {
     use ResponseTrait;
 
-    function __construct(UsersService $service)
+    function __construct()
     {
-        $this->service = $service;
+        $this->service = new UsersService();
     }
 
     public function index()
@@ -37,11 +37,11 @@ class UsersController extends BaseController
             "password" => "required"
         ]);
 
-        $this->service->create();
+        $this->service->create($this->request->getJSON());
         return $this->respondCreated(null, "User successful created.");
     }
 
-    public function update()
+    public function update($id = null)
     {
         $this->validate([
             "name" => "required|min_length[3]|max_length[100]",
@@ -49,13 +49,13 @@ class UsersController extends BaseController
             "role_id" => "required"
         ]);
 
-        $this->service->update();
+        $this->service->update($id, $this->request->getJSON());
         return $this->respondUpdated(null, "User successful updated.");
     }
 
-    public function delete()
+    public function delete($id = null)
     {
-        $this->service->delete();
+        $this->service->delete($id);
         return $this->respondDeleted(null, "User successful deleted.");
     }
 }
