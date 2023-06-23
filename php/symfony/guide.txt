@@ -1,0 +1,22 @@
+==== INITIAL STEPS ====
+
+scoop install symfony-cli
+symfony new --webapp my_project (for web app)
+symfony new my_project (for api) 
+php bin/console (check commands available)
+
+==== ABOUT EXTERNAL PACKAGES ====
+
+Symfony, like Nest, is a packages agregator.
+
+Packages list: https://symfony.com/bundles
+Maker commands: https://symfony.com/bundles/SymfonyMakerBundle/current/index.html
+Doctrine ORM: https://symfony.com/doc/current/doctrine.html
+
+==== STEPS FOR API REST ====
+
+1 - Define database configuration: https://symfony.com/doc/current/doctrine.html#configuring-the-database
+2 - Define entities: https://symfony.com/doc/current/doctrine.html#creating-an-entity-class - Relationships: https://symfony.com/doc/current/doctrine.html#relationships-and-associations
+2.1 - Many to Many with extra columns: https://groups.google.com/g/doctrine-user/c/0dh8lgUudvc#436b896e83c10868
+3 - Create migrations: https://symfony.com/doc/current/doctrine.html#migrations-creating-the-database-tables-schema (based on entities)
+4 - Add JWT Bundle: https://symfony.com/bundles/LexikJWTAuthenticationBundle/current/index.html#installation
