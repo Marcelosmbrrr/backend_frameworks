@@ -1,0 +1,34 @@
+==== INTIAL STEPS ====
+
+- Install Python: https://www.python.org/downloads/ 
+- Installation: check the checkbox "Python to PATH"
+- Install Django: python install Django
+- Create project: django-admin startproject <name> <folder>
+
+==== FUNDAMENTALS ====
+
+Django use an approach like Nest with different "modules" that are called as "apps".
+An project app may have models, urls (routes), views (controllers) and submodules.
+They are all registered in the main folder.
+
+Create a new app or module: python manage.py startapp <name>
+
+[main_folder]
+    - core resources 
+[app1_folder]
+    - app1 resources....
+[appN_folder]
+    - appN resources....
+manage.py
+
+==== STEP BY STEP ====
+
+Table of contents: https://docs.djangoproject.com/en/4.2/contents/
+
+1 - Create and undestanding apps: python manage.py startapp <name> - Source: https://docs.djangoproject.com/en/4.2/intro/tutorial01/
+2 - Database setup: [main_folder]/settings.py - Source: https://docs.djangoproject.com/en/4.2/intro/tutorial02/
+3 - Defining apps Models: [app_folder]/models.py - Source: https://docs.djangoproject.com/en/4.2/topics/db/models/
+3.1 - Models Relationships: https://docs.djangoproject.com/en/4.2/topics/db/examples/
+4 - Defining apps views (controller): [app_folder]/views.py - Source: https://docs.djangoproject.com/en/4.2/intro/tutorial03/
+5 - Defining apps urls: [app_folder]/urls.py - Source: https://docs.djangoproject.com/en/4.2/topics/http/urls/ 
+
