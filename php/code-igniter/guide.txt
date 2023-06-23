@@ -1,2 +1,28 @@
+==== INITIAL STEPS ====
+
+Create project: composer create-project codeigniter4/appstarter project-name
+Command line list: php spark - https://codeigniter.com/user_guide/cli/cli_overview.html
+Generator commands: https://www.codeigniter.com/user_guide/cli/cli_generators.html?highlight=make
+Run project: php spark serve --port 8000
+
+==== STEP BY STEP ====
+
+1 - Config database:
+2 - Create Models: php make:model Name [options]
+2.1 - Config model data like fields, type (array or entity collection), validations, events (callbacks), etc
+3 - Create Migrations: php spark make:migration table_name 
+4 - Create Seeder: php spark make:seeder NameSeeder
+5 - Create Controllers: php spark make:controller NameController [options] (--bare, --restful)
+5.1 - Config form validations if is necessary
+5.2 - Define routes in config/routes
+6 - Create Controller Filter: php spark make:filter NameFilter 
+7 - Create Entity: php spark make:entity NameEntity 
+8 - Create Service Layer (optional)
+9 - Install JWT Package: composer require firebase/php-jwt
+
+
+
+
+
 Documentation: https://www.codeigniter.com/user_guide/index.html
 Video guide: https://www.youtube.com/playlist?list=PLOnQtvVd3KIQ3WHHbxbPe6a3KBwo3wynD
