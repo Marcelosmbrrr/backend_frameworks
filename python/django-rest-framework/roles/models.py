@@ -1,20 +1,24 @@
 from django.db import models
 
-class Module(models.Model):
-    name = models.CharField(max_length=100)
-
 class Role(models.Model):
+    id = models.IntegerField()
     name = models.CharField(max_length=100)
-    created_at = models.DateTimeField()
-    updated_at = models.DateTimeField()
-    deleted_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(null=True)
+    deleted_at = models.DateTimeField(null=True)
+    modules = models.ManyToManyField("Module")
 
     class Meta:
         db_table = "roles"
 
+class Module(models.Model):
+    id = models.IntegerField()
+    name = models.CharField(max_length=100)
+    roles = models.ManyToManyField("Role")
+
 class ModuleRole(models.Model):
-    role_id = models.ForeignKey(Role)
-    module_id = models.ForeignKey(Module)
+    role = models.ForeignKey(Role)
+    module = models.ForeignKey(Module)
     read = models.BooleanField(default=False)
     write = models.BooleanField(default=False)
 

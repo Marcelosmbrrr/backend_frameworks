@@ -1,14 +1,19 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
+@api_view(['GET'])
 def index(request):
-    if request.method == 'GET':     
-        return HttpResponse("User paginate.")
-    elif request.method == 'POST':
-        return HttpResponse("User create.")
+    return Response("User paginate.")
 
+@api_view(['POST'])
+def create(request):
+    return Response("Create user.")
+
+@api_view(['PATCH'])
 def update(request, user_id):
-    return HttpResponse("User update.")
+    return Response("User update.")
 
+@api_view(['DELETE'])
 def delete(user_id):
-    return HttpResponse("User delete.")
+    return Response("User delete.")

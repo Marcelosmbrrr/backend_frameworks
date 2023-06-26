@@ -1,18 +1,20 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
 
+@api_view(['GET'])
 def index(request):
-    if request.method == 'GET':     
-        return HttpResponse("Role paginate.")
-    elif request.method == 'POST':
-        return HttpResponse("Role create.")
+    return Response("Role paginate.")
 
+@api_view(['POST'])
 def create(request):
-    return HttpResponse("Role create.")
+    return Response("Create role.")
 
+@api_view(['PATCH'])
 def update(request, user_id):
-    return HttpResponse("Role update.")
+    return Response("Role update.")
 
+@api_view(['DELETE'])
 def delete(user_id):
-    return HttpResponse("Role delete.")
+    return Response("Role delete.")
 
